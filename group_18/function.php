@@ -36,7 +36,7 @@
     {
         session_start();
         session_destroy();
-        header("Location: /");
+        header("Location:index.php");
     }
     function checkLogin($account, $password)
     {
@@ -50,11 +50,11 @@
             session_start();
             $_SESSION['member_account'] = $account;
 
-            header("Location: /index.php");
+            header("Location:index.php");
         }
         else
         {
-            header("Location: /group_18/login.php");
+            header("Location:login.php");
         }
        
     }
@@ -69,17 +69,17 @@
             if ($result = mysqli_query($link, "SELECT * FROM member_cart")) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     if($row["member_account"] == $account && $row["game_ID"] == $game_ID){
-                        header("Location: /group_18/game-details.php?game_ID=".$game_ID);
+                        header("Location:game-details.php?game_ID=".$game_ID);
                     }
                 }
                 mysqli_query($link, $sql);
                 mysqli_free_result($result); // 釋放佔用的記憶體
 
-                header("Location: /group_18/game-details.php?game_ID=".$game_ID);
+                header("Location:game-details.php?game_ID=".$game_ID);
             }
         }
         else{
-            header("Location: /group_18/login.php");
+            header("Location:login.php");
         }
     }
 
@@ -90,7 +90,7 @@
 
         mysqli_query($link, $sql);
 
-        header("Location: /group_18/cart.php");
+        header("Location:cart.php");
     }
 
     function removeAllCart($account,$game_ID)
@@ -100,7 +100,7 @@
 
         mysqli_query($link, $sql);
 
-        header("Location: /group_18/cart.php");
+        header("Location:cart.php");
     }
 
 

@@ -323,7 +323,6 @@
                                         echo '<a href="game-details.php?game_ID='. $row["game_ID"].'">
                                             <div class="product__mayLike__item set-bg" data-setbg="img/product/'. $row["game_picture"].'.jpg">
                                                 <div class="view"><i class="fa fa-download"></i> '. $row["game_bought"].'</div>
-                                                <h5>'. $row["game_ID"].'</h5>
                                             </div>
                                         </a>';
                                     }
