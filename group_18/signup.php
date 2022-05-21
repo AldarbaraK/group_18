@@ -1,5 +1,5 @@
 <?php
-    include 'dbConnect/php';
+    include 'dbConnect.php';
     session_start();
 ?>
 
@@ -25,7 +25,8 @@
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh_TW.js "></script>
 
     <link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
-	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="css/core.css">
+    <link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
@@ -120,7 +121,7 @@
     </div>
 
     <!-- Header Section Begin -->
-    <header class="header">
+    <header class="cus__header">
         <div class="container">
             <div class="row">
                 <div class="col-lg-2">
