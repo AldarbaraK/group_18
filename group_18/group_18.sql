@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2022-05-15 16:17:01
+-- 產生時間： 2022-05-21 11:46:13
 -- 伺服器版本： 10.4.22-MariaDB
 -- PHP 版本： 8.1.2
 
@@ -22,6 +22,31 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `group_18` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `group_18`;
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `admin_info`
+--
+
+CREATE TABLE `admin_info` (
+  `admin_account` varchar(64) NOT NULL,
+  `admin_password` varchar(200) NOT NULL,
+  `admin_email` varchar(64) NOT NULL,
+  `admin_name` varchar(30) NOT NULL,
+  `admin_nickname` varchar(30) NOT NULL,
+  `admin_birth` date NOT NULL,
+  `admin_phone` varchar(20) NOT NULL,
+  `admin_insertDate` date NOT NULL,
+  `admin_sex` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `admin_info`
+--
+
+INSERT INTO `admin_info` (`admin_account`, `admin_password`, `admin_email`, `admin_name`, `admin_nickname`, `admin_birth`, `admin_phone`, `admin_insertDate`, `admin_sex`) VALUES
+('admin', 'admin123456', 'admin@gmail.com', 'admin', '管理者', '2022-05-21', '0911222333', '2022-05-21', '男性');
 
 -- --------------------------------------------------------
 
@@ -260,6 +285,90 @@ INSERT INTO `member_cart` (`member_account`, `game_ID`) VALUES
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `member_collection`
+--
+
+CREATE TABLE `member_collection` (
+  `member_account` varchar(64) NOT NULL,
+  `game_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `member_collection`
+--
+
+INSERT INTO `member_collection` (`member_account`, `game_ID`) VALUES
+('allan96452', 10),
+('allan96452', 16),
+('member', 4),
+('member', 21),
+('Unshun0120', 15),
+('Unshun0120', 22);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `member_comment`
+--
+
+CREATE TABLE `member_comment` (
+  `game_ID` int(11) NOT NULL,
+  `member_account` varchar(64) NOT NULL,
+  `comment_time` datetime NOT NULL,
+  `comment` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `member_comment`
+--
+
+INSERT INTO `member_comment` (`game_ID`, `member_account`, `comment_time`, `comment`) VALUES
+(3, 'member', '2022-05-20 11:39:34', '讚讚喔'),
+(3, 'member', '2022-05-21 11:39:34', '感覺不錯喔'),
+(3, 'Unshun0120', '2022-05-21 11:39:34', '普通~'),
+(3, 'Unshun0120', '2022-05-21 11:40:34', '真的還好'),
+(4, 'allan96452', '2022-05-20 11:37:30', '好好玩'),
+(7, 'allan96452', '2022-05-21 11:37:30', '真讚喔!\r\n');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `member_details`
+--
+
+CREATE TABLE `member_details` (
+  `member_account` varchar(64) NOT NULL,
+  `member_level` varchar(64) NOT NULL,
+  `member_cost` int(11) NOT NULL,
+  `login_count` int(11) NOT NULL,
+  `bought_count` int(11) NOT NULL,
+  `score_count` int(11) NOT NULL,
+  `comment_count` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `member_follow`
+--
+
+CREATE TABLE `member_follow` (
+  `member_account` varchar(64) NOT NULL,
+  `game_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `member_follow`
+--
+
+INSERT INTO `member_follow` (`member_account`, `game_ID`) VALUES
+('allan96452', 22),
+('member', 15),
+('Unshun0120', 11);
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `member_info`
 --
 
@@ -270,7 +379,7 @@ CREATE TABLE `member_info` (
   `member_name` varchar(30) NOT NULL COMMENT '會員姓名',
   `member_nickname` varchar(30) NOT NULL COMMENT '會員暱稱',
   `member_birth` date NOT NULL COMMENT '會員生日',
-  `member_phone` int(20) NOT NULL COMMENT '會員電話',
+  `member_phone` varchar(20) NOT NULL COMMENT '會員電話',
   `member_signupDate` date NOT NULL COMMENT '註冊日期',
   `member_sex` varchar(10) NOT NULL COMMENT '性別'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -280,13 +389,19 @@ CREATE TABLE `member_info` (
 --
 
 INSERT INTO `member_info` (`member_account`, `member_password`, `member_email`, `member_name`, `member_nickname`, `member_birth`, `member_phone`, `member_signupDate`, `member_sex`) VALUES
-('allan96452', '$2y$10$c0aTyVqszG6mtR.zpESvIuBgTZOC4woCsUpLLLZZxMf0bIOI1ZGnS', 'allan96452@gmail.com', '莊明憲', 'Xian', '2001-09-05', 963111111, '2022-05-14', '男性'),
-('member', '$2y$10$Vb1ZRb/zVvtUvm26Chx7QegncZBFend8F6H/1WB6WYFcUSVf3Z/I6', 'member@gmail.com', '測試帳號', '測試', '2022-05-14', 912345678, '2022-05-14', '男性'),
-('Unshun0120', '$2y$10$PWBkQkOyIqb9aZqxP73o6Olhq3WtxO6fQ9BwMLygLfx1Ksom7d84.', 'unshun0120@gmail.com', '李永紳', '紳', '2001-01-20', 972069867, '2022-05-14', '男性');
+('allan96452', '$2y$10$c0aTyVqszG6mtR.zpESvIuBgTZOC4woCsUpLLLZZxMf0bIOI1ZGnS', 'allan96452@gmail.com', '莊明憲', 'Xian', '2001-09-05', '963111111', '2022-05-14', '男性'),
+('member', '$2y$10$Vb1ZRb/zVvtUvm26Chx7QegncZBFend8F6H/1WB6WYFcUSVf3Z/I6', 'member@gmail.com', '測試帳號', '測試', '2022-05-14', '912345678', '2022-05-14', '男性'),
+('Unshun0120', '$2y$10$PWBkQkOyIqb9aZqxP73o6Olhq3WtxO6fQ9BwMLygLfx1Ksom7d84.', 'unshun0120@gmail.com', '李永紳', '紳', '2001-01-20', '972069867', '2022-05-14', '男性');
 
 --
 -- 已傾印資料表的索引
 --
+
+--
+-- 資料表索引 `admin_info`
+--
+ALTER TABLE `admin_info`
+  ADD PRIMARY KEY (`admin_account`);
 
 --
 -- 資料表索引 `game_categories`
@@ -316,6 +431,33 @@ ALTER TABLE `game_pic`
 -- 資料表索引 `member_cart`
 --
 ALTER TABLE `member_cart`
+  ADD PRIMARY KEY (`member_account`,`game_ID`),
+  ADD KEY `game_ID` (`game_ID`);
+
+--
+-- 資料表索引 `member_collection`
+--
+ALTER TABLE `member_collection`
+  ADD PRIMARY KEY (`member_account`,`game_ID`),
+  ADD KEY `game_ID` (`game_ID`);
+
+--
+-- 資料表索引 `member_comment`
+--
+ALTER TABLE `member_comment`
+  ADD PRIMARY KEY (`game_ID`,`member_account`,`comment_time`),
+  ADD KEY `member_account` (`member_account`);
+
+--
+-- 資料表索引 `member_details`
+--
+ALTER TABLE `member_details`
+  ADD PRIMARY KEY (`member_account`);
+
+--
+-- 資料表索引 `member_follow`
+--
+ALTER TABLE `member_follow`
   ADD PRIMARY KEY (`member_account`,`game_ID`),
   ADD KEY `game_ID` (`game_ID`);
 
@@ -363,6 +505,33 @@ ALTER TABLE `game_pic`
 ALTER TABLE `member_cart`
   ADD CONSTRAINT `member_cart_ibfk_1` FOREIGN KEY (`game_ID`) REFERENCES `game_info` (`game_ID`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `member_cart_ibfk_2` FOREIGN KEY (`member_account`) REFERENCES `member_info` (`member_account`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- 資料表的限制式 `member_collection`
+--
+ALTER TABLE `member_collection`
+  ADD CONSTRAINT `member_collection_ibfk_1` FOREIGN KEY (`member_account`) REFERENCES `member_info` (`member_account`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `member_collection_ibfk_2` FOREIGN KEY (`game_ID`) REFERENCES `game_info` (`game_ID`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- 資料表的限制式 `member_comment`
+--
+ALTER TABLE `member_comment`
+  ADD CONSTRAINT `member_comment_ibfk_1` FOREIGN KEY (`game_ID`) REFERENCES `game_info` (`game_ID`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `member_comment_ibfk_2` FOREIGN KEY (`member_account`) REFERENCES `member_info` (`member_account`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- 資料表的限制式 `member_details`
+--
+ALTER TABLE `member_details`
+  ADD CONSTRAINT `member_details_ibfk_1` FOREIGN KEY (`member_account`) REFERENCES `member_info` (`member_account`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- 資料表的限制式 `member_follow`
+--
+ALTER TABLE `member_follow`
+  ADD CONSTRAINT `member_follow_ibfk_1` FOREIGN KEY (`game_ID`) REFERENCES `game_info` (`game_ID`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `member_follow_ibfk_2` FOREIGN KEY (`member_account`) REFERENCES `member_info` (`member_account`) ON DELETE CASCADE ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
