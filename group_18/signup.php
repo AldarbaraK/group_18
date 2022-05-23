@@ -201,7 +201,7 @@
             <div class="row">
                 <div class="signup__form">
                     <h3>註冊</h3>
-                    <form action="#" id="form1">
+                    <form action="function.php?op=signUp" id="form1" method="post">
                         <div class="input__item">
                             <input type="text" name="account" id="account" placeholder="請輸入帳號">
                             <span class="icon_profile"></span>
@@ -242,13 +242,13 @@
                                     </div>	
                                     <div class="col-lg-3">
                                         <div class="custom-control custom-radio radio__pos">
-                                            <input type="radio" id="sexRadio1" name="sexRadio" class="custom-control-input">
+                                            <input type="radio" id="sexRadio1" name="sexRadio" class="custom-control-input" value="1">
                                             <label class="custom-control-label" for="sexRadio1">男性　</label>
                                         </div>
                                     </div>	
                                     <div class="col-lg-3">
                                         <div class="custom-control custom-radio radio__pos">
-                                            <input type="radio" id="sexRadio2" name="sexRadio" class="custom-control-input">
+                                            <input type="radio" id="sexRadio2" name="sexRadio" class="custom-control-input" vlaue="2">
                                             <label class="custom-control-label" for="sexRadio2">女性　</label>
                                         </div>
                                     </div>	

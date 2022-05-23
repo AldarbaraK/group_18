@@ -27,6 +27,10 @@
         session_start();
         removeAllCart($_SESSION['member_account'],$_GET['game_ID']);
     }
+    if($op=='signUp')
+    {
+        SingUp($_POST['account'],$_POST['pwd'],$_POST['email'],$_POST['name'],$_POST['nickname'],$_POST['birthday'],$_POST['phone'],$_POST['sexRadio']);
+    }
 
     function isStaff()
     {
@@ -101,6 +105,32 @@
         mysqli_query($link, $sql);
 
         header("Location:cart.php");
+    }
+
+    function SingUp($account,$pwd,$email,$name,$nickname,$birthday,$phone,$sexRadio)
+    {
+        global $link;
+
+        if ($result = mysqli_query($link, "SELECT member_account FROM member_info")) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                if($row["member_account"] == $account){
+                    header("Location:signup.php");
+                }
+            }
+            mysqli_free_result($result); // 釋放佔用的記憶體
+        }
+
+        $today = date("Y-n-j");     //今天日期
+        if( $sexRadio == "1")      //選radio button
+            $sex = "男性";
+        else    
+            $sex = "女性";
+        
+        $password = password_hash($pwd, PASSWORD_BCRYPT);   //加密
+
+        $sql = "insert into member_info values ('" . $account . "','" . $password ."','" . $email ."','" . $name ."','" . $nickname ."','" . $birthday ."','" . $phone ."','" . $today ."','" . $sex ."')";
+        mysqli_query($link, $sql);
+        header("Location:login.php");
     }
 
 
