@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2022-05-21 11:46:13
+-- 產生時間： 2022-05-25 13:40:01
 -- 伺服器版本： 10.4.22-MariaDB
 -- PHP 版本： 8.1.2
 
@@ -379,7 +379,7 @@ CREATE TABLE `member_info` (
   `member_name` varchar(30) NOT NULL COMMENT '會員姓名',
   `member_nickname` varchar(30) NOT NULL COMMENT '會員暱稱',
   `member_birth` date NOT NULL COMMENT '會員生日',
-  `member_phone` varchar(20) NOT NULL COMMENT '會員電話',
+  `member_phone` varchar(30) NOT NULL COMMENT '會員電話',
   `member_signupDate` date NOT NULL COMMENT '註冊日期',
   `member_sex` varchar(10) NOT NULL COMMENT '性別'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -389,9 +389,9 @@ CREATE TABLE `member_info` (
 --
 
 INSERT INTO `member_info` (`member_account`, `member_password`, `member_email`, `member_name`, `member_nickname`, `member_birth`, `member_phone`, `member_signupDate`, `member_sex`) VALUES
-('allan96452', '$2y$10$c0aTyVqszG6mtR.zpESvIuBgTZOC4woCsUpLLLZZxMf0bIOI1ZGnS', 'allan96452@gmail.com', '莊明憲', 'Xian', '2001-09-05', '963111111', '2022-05-14', '男性'),
-('member', '$2y$10$Vb1ZRb/zVvtUvm26Chx7QegncZBFend8F6H/1WB6WYFcUSVf3Z/I6', 'member@gmail.com', '測試帳號', '測試', '2022-05-14', '912345678', '2022-05-14', '男性'),
-('Unshun0120', '$2y$10$PWBkQkOyIqb9aZqxP73o6Olhq3WtxO6fQ9BwMLygLfx1Ksom7d84.', 'unshun0120@gmail.com', '李永紳', '紳', '2001-01-20', '972069867', '2022-05-14', '男性');
+('allan96452', '$2y$10$9GuR2Ie7oSWv3h2JnIQIXuIM3IK0V9ROonFwNVctLcXP5jLxq40Fe', 'allan96452@gmail.com', '莊明憲', 'Xian', '2001-09-05', '0963111111', '2022-05-14', '男性'),
+('member', '$2y$10$PnnpquTXalEWMwZqOt6o2OiEPMs4T/EywRsQMiXw5sLAmaGFWp6vW', 'member@gmail.com', '測試帳號', '測試', '2022-05-14', '0912345678', '2022-05-14', '男性'),
+('Unshun0120', '$2y$10$zrxkN5gB5Lb75eCopQcly.O2Elm1I0OrFH.eHdhfzR0VxTpzbe3TC', 'unshun0120@gmail.com', '李永紳', '紳', '2001-01-20', '0972069867', '2022-05-14', '男性');
 
 --
 -- 已傾印資料表的索引

@@ -1,5 +1,6 @@
 <?php
     include 'dbConnect.php';
+    session_start();
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +52,11 @@
                     form.submit();
                 },
                 rules: {
+                    account: {
+                        required: true,
+                        minlength: 4,
+                        maxlength: 24
+                    },
                     email: {
                         required: true,
                         email: true
@@ -69,6 +75,9 @@
                     }
                 },
                 messages: {
+                    account: {
+                        required: "請輸入帳號"
+                    },
                     email: {
                         required: "請輸入電子郵箱",
                         email: "請輸入正確郵箱格式"
@@ -173,7 +182,11 @@
             <div class="row">
                 <div class="signup__form">
                     <h3>修改</h3>
-                    <form action="#" id="form1">
+                    <form action="function.php?op=forget" id="form1" method="post">
+                        <div class="input__item" >
+                            <input type="text" name="account" id="account" placeholder="輸入帳號">
+                            <span class="icon_profile"></span>
+                        </div>
                         <div class="input__item">
                             <input type="text" name="email" id="email" placeholder="輸入您的郵箱">
                             <span class="icon_mail"></span>

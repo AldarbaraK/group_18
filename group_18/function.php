@@ -31,6 +31,10 @@
     {
         SingUp($_POST['account'],$_POST['pwd'],$_POST['email'],$_POST['name'],$_POST['nickname'],$_POST['birthday'],$_POST['phone'],$_POST['sexRadio']);
     }
+    if($op=='forget')
+    {
+        forgetCheck($_POST['account'], $_POST['email'],$_POST['phone'],$_POST['pwd']);
+    }
 
     function isStaff()
     {
@@ -40,7 +44,7 @@
     {
         session_start();
         session_destroy();
-        header("Location:index.php");
+        header("Location:login.php");
     }
     function checkLogin($account, $password)
     {
@@ -131,6 +135,30 @@
         $sql = "insert into member_info values ('" . $account . "','" . $password ."','" . $email ."','" . $name ."','" . $nickname ."','" . $birthday ."','" . $phone ."','" . $today ."','" . $sex ."')";
         mysqli_query($link, $sql);
         header("Location:login.php");
+    }
+
+    function forgetCheck($account, $email, $phone, $pwd)
+    {
+        global $link;
+
+        $flag = 0;
+
+        $password = password_hash($pwd, PASSWORD_BCRYPT);   //加密
+
+        if ($result = mysqli_query($link, "SELECT member_account,member_email,member_phone FROM member_info")) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                if($row["member_account"] == $account && $row["member_email"] == $email && $row["member_phone"] == $phone){
+                    $sql = "update member_info set member_password='" .$password. "' where member_account = '" . $account . "'";
+                    $flag = 1;
+                    mysqli_query($link, $sql);
+                    header("Location:login.php");
+                }
+            }
+            mysqli_free_result($result); // 釋放佔用的記憶體
+        }
+
+        if($flag == 0)
+            header("Location:forget.php");
     }
 
 
