@@ -27,6 +27,14 @@
         session_start();
         removeAllCart($_SESSION['member_account'],$_GET['game_ID']);
     }
+    if($op=='signUp')
+    {
+        SingUp($_POST['account'],$_POST['pwd'],$_POST['email'],$_POST['name'],$_POST['nickname'],$_POST['birthday'],$_POST['phone'],$_POST['sexRadio']);
+    }
+    if($op=='forget')
+    {
+        forgetCheck($_POST['account'], $_POST['email'],$_POST['phone'],$_POST['pwd']);
+    }
 
     function isStaff()
     {
@@ -36,7 +44,7 @@
     {
         session_start();
         session_destroy();
-        header("Location:index.php");
+        header("Location:login.php");
     }
     function checkLogin($account, $password)
     {
@@ -101,6 +109,56 @@
         mysqli_query($link, $sql);
 
         header("Location:cart.php");
+    }
+
+    function SingUp($account,$pwd,$email,$name,$nickname,$birthday,$phone,$sexRadio)
+    {
+        global $link;
+
+        if ($result = mysqli_query($link, "SELECT member_account FROM member_info")) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                if($row["member_account"] == $account){
+                    header("Location:signup.php");
+                }
+            }
+            mysqli_free_result($result); // 釋放佔用的記憶體
+        }
+
+        $today = date("Y-n-j");     //今天日期
+        if( $sexRadio == "1")      //選radio button
+            $sex = "男性";
+        else    
+            $sex = "女性";
+        
+        $password = password_hash($pwd, PASSWORD_BCRYPT);   //加密
+
+        $sql = "insert into member_info values ('" . $account . "','" . $password ."','" . $email ."','" . $name ."','" . $nickname ."','" . $birthday ."','" . $phone ."','" . $today ."','" . $sex ."')";
+        mysqli_query($link, $sql);
+        header("Location:login.php");
+    }
+
+    function forgetCheck($account, $email, $phone, $pwd)
+    {
+        global $link;
+
+        $flag = 0;
+
+        $password = password_hash($pwd, PASSWORD_BCRYPT);   //加密
+
+        if ($result = mysqli_query($link, "SELECT member_account,member_email,member_phone FROM member_info")) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                if($row["member_account"] == $account && $row["member_email"] == $email && $row["member_phone"] == $phone){
+                    $sql = "update member_info set member_password='" .$password. "' where member_account = '" . $account . "'";
+                    $flag = 1;
+                    mysqli_query($link, $sql);
+                    header("Location:login.php");
+                }
+            }
+            mysqli_free_result($result); // 釋放佔用的記憶體
+        }
+
+        if($flag == 0)
+            header("Location:forget.php");
     }
 
 
