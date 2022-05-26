@@ -14,11 +14,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>註冊新帳號</title>
 
+    <script src="//code.jquery.com/jquery-latest.min.js"></script>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+
+    
     <!--additional method - for checkbox .. ,require_from_group method ...-->
     <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
     <!--中文錯誤訊息-->
@@ -49,7 +52,7 @@
         },"請填寫長度在8-20之間,需包含一個字母和一個數字!");
 
         $(document).ready(function($) {
-            $("#form1").validate({
+            $("#signup_form").validate({
                 submitHandler: function(form) {
                     form.submit();
                 },
@@ -108,6 +111,25 @@
                         matches: "請輸入正確的10位手機格式"
                     }
                 }
+            });
+        });
+
+        $(function() { //網頁完成後才會載入
+            $('#account').keyup(function() {
+                $.ajax({
+                    url: "function.php?op=signupCheckAjax",
+                    data: $('#signup_form').serialize(),
+                    type: "POST",
+                    dataType: 'text',
+                    success: function(msg) {
+                        $("#show_msg").html(msg);//顯示訊息
+                        //document.getElementById('show_msg').innerHTML= msg ;
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
             });
         });
     </script>
@@ -201,11 +223,12 @@
             <div class="row">
                 <div class="signup__form">
                     <h3>註冊</h3>
-                    <form action="function.php?op=signUp" id="form1" method="post">
+                    <form action="function.php?op=signUp" id="signup_form" method="post">
                         <div class="input__item">
                             <input type="text" name="account" id="account" placeholder="請輸入帳號">
                             <span class="icon_profile"></span>
                         </div>
+                        <p id="show_msg" style="color:red"></p>
                         <div class="input__item">
                             <input type="text" name="email" id="email" placeholder="輸入郵箱(...@xxx.xxx)">
                             <span class="icon_mail"></span>

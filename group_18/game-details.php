@@ -14,7 +14,8 @@
                 $rate = $row['game_rating'];
                 $story = $row['game_story'];
                 $price = $row['game_price'];
-                $pic = $row['game_picture'];              
+                $pic = $row['game_picture'];    
+                $discount = $row['game_discount'];          
             }
         }
     }
@@ -194,7 +195,7 @@
                                                     <?php 
                                                         if ($cateResult = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
                                                             while ($categories = mysqli_fetch_assoc($cateResult)) {
-                                                                if($_GET['game_ID'] == $categories["game_ID"]) echo '<a href="categories.php"><p>'.$categories["game_type"].'</p></a>';
+                                                                if($_GET['game_ID'] == $categories["game_ID"]) echo '<a href="categories.php"><p>'.$categories["game_type"].'</p> </a>';
                                                             }  
                                                             mysqli_free_result($cateResult); // 釋放佔用的記憶體 
                                                         }       
@@ -226,7 +227,20 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="gameProduct__details__text">
-                                <p>價格: <?php if($price == 0) echo "Free!"; else echo '$NT '.$price;?></p>
+                                <p>價格: <?php 
+                                            if($price == 0) echo "Free!"; 
+                                            else if($discount!=0){
+                                                $discount_price = round($price*$discount/100);
+                                                echo '  
+                                                    <s> NT$ '.$price.'</s>
+                                                    -> NT$ '.$discount_price.'
+                                                    ';
+                                            }
+                                            else{ 
+                                                echo '$NT '.$price;
+                                            }  
+                                        ?>
+                                </p>
                                 <div class="game__details__btn">
                                     <div class="row">
                                         <button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>追隨</span></button>
@@ -246,67 +260,39 @@
                         <div class="section-title">
                             <h5>評論</h5>
                         </div>
-                        <div class="game__review__item">
-                            <div class="game__review__item__pic">
-                                <img src="img/review/review-1.jpg" alt="">
-                            </div>
-                            <div class="game__review__item__text">
-                                <h6>陳 - <span>1 小時前</span></h6>
-                                <p>讚讚</p>
-                            </div>
-                        </div>
-                        <div class="game__review__item">
-                            <div class="game__review__item__pic">
-                                <img src="img/review/review-2.jpg" alt="">
-                            </div>
-                            <div class="game__review__item__text">
-                                <h6>李 - <span>5 小時前</span></h6>
-                                <p>讚讚</p>
-                            </div>
-                        </div>
-                        <div class="game__review__item">
-                            <div class="game__review__item__pic">
-                                <img src="img/review/review-3.jpg" alt="">
-                            </div>
-                            <div class="game__review__item__text">
-                                <h6>莊 - <span>20 小時前</span></h6>
-                                <p>讚讚</p>
-                            </div>
-                        </div>
-                        <div class="game__review__item">
-                            <div class="game__review__item__pic">
-                                <img src="img/review/review-4.jpg" alt="">
-                            </div>
-                            <div class="game__review__item__text">
-                                <h6>林 - <span>1 小時前</span></h6>
-                                <p>讚讚</p>
-                            </div>
-                        </div>
-                        <div class="game__review__item">
-                            <div class="game__review__item__pic">
-                                <img src="img/review/review-5.jpg" alt="">
-                            </div>
-                            <div class="game__review__item__text">
-                                <h6>楊 - <span>5 小時前</span></h6>
-                                <p>讚讚</p>
-                            </div>
-                        </div>
-                        <div class="game__review__item">
-                            <div class="game__review__item__pic">
-                                <img src="img/review/review-6.jpg" alt="">
-                            </div>
-                            <div class="game__review__item__text">
-                                <h6>高 - <span>20 小時前</span></h6>
-                                <p>讚讚</p>
-                            </div>
-                        </div>
+                        <?php
+                            if ($result = mysqli_query($link, "SELECT * FROM member_comment")){
+                                while($row = mysqli_fetch_assoc($result)){
+                                    if($_GET['game_ID'] == $row['game_ID']){
+                                        echo ' <div class="game__review__item">
+                                                    <div class="game__review__item__pic">
+                                                        <img src="img/review/review-1.jpg" alt="">
+                                                    </div>
+                                                    <div class="game__review__item__text">
+                                                        <div class="row">
+                                                            <div class="col-lg-10">
+                                                                <h6>'.$row["member_account"].' - <span>'.$row["comment_time"].'</span></h6>
+                                                                <p>'.$row["comment"].'</p>
+                                                            </div>
+                                                            <div class="col-lg-2">
+                                                                <button class="fa fa-trash-o" id="delete__btn" name="delete__btn"><span> 刪除</span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            ';
+                                    }
+                                }
+                            }
+                        ?>
+                        
                     </div>
                     <div class="game__details__form">
                         <div class="section-title">
                             <h5>你的評論</h5>
                         </div>
-                        <form action="#">
-                            <textarea placeholder="你的評論..."></textarea>
+                        <form action="function.php?op=addComment&game_ID=<?php echo $_GET["game_ID"]?>" id="addCommment_form" method="post">
+                            <textarea id="comment" name="comment" placeholder="你的評論..."></textarea>
                             <button type="submit"><i class="fa fa-location-arrow"></i> 評論</button>
                         </form>
                     </div>

@@ -1150,6 +1150,19 @@ ol {
 	margin-bottom: 0;
 }
 
+.game__review__item__text button {
+	font-size: 11px;
+	color: #ffffff;
+	font-weight: 700;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	background: #e53637;
+	border: none;
+	padding: 8px 13px;
+	border-radius: 2px;
+	margin-top: 10px;
+}
+
 .game__details__form form textarea {
 	width: 100%;
 	font-size: 15px;
@@ -1174,6 +1187,7 @@ ol {
 	padding: 10px 15px;
 	border-radius: 2px;
 }
+
 
 /*---------------------
   Anime Watching
@@ -1741,7 +1755,7 @@ ol {
 
 .gameProduct__details__text p {
 	color: #b7b7b7;
-	font-size: 24px;
+	font-size: 22px;
 	line-height: 30px;
 }
 

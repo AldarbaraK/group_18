@@ -14,6 +14,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>登入</title>
 
+    <script src="//code.jquery.com/jquery-latest.min.js"></script>
+
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -37,7 +39,7 @@
     <!--<link rel="stylesheet" href="js/pwd.js" type="text/js">-->
     <script>
     $(document).ready(function($) {
-        $("#form1").validate({
+        $("#login_form").validate({
             submitHandler: function(form) {
                 form.submit();
             },
@@ -65,6 +67,26 @@
             }
         });
     });
+
+    $(function() { //網頁完成後才會載入
+        $('#login_btn').on("click", function(){
+            $.ajax({
+                url: "function.php?op=accountCheckAjax",
+                data: $('#login_form').serialize(),
+                type: "POST",
+                dataType: 'text',
+                success: function(msg) {
+                    $("#show_msg").html(msg);//顯示訊息
+                    //document.getElementById('show_msg').innerHTML= msg ;
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+        });
+    });
+
 </script>
 
     
@@ -152,16 +174,17 @@
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>登入</h3>
-                        <form action="function.php?op=checkLogin" id="form1" method="post">
+                        <form action="function.php?op=checkLogin" id="login_form" method="post">
                             <div class="input__item" >
                                 <input type="text" name="account" id="account" placeholder="輸入帳號">
                                 <span class="icon_profile"></span>
                             </div>
+                            <p id="show_msg" style="color:red"></p>
                             <div class="input__item">
                                 <input type="password" name="pwd" id = "pwd" placeholder="輸入密碼">
                                 <span class="icon_lock"></span>
                             </div>
-                            <button type="submit" class="site-btn">立刻登入</button>
+                            <button type="submit" class="site-btn" id="login_btn">立刻登入</button>
                         </form>
                         <a href="forget.php" class="forget_pass">忘記密碼?</a>
                     </div>
