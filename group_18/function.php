@@ -35,6 +35,19 @@
     {
         forgetCheck($_POST['account'], $_POST['email'],$_POST['phone'],$_POST['pwd']);
     }
+    if($op=='addComment')
+    {
+        session_start();
+        writeComment($_SESSION['member_account'],$_GET['game_ID'],$_POST['comment']);
+    }
+    if($op=='signupCheckAjax')
+    {
+        signupCheck($_POST['account']);
+    }
+    if($op=='accountCheckAjax')
+    {
+        accountCheck($_POST['account']);
+    }
 
     function isStaff()
     {
@@ -159,6 +172,57 @@
 
         if($flag == 0)
             header("Location:forget.php");
+    }
+
+    function writeComment($account,$game_ID,$comment)
+    {
+        global $link;
+
+        if(isset($account))
+        {
+            $sql = "insert into member_comment values ('" . $game_ID . "','" . $account . "', NOW() ,'" . $comment ."')";
+
+            mysqli_query($link, $sql);
+
+            header("Location:game-details.php?game_ID=".$game_ID);
+            
+        }
+        else{
+            header("Location:login.php");
+        }
+    }
+
+    function signupCheck($account)
+    {
+        global $link;
+        
+        $sql = "SELECT * FROM member_info where member_account='$account' ";
+        
+        if ( $result = mysqli_query($link, $sql) ) {
+            if( $row = mysqli_fetch_assoc($result) ) echo "此帳號已存在!";
+            mysqli_free_result($result); // 釋放佔用的記憶體
+        }
+
+        mysqli_close($link); // 關閉資料庫連結
+    }
+
+    function accountCheck($account)
+    {
+        global $link;
+
+        if($account!="")
+        {
+            if ( $result = mysqli_query($link, "SELECT * FROM member_info where member_account='$account'") ) {
+                if(!($row = mysqli_fetch_assoc($result))) echo "此帳號不存在!";
+                mysqli_free_result($result); // 釋放佔用的記憶體
+            }
+    
+            mysqli_close($link); // 關閉資料庫連結
+        }
+        else
+            echo "";
+
+        
     }
 
 

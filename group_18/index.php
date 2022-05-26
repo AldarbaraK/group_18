@@ -348,12 +348,12 @@
             <div class="row">
                 <div class="all__product">
                     <div class="row">
-                        <div class="col-lg-8 col-md-8 col-sm-8">
+                        <div class="col-lg-10 col-md-10 col-sm-10">
                             <div class="section-title">
-                                <h4>所有遊戲</h4>
+                                <h4>所有遊戲　　</h4>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="btn__all">
                                 <a href="categories.php" class="primary-btn">更多 <span class="arrow_right"></span></a>
                             </div>

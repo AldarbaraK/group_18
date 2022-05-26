@@ -126,9 +126,9 @@
                                 <div class="categories__page__filter__space">
                                     <p>篩選:</p>
                                     <select>
-                                        <option value="">所有遊戲</option>
-                                        <option value="">免費遊戲</option>
-                                        <option value="">付費遊戲</option>
+                                        <option value="0">所有遊戲</option>
+                                        <option value="1">免費遊戲</option>
+                                        <option value="2">付費遊戲</option>
                                     </select>
                                 </div>
                             </div>
@@ -138,8 +138,9 @@
                                 <div class="categories__page__filter__space">
                                     <p>排序:</p>
                                     <select>
-                                        <option value="">最熱銷</option>
-                                        <option value="">發行日期</option>
+                                        <option value="0">依照排序</option>
+                                        <option value="1">最熱銷</option>
+                                        <option value="2">發行日期</option>
                                     </select>
                                 </div>
                             </div>
@@ -148,9 +149,10 @@
                             <div class="categories__page__filter">
                                 <div class="categories__page__filter__space">
                                     <p>支援:</p>
-                                    <select>
-                                        <option value="">單人</option>
-                                        <option value="">多人</option>
+                                    <select >
+                                        <option value="0">玩家支援</option>
+                                        <option value="1">單人</option>
+                                        <option value="2">多人</option>
                                     </select>
                                 </div>
                             </div>
@@ -160,9 +162,15 @@
                                 <div class="categories__page__filter__space">
                                     <p>類型:</p>
                                     <select>
-                                        <option value="">休閒</option>
-                                        <option value="">冒險</option>
-                                        <option value="">策略</option>
+                                        <option value="0">選擇類型</option>
+                                        <option value="1">休閒</option>
+                                        <option value="2">冒險</option>
+                                        <option value="3">動作</option>
+                                        <option value="4">策略</option>
+                                        <option value="5">卡牌</option>
+                                        <option value="6">汽機車模擬</option>
+                                        <option value="7">恐怖</option>
+                                        <option value="8">第一人稱</option>
                                     </select>
                                 </div>
                             </div>
@@ -221,12 +229,12 @@
                                                         <ul>';  
                                                         if ($cateResult = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
                                                             while ($categories = mysqli_fetch_assoc($cateResult)) {
-                                                               if($row["game_ID"] == $categories["game_ID"]) echo '<a href = "categories.php"><li>'. $categories["game_type"].'</li></a>';
+                                                               if($row["game_ID"] == $categories["game_ID"]) echo '<a href = "categories.php"><li>'. $categories["game_type"].'</li> </a>';
                                                             }  
                                                             mysqli_free_result($cateResult); // 釋放佔用的記憶體
                                                         }                                                         
                                                         echo '</ul>
-                                                        <h5><a href="game-details.php">'. $row["game_name"].'</a></h5>
+                                                        <h5><a href="game-details.php?game_ID='. $row["game_ID"].'">'. $row["game_name"].'</a></h5>
                                                     </div>
                                                 </div>
                                             </div>';
