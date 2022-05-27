@@ -3,6 +3,29 @@
     session_start();
 ?>
 
+<?php
+	$account = $_SESSION['member_account'];
+    if ($result = mysqli_query($link, "SELECT * FROM member_details a,member_info b WHERE a.member_account = b.member_account")){
+        while($row = mysqli_fetch_assoc($result)){
+            if($account == $row['member_account']){
+                $email = $row['member_email'];
+                $name = $row['member_name'];
+                $nickname = $row['member_nickname'];
+                $birthday = $row['member_birth'];
+				$signupDate = $row['member_signupDate'];
+                $phone = $row['member_phone'];
+                $sex = $row['member_sex'];
+                $level = $row['member_level'];    
+                $totalCost = $row['member_cost']; 
+				$loginCount = $row['login_count'];
+				$boughtCount = $row['bought_count'];
+				$scoreCount = $row['score_count'];         
+				$commentCount = $row['comment_count'];
+            }
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +63,7 @@
     </div>
 
 	<!-- Header Section Begin -->
-    <header class="header">
+    <header class="cus__header">
         <div class="container">
             <div class="row">
             	<div class="col-lg-1">
@@ -134,7 +157,14 @@
 					<div class="col-lg-6 mb-3">
 						<div class="section-title"><h3>會員等級</h3></div>
 						<div class="personal-background">
-		                   <p>黃金會員</p>
+							<?php
+								if($level == "1")
+									echo '<p>黃金會員</p>';
+								else if($level == "2")
+									echo '<p>白金會員</p>';
+								else if($level == "3")
+									echo '<p>鑽石會員</p>';
+							?>
 		                </div>
 					</div>
 					<div class="col-lg-6 mb-2">
@@ -164,7 +194,7 @@
 									<div class="section-title"><h5>姓名</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>莊胖胖</p>
+									<p><?php echo $name?></p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -172,7 +202,7 @@
 									<div class="section-title"><h5>暱稱</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>洨欠喵OuO</p>
+									<p><?php echo $nickname?></p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -180,7 +210,15 @@
 									<div class="section-title"><h5>電子信箱</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>allan96452@gmail.com</p>
+									<p><?php echo $email?></p>
+								</div>
+							</div>
+							<div class="row personal-basic">
+								<div class="col-lg-3">
+									<div class="section-title"><h5>帳號</h5></div>
+								</div>
+								<div class="col-lg-9">
+									<p><?php echo $account?></p>
 								</div>
 							</div>
 						</div>
@@ -192,7 +230,7 @@
 									<div class="section-title"><h5>性別</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>男性</p>
+									<p><?php echo $sex?></p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -200,7 +238,7 @@
 									<div class="section-title"><h5>生日</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>29-03-2001</p>
+									<p><?php echo $birthday?></p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -208,7 +246,7 @@
 									<div class="section-title"><h5>電話</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>0963111111</p>
+									<p><?php echo "0". $phone?></p>
 								</div>
 							</div>
 						</div>
@@ -227,7 +265,7 @@
 									<div class="section-title"><h5>註冊日期</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>09-04-2021</p>
+									<p><?php echo $signupDate?></p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -235,7 +273,7 @@
 									<div class="section-title"><h5>登入次數</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>56</p>
+									<p><?php echo $loginCount?></p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -243,7 +281,7 @@
 									<div class="section-title"><h5>消費次數</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>18</p>
+									<p><?php echo $boughtCount?></p>
 								</div>
 							</div>
 						</div>
@@ -255,7 +293,7 @@
 									<div class="section-title"><h5>消費總額</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>30521</p>
+									<p><?php echo $totalCost?></p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -263,7 +301,7 @@
 									<div class="section-title"><h5>評價次數</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>4</p>
+									<p><?php echo $scoreCount?></p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -271,7 +309,7 @@
 									<div class="section-title"><h5>評論總數</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p>8</p>
+									<p><?php echo $commentCount?></p>
 								</div>
 							</div>		
 						</div>

@@ -48,6 +48,10 @@
     {
         accountCheck($_POST['account']);
     }
+    if($op=='loginAccountAjax')
+    {
+        loginAccount();
+    }
 
     function isStaff()
     {
@@ -95,8 +99,8 @@
                 }
                 mysqli_query($link, $sql);
                 mysqli_free_result($result); // 釋放佔用的記憶體
-
-                header("Location:game-details.php?game_ID=".$game_ID);
+                echo "已加入購物車";
+                //header("Location:game-details.php?game_ID=".$game_ID);
             }
         }
         else{
@@ -212,17 +216,26 @@
 
         if($account!="")
         {
-            if ( $result = mysqli_query($link, "SELECT * FROM member_info where member_account='$account'") ) {
-                if(!($row = mysqli_fetch_assoc($result))) echo "此帳號不存在!";
-                mysqli_free_result($result); // 釋放佔用的記憶體
-            }
+            if(strlen($account)>=4 && strlen($account)<=24)
+            {
+                if ( $result = mysqli_query($link, "SELECT * FROM member_info where member_account='$account'") ) {
+                    if(!($row = mysqli_fetch_assoc($result))) echo "此帳號不存在!";
+                    mysqli_free_result($result); // 釋放佔用的記憶體
+                }
     
-            mysqli_close($link); // 關閉資料庫連結
+                mysqli_close($link); // 關閉資料庫連結
+            }
+            else
+                echo "";
         }
         else
             echo "";
 
-        
+    }
+
+    function loginAccount()
+    {
+        echo "";
     }
 
 
