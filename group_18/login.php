@@ -38,73 +38,76 @@
 
     <!--<link rel="stylesheet" href="js/pwd.js" type="text/js">-->
     <script>
-    $(document).ready(function($) {
-        $("#login_form").validate({
-            submitHandler: function(form) {
-                form.submit();
-            },
-            rules: {
-                account: {
-                    required: true,
-                    minlength: 4,
-                    maxlength: 24
-                },
-                pwd: {
-                    required: true,
-                    minlength: 8,
-                    maxlength: 20
-                }
-            },
-            messages: {
-                account: {
-                    required: "請輸入帳號"
-                },
-                pwd: {
-                    required: "請輸入密碼",
-                    minlength: "請輸入8~20位英數字組合密碼",
-                    maxlength:"請輸入8~20位英數字組合密碼"
-                }
-            }
-        });
-    });
 
-    $(function() { //網頁完成後才會載入
-        $('#login_btn').on("click", function(){
-            $.ajax({
-                url: "function.php?op=accountCheckAjax",
-                data: $('#login_form').serialize(),
-                type: "POST",
-                dataType: 'text',
-                success: function(msg) {
-                    $("#show_msg").html(msg);//顯示訊息
-                    //document.getElementById('show_msg').innerHTML= msg ;
+        $(document).ready(function($) {
+            $("#login_form").validate({
+                submitHandler: function(form) {
+                    form.submit();
                 },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status);
-                    alert(thrownError);
+                rules: {
+                    account: {
+                        required: true,
+                        minlength: 4,
+                        maxlength: 24,
+                       // checkUsername:true
+                    },
+                    pwd: {
+                        required: true,
+                        minlength: 8,
+                        maxlength: 20,
+                        //checkUsername:true
+                    }
+                },
+                messages: {
+                    account: {
+                        required: "請輸入帳號"
+                    },
+                    pwd: {
+                        required: "請輸入密碼",
+                        minlength: "請輸入8~20位英數字組合密碼",
+                        maxlength:"請輸入8~20位英數字組合密碼"
+                    }
                 }
             });
         });
 
-        $('#account').keyup(function() {
-            $.ajax({
-                url: "function.php?op=loginAccountAjax",
-                data: $('#login_form').serialize(),
-                type: "POST",
-                dataType: 'text',
-                success: function(msg) {
-                    $("#show_msg").html(msg);//顯示訊息
-                    //document.getElementById('show_msg').innerHTML= msg ;
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status);
-                    alert(thrownError);
-                }
+        $(function() { //網頁完成後才會載入
+            $('#login_btn').on("click", function(){
+                $.ajax({
+                    url: "function.php?op=accountCheckAjax",
+                    data: $('#login_form').serialize(),
+                    type: "POST",
+                    dataType: 'text',
+                    success: function(msg) {
+                        $("#show_msg").html(msg);//顯示訊息
+                        //document.getElementById('show_msg').innerHTML= msg ;
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+            });
+
+            $('#account').keyup(function() {
+                $.ajax({
+                    url: "function.php?op=loginAccountAjax",
+                    data: $('#login_form').serialize(),
+                    type: "POST",
+                    dataType: 'text',
+                    success: function(msg) {
+                        $("#show_msg").html(msg);//顯示訊息
+                        //document.getElementById('show_msg').innerHTML= msg ;
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
             });
         });
-    });
 
-</script>
+    </script>
 
     
 </head>
@@ -203,11 +206,11 @@
                                 <input type="text" name="account" id="account" placeholder="輸入帳號">
                                 <span class="icon_profile"></span>
                             </div>
-                            <p id="show_msg" style="color:red"></p>
                             <div class="input__item">
                                 <input type="password" name="pwd" id = "pwd" placeholder="輸入密碼">
                                 <span class="icon_lock"></span>
                             </div>
+                            <p id="show_msg" style="color:red"></p>
                             <button type="submit" class="site-btn" id="login_btn">立刻登入</button>
                         </form>
                         <a href="forget.php" class="forget_pass">忘記密碼?</a>

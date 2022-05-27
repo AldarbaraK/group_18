@@ -40,6 +40,15 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+
+    
+    <!--additional method - for checkbox .. ,require_from_group method ...-->
+    <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+    <!--中文錯誤訊息-->
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh_TW.js "></script>
+
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
@@ -56,6 +65,57 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
+
+	<script>
+		jQuery.validator.methods.matches = function( value, element, params ) {
+			var re = new RegExp(params);
+			return this.optional( element ) || re.test( value );
+		}
+
+		$.validator.addMethod("pwd",function(value,element,params){
+			var pwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+			return (pwd.test(value));
+		},"請填寫長度在8-20之間,需包含一個字母和一個數字!");
+
+		$(document).ready(function($) {
+			$("#edit_form").validate({
+				submitHandler: function(form) {
+					form.submit();
+				},
+				rules: {
+					account: {
+						minlength: 4,
+						maxlength: 24
+					},
+					email: {
+						email: true
+					},
+					pwd: {
+						pwd: true
+					},
+					pwd2: {
+						equalTo: "#pwd"
+					},
+					phone: {
+						matches: new RegExp('^09\\d{8}$')
+					}
+				},
+				messages: {
+					email: {
+						email: "請輸入正確郵箱格式"
+					},
+					pwd2: {
+						equalTo: "密碼不相符"
+					},
+					phone: {
+						matches: "請輸入正確的10位手機格式"
+					}
+				}
+			});
+		});
+
+	</script>
+
 <body>
 
 	<div id="preloder">
@@ -332,12 +392,12 @@
 	<!-- Edit model Begin -->
     <div class="edit-model">
         <div class="edit-model-show">
-	        <div class="edit-switch-pos">
-        		<div class="edit-close-switch"><i class="icon_check"></i></div>
-	    		<div class="edit-close-switch"><i class="icon_close"></i></div>	
-	    	</div>
-	    	<form class="edit-model-form">
+	    	<form class="edit-model-form" action="function.php?op=memberDataEdit" id="edit_form" method="post" >
 		        <div class="container">
+					<div class="edit-switch-pos">
+						<button class="edit-close-switch" type="submit" name="edit_btn" id="edit_btn" value=""><i class="icon_check"></i></button>
+						<div class="edit-close-switch"><i class="icon_close"></i></div>	
+					</div>
 		        	<div class="row pt-5">
 		        		<div class="col-lg-6">
 		        			<div class="form-group">
@@ -345,15 +405,16 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>電子信箱</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-email" placeholder="請輸入電子信箱"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-email" placeholder="請輸入電子信箱" name="email"></div>
         						</div>
         					</div>
+							<p id="show_msg"></p>
         					<div class="form-group">
         						<div class="row">
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>密碼</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password" placeholder="請輸入密碼"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password" placeholder="請輸入密碼" name="pwd" id="pwd"></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -361,7 +422,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>確認</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password" placeholder="請重複輸入密碼"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password2" placeholder="請重複輸入密碼" name="pwd2"></div>
         						</div>
         					</div>
 		        		</div>
@@ -371,7 +432,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>姓名</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-name" placeholder="請輸入姓名"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-name" placeholder="請輸入姓名" name="name"></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -379,7 +440,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>暱稱</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-nickname" placeholder="請輸入暱稱"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-nickname" placeholder="請輸入暱稱" name="nickname"></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -389,13 +450,13 @@
 	        						</div>
 									<div class="col-lg-2">
 										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex1" name="ratedRadio" class="custom-control-input edit-form-Zindex">
+											<input type="radio" id="edit-member-sex1" name="ratedRadio" class="custom-control-input edit-form-Zindex" value="1">
 											<label class="custom-control-label" for="sexRadio1">男性</label>
 										</div>
 									</div>	
 									<div class="col-lg-2">
 										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex2" name="ratedRadio" class="custom-control-input edit-form-Zindex">
+											<input type="radio" id="edit-member-sex2" name="ratedRadio" class="custom-control-input edit-form-Zindex" value="2">
 											<label class="custom-control-label" for="sexRadio2">女性</label>
 										</div>
 									</div>	
@@ -406,7 +467,7 @@
 	        						<div class="col-lg-3">
 	        							<div class="section-title"><h4>生日</h4></div>
 	        						</div>
-									<div class="col-lg-9"><input class="form-control date-picker" id="edit-member-birth" placeholder="選擇生日日期" type="text"></div>
+									<div class="col-lg-9"><input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="birth" id="edit-member-birth" placeholder="選擇生日日期" type="text"></div>
 								</div>
         					</div>
         					<div class="form-group">
@@ -414,7 +475,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>電話</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-phone" placeholder="請輸入電話"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="phone" id="edit-member-phone" placeholder="請輸入電話"></div>
         						</div>
         					</div>
 		        		</div>
