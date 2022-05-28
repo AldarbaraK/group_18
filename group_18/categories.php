@@ -64,7 +64,14 @@
                                         <li><a href="categories.php">卡牌</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="member-center-data.php">會員中心</a></li>
+                                <?php
+                                    if(isset($_SESSION['member_account'])){
+                                        echo '<li><a href="member-center-data.php">會員中心</a></li>';
+                                    }
+                                    else{
+                                        echo '<li><a href="login.php">會員中心</a></li>';
+                                    }
+                                ?>
                                 <li><a href="customer.php">客服中心</a></li>
                                 <li><a href="admin.php">管理員中心</a></li>
                             </ul>
@@ -217,12 +224,40 @@
                             <?php 
                                 if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_pic b WHERE a.game_ID = b.game_ID")) {
                                     while ($row = mysqli_fetch_assoc($result)) {
+                                        $commentflag=0;
+                                        $boughtflag=0;  
                                         echo '<div class="col-lg-3 col-md-6 col-sm-6">
                                                 <div class="product__item">
                                                     <a href="game-details.php?game_ID='. $row["game_ID"].'">
                                                         <div class="product__item__pic set-bg" data-setbg="img/product/'. $row["game_picture"].'.jpg">
-                                                            <div class="comment"><i class="fa fa-comments"></i>'. $row["game_score"].'</div>
-                                                            <div class="view"><i class="fa fa-download"></i>'. $row["game_bought"].'</div>
+                                                            <div class="comment"><i class="fa fa-comments"></i>';
+                                                                if ($commentResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM member_comment GROUP BY game_ID")){
+                                                                    while ($people = mysqli_fetch_assoc($commentResult)) {
+                                                                        if($row["game_ID"] == $people["game_ID"]) 
+                                                                        {   
+                                                                            echo " ". $people["count"];
+                                                                            $commentflag = 1;
+                                                                        }
+                                                                    }  
+                                                                    mysqli_free_result($commentResult); // 釋放佔用的記憶體
+                                                                }
+                                                                if($commentflag == 0)
+                                                                    echo " 0";
+                                                            echo '</div>
+                                                            <div class="view"><i class="fa fa-download"></i> ';
+                                                                if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
+                                                                    while ($people = mysqli_fetch_assoc($boughtResult)) {
+                                                                        if($row["game_ID"] == $people["game_ID"]) 
+                                                                        {    
+                                                                            echo " ". $people["count"];
+                                                                            $boughtflag = 1;
+                                                                        }
+                                                                    }  
+                                                                    mysqli_free_result($boughtResult); // 釋放佔用的記憶體
+                                                                }
+                                                                if($boughtflag == 0)
+                                                                    echo " 0";
+                                                            echo '</div>
                                                         </div>
                                                     </a>
                                                     <div class="product__item__text">

@@ -9,7 +9,6 @@
                 $name = $row['game_name'];
                 $developer = $row['game_developer'];
                 $publisher = $row['game_publisher'];
-                $bought = $row['game_bought'];
                 $date = $row['game_date'];
                 $rate = $row['game_rating'];
                 $story = $row['game_story'];
@@ -72,6 +71,25 @@
                     
             });
         });
+
+        $(function() { //網頁完成後才會載入
+            $('#addCart_btn').on("click", function() {
+                $.ajax({
+                    url: "function.php?op=addCart&game_ID=<?php echo $_GET["game_ID"]?>",
+                    data: $('#addcart_form').serialize(),
+                    type: "POST",
+                    dataType: 'text',
+                    success: function(msg) {
+                        $("#show_msg").html(msg);//顯示訊息
+                        //document.getElementById('show_msg').innerHTML= msg ;
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+            });
+        });
         
     </script>
 </head>
@@ -110,7 +128,14 @@
                                         <li><a href="categories.php">卡牌</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="member-center-data.php">會員中心</a></li>
+                                <?php
+                                    if(isset($_SESSION['member_account'])){
+                                        echo '<li><a href="member-center-data.php">會員中心</a></li>';
+                                    }
+                                    else{
+                                        echo '<li><a href="login.php">會員中心</a></li>';
+                                    }
+                                ?>
                                 <li><a href="customer.php">客服中心</a></li>
                                 <li><a href="admin.php">管理員中心</a></li>
                             </ul>
@@ -209,7 +234,23 @@
                                             <li><span>發行商:</span> <?php echo $publisher?></li>
                                             <li><span>支援語言:</span> 繁體中文 / 英文 / 日文</li>
                                             <li><span>遊戲分級:</span> <?php echo $rate ?></li>
-                                            <li><span>購買人數:</span> <?php echo $bought ?></li>
+                                            <li><span>購買人數:</span> 
+                                                <?php
+                                                    $boughtflag=0;
+                                                    if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
+                                                        while ($people = mysqli_fetch_assoc($boughtResult)) {
+                                                            if($_GET['game_ID'] == $people["game_ID"]) 
+                                                            {    
+                                                                echo " ". $people["count"];
+                                                                $boughtflag = 1;
+                                                            }
+                                                        }  
+                                                        mysqli_free_result($boughtResult); // 釋放佔用的記憶體
+                                                    }
+                                                    if($boughtflag == 0)
+                                                        echo " 0";
+                                                ?>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -227,25 +268,26 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="gameProduct__details__text">
-                                <p>價格: <?php 
-                                            if($price == 0) echo "Free!"; 
-                                            else if($discount!=0){
-                                                $discount_price = round($price*$discount/100);
-                                                echo '  
-                                                    <s> NT$ '.$price.'</s>
-                                                    -> NT$ '.$discount_price.'
-                                                    ';
-                                            }
-                                            else{ 
-                                                echo '$NT '.$price;
-                                            }  
-                                        ?>
+                                <p>價格: 
+                                    <?php 
+                                        if($price == 0) echo "Free!"; 
+                                        else if($discount!=0){
+                                            $discount_price = round($price*$discount/100);
+                                            echo '  
+                                                <s> NT$ '.$price.'</s>
+                                                -> NT$ '.$discount_price.'
+                                                ';
+                                        }
+                                        else{ 
+                                            echo '$NT '.$price;
+                                        }  
+                                    ?>
                                 </p>
                                 <div class="game__details__btn">
                                     <div class="row">
                                         <button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>追隨</span></button>
-                                        <form action="function.php?op=addCart&game_ID=<?php echo $_GET["game_ID"]?>" method="post" id="addcart_form">
-                                            <button class="watch-btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>
+                                        <form action="" method="post" id="addcart_form">
+                                            <button class="watch-btn" id="addCart_btn"><span id="show_msg"></span> <i class="fa fa-angle-right"></i></button>
                                         </form>
                                     </div>
                                 </div>
@@ -305,10 +347,24 @@
                         <?php 
                             if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_pic b WHERE a.game_ID = b.game_ID")) {
                                 while ($row = mysqli_fetch_assoc($result)) {
+                                    $boughtflag=0;
                                     if( $row["game_ID"] == 1 || $row["game_ID"] == 2 || $row["game_ID"] == 9 || $row["game_ID"] == 10 ){
                                         echo '<a href="game-details.php?game_ID='. $row["game_ID"].'">
                                             <div class="product__mayLike__item set-bg" data-setbg="img/product/'. $row["game_picture"].'.jpg">
-                                                <div class="view"><i class="fa fa-download"></i> '. $row["game_bought"].'</div>
+                                                <div class="view"><i class="fa fa-download"></i> ';
+                                                    if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
+                                                        while ($people = mysqli_fetch_assoc($boughtResult)) {
+                                                            if($row["game_ID"] == $people["game_ID"]) 
+                                                            {    
+                                                                echo " ". $people["count"];
+                                                                $boughtflag = 1;
+                                                            }
+                                                        }  
+                                                        mysqli_free_result($boughtResult); // 釋放佔用的記憶體
+                                                    }
+                                                    if($boughtflag == 0)
+                                                        echo " 0";
+                                                echo '</div>
                                             </div>
                                         </a>';
                                     }

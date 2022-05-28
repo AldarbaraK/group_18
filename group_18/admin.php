@@ -40,7 +40,7 @@
     </div>
 
 	<!-- Header Section Begin -->
-    <header class="header">
+    <header class="cus__header">
         <div class="container">
             <div class="row">
             	<div class="col-lg-1">

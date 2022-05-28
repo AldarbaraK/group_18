@@ -46,7 +46,16 @@
     }
     if($op=='accountCheckAjax')
     {
-        accountCheck($_POST['account']);
+        accountCheck($_POST['account'],$_POST['pwd']);
+    }
+    if($op=='loginAccountAjax')
+    {
+        loginAccount();
+    }
+    if($op=='memberDataEdit')
+    {
+        session_start();
+        memberDataEdit($_SESSION['member_account'],$_POST['email'],$_POST['pwd'],$_POST['name'],$_POST['nickname'],$_POST['ratedRadio'],$_POST['birth'],$_POST['phone']);
     }
 
     function isStaff()
@@ -95,8 +104,8 @@
                 }
                 mysqli_query($link, $sql);
                 mysqli_free_result($result); // 釋放佔用的記憶體
-
-                header("Location:game-details.php?game_ID=".$game_ID);
+                echo "已加入購物車";
+                //header("Location:game-details.php?game_ID=".$game_ID);
             }
         }
         else{
@@ -206,23 +215,89 @@
         mysqli_close($link); // 關閉資料庫連結
     }
 
-    function accountCheck($account)
+    function accountCheck($account,$pwd)
     {
         global $link;
 
         if($account!="")
         {
-            if ( $result = mysqli_query($link, "SELECT * FROM member_info where member_account='$account'") ) {
-                if(!($row = mysqli_fetch_assoc($result))) echo "此帳號不存在!";
-                mysqli_free_result($result); // 釋放佔用的記憶體
-            }
+            if(strlen($account)>=4 && strlen($account)<=24)
+            {
+                if ( $result = mysqli_query($link, "SELECT * FROM member_info where member_account='$account'") ) {
+                    if(!($row = mysqli_fetch_assoc($result))||!(password_verify($pwd,$row['member_password']))) echo "此帳號不存在或密碼不正確!";
+                    mysqli_free_result($result); // 釋放佔用的記憶體
+                }
     
-            mysqli_close($link); // 關閉資料庫連結
+                mysqli_close($link); // 關閉資料庫連結
+            }
+            else
+                echo "";
         }
         else
             echo "";
 
+    }
+
+    function loginAccount()
+    {
+        echo "";
+    }
+
+    function memberDataEdit($account,$email,$pwd,$name,$nickname,$ratedRadio,$birth,$phone)
+    {
+        global $link;
         
+        if ($result = mysqli_query($link, "SELECT * FROM member_info")) {
+            while($row = mysqli_fetch_assoc($result)) {
+                if($row["member_account"] == $account){
+                    if($email!="")
+                    {
+                        $sql = "update member_info set member_email='" .$email. "' where member_account = '" . $account . "'";
+                        mysqli_query($link, $sql);
+                    }
+                    if($pwd!="")
+                    {
+                        $password = password_hash($pwd, PASSWORD_BCRYPT);   //加密
+                        $sql = "update member_info set member_password='" .$password. "' where member_account = '" . $account . "'";
+                        mysqli_query($link, $sql);
+                    }
+                    if($name!="")
+                    {
+                        $sql = "update member_info set member_name='" .$name. "' where member_account = '" . $account . "'";
+                        mysqli_query($link, $sql);
+                    }
+                    if($nickname!="")
+                    {
+                        $sql = "update member_info set member_nickname='" .$nickname. "' where member_account = '" . $account . "'";
+                        mysqli_query($link, $sql);
+                    }
+                    if($birth!="")
+                    {
+                        $sql = "update member_info set member_birth='" .$birth. "' where member_account = '" . $account . "'";
+                        mysqli_query($link, $sql);
+                    }
+                    if($phone!="")
+                    {
+                        $sql = "update member_info set member_phone='" .$phone. "' where member_account = '" . $account . "'";
+                        mysqli_query($link, $sql);
+                    }
+                    if($ratedRadio!="")
+                    {
+                        if($ratedRadio == "1")
+                            $sex = "男性";
+                        else if($ratedRadio == "2")
+                            $sex = "女性";
+                        $sql = "update member_info set member_sex='" .$sex. "' where member_account = '" . $account . "'";
+                        mysqli_query($link, $sql);
+                    }
+                    
+                }
+            }
+            mysqli_free_result($result); // 釋放佔用的記憶體
+        }
+
+        header("Location:member-center-data.php");
+
     }
 
 
