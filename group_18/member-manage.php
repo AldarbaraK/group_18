@@ -40,7 +40,7 @@
     </div>
 
 	<!-- Header Section Begin -->
-    <header class="cus__header">
+    <header class="header">
         <div class="container">
             <div class="row">
             	<div class="col-lg-1">
@@ -331,7 +331,7 @@
 	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
 	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
 	<!-- Datatable Setting js -->
-	<script src="vendors/scripts/datatable-setting.js"></script></body>
+	<script src="vendors/scripts/datatable-setting.js"></script>
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/player.js"></script>
@@ -340,5 +340,5 @@
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
-
+	</body>
 </html>

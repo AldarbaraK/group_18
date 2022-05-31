@@ -9,12 +9,21 @@ $('document').ready(function(){
 		}],
 		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 		"language": {
-			"info": "_START_-_END_ of _TOTAL_ entries",
-			searchPlaceholder: "Search",
-			paginate: {
-				next: '<i class="ion-chevron-right"></i>',
-				previous: '<i class="ion-chevron-left"></i>'  
-			}
+			"processing": "處理中...",
+	        "loadingRecords": "載入中...",
+	        "lengthMenu": "顯示 _MENU_ 項結果",
+	        "zeroRecords": "沒有符合的結果",
+	        "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+	        "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+	        "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+	        "infoPostFix": "",
+	        "search": "搜尋:",
+	        "paginate": {
+	            "first": "第一頁",
+	            "previous": "上一頁",
+	            "next": "下一頁",
+	            "last": "最後一頁"
+	        },
 		},
 	});
 

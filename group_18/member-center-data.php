@@ -40,14 +40,11 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-
-    
-    <!--additional method - for checkbox .. ,require_from_group method ...-->
-    <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
-    <!--中文錯誤訊息-->
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh_TW.js "></script>
+    <!--表單驗證-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+	<script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh_TW.js "></script>
 
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
@@ -80,6 +77,7 @@
 		$(document).ready(function($) {
 			$("#edit_form").validate({
 				submitHandler: function(form) {
+					$('.edit-model').fadeOut(400);
 					form.submit();
 				},
 				rules: {
@@ -94,7 +92,7 @@
 						pwd: true
 					},
 					pwd2: {
-						equalTo: "#pwd"
+						equalTo: "#edit-member-password"
 					},
 					phone: {
 						matches: new RegExp('^09\\d{8}$')
@@ -123,7 +121,7 @@
     </div>
 
 	<!-- Header Section Begin -->
-    <header class="cus__header">
+    <header class="header">
         <div class="container">
             <div class="row">
             	<div class="col-lg-1">
@@ -414,7 +412,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>密碼</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password" placeholder="請輸入密碼" name="pwd" id="pwd"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password" placeholder="請輸入密碼" name="pwd"></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -485,6 +483,7 @@
         </div>
     </div>
     <!-- Edit model end -->
+
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
@@ -494,15 +493,8 @@
 	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
 	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
 	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
-	<!-- buttons for Export datatable -->
-	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
-	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
 	<!-- Datatable Setting js -->
-	<script src="vendors/scripts/datatable-setting.js"></script></body>
+	<script src="vendors/scripts/datatable-setting.js"></script>
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/player.js"></script>
@@ -511,5 +503,5 @@
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
-
+	</body>
 </html>

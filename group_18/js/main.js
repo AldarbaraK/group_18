@@ -1,7 +1,5 @@
 
 
-'use strict';
-
 (function ($) {
 
     /*------------------
@@ -47,35 +45,20 @@
     --------------------*/
 
     //Edit Model
-    $('.edit-switch').on('click', function () {
-        $('.edit-model').fadeIn(400);
-    });
-
     $(document).on('click', '.edit-switch' , function () {
         $('.edit-model').fadeIn(400);
     });
 
-    $('.edit-close-switch').on('click', function () {
-        $('.edit-model').fadeOut(400, function () {
-            $('#edit-input').val('');
-        });
-    });
-
     //View Model
-    $('.view-switch').on('click', '.view-switch' , function () {
-        $('.view-model').fadeIn(400);
-    });
     $(document).on('click', '.view-switch' , function () {
         $('.view-model').fadeIn(400);
     });
 
     $('.view-close-switch').on('click', function () {
-        $('.view-model').fadeOut(400, function () {
-            $('#view-input').val('');
-        });
+        $('.view-model').fadeOut(400);
     });
 
-
+    
     /*------------------
 		Navigation
 	--------------------*/
