@@ -286,8 +286,8 @@
                                 <div class="game__details__btn">
                                     <div class="row">
                                         <button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>追隨</span></button>
-                                        <form action="" method="post" id="addcart_form">
-                                            <button class="watch-btn" id="addCart_btn"><span id="show_msg"></span> <i class="fa fa-angle-right"></i></button>
+                                        <form action="function.php?op=addCart&game_ID=<?php echo $_GET["game_ID"]?>" method="post" id="addcart_form">
+                                            <button class="watch-btn" id="addCart_btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>
                                         </form>
                                     </div>
                                 </div>

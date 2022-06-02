@@ -7,6 +7,9 @@
     /*------------------
         Preloader
     --------------------*/
+    
+    
+
     $(window).on('load', function () {
         $(".loader").fadeOut();
         $("#preloder").delay(200).fadeOut("slow");
@@ -18,11 +21,170 @@
             $('.filter__controls li').removeClass('active');
             $(this).addClass('active');
         });
-        if ($('.filter__gallery').length > 0) {
+        /*if ($('.filter__gallery').length > 0) {
             var containerEl = document.querySelector('.filter__gallery');
             var mixer = mixitup(containerEl);
+        }*/
+        if ($('.filter__gallery').length > 0) {
+            var containerE1 = document.querySelector('.filter__gallery');
+            var mixer = mixitup(containerE1,{
+                animation: {
+                    effects: 'fade rotateZ(-180deg)',
+                    duration: 700
+                },
+                callbacks: {
+                    onMixEnd: function(state){
+                        console.log(state)
+                    }
+                }
+            });
         }
+
+        
+
+        var containerE2 = document.querySelector('.filter__game');
+        var selectFilter2 = document.querySelector('.filter__select');
+        var selectSort = document.querySelector('.filter__sort');
+        var selectFilter3 = document.querySelector('.filter__price');
+        var mixer2 = mixitup(containerE2,{
+            load:{
+                filter: '' + or
+            }
+        });
+
+        $('.filter__select').on('change', function () {
+            $.ajax({
+                url: "function.php?op=selectGame",
+                data: $('#select_form').serialize(),
+                type: "POST",
+                dataType: 'text',
+                success: function(msg) {
+                    $("#show_msg").html(msg);//顯示訊息
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+
+            if(selectFilter3.value == "all")
+                var selector1 = selectFilter2.value;
+            else if(selectFilter2.value == "all")
+                var selector1 = selectFilter3.value;
+            else
+                var selector1 = selectFilter2.value + selectFilter3.value;
+            
+            mixer2.filter(selector1);
+
+            if(selectFilter2.value == ".leisure")
+                $('#type_path').text("休閒");
+            else if(selectFilter2.value == ".adventure")
+                $('#type_path').text("冒險");
+            else if(selectFilter2.value == ".action")
+                $('#type_path').text("動作");
+            else if(selectFilter2.value == ".tactic")
+                $('#type_path').text("策略");
+            else if(selectFilter2.value == ".cardType")
+                $('#type_path').text("卡牌");
+            else if(selectFilter2.value == ".car")
+                $('#type_path').text("汽機車模擬");
+            else if(selectFilter2.value == ".terrible")
+                $('#type_path').text("恐怖");
+            else if(selectFilter2.value == ".firstPerson")
+                $('#type_path').text("第一人稱");
+            else if(selectFilter2.value == ".single")
+                $('#type_path').text("單人");
+            else if(selectFilter2.value == ".multiperson")
+                $('#type_path').text("多人");
+            else if(selectFilter2.value == "all")
+                $('#type_path').text("所有類型");
+
+            if(selectFilter3.value == ".free")
+                $('#path').text("免費遊戲");
+            else if(selectFilter3.value == ".pay")
+                $('#path').text("付費遊戲");
+            else if(selectFilter3.value == "all")
+                $('#path').text("所有遊戲");
+                
+            
+        });
+
+        $('.filter__sort').on('change', function () {
+            var order = selectSort.value;
+            mixer2.sort(order);
+        });
+
+        $('.filter__price').on('change', function () {
+            $.ajax({
+                url: "function.php?op=selectGame",
+                data: $('#select_form').serialize(),
+                type: "POST",
+                dataType: 'text',
+                success: function(msg) {
+                    $("#show_msg").html(msg);//顯示訊息
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+
+            if(selectFilter2.value == "all")
+                var selector2 = selectFilter3.value;
+            else if(selectFilter3.value == "all")
+                var selector2 = selectFilter2.value;
+            else
+                var selector2 = selectFilter2.value + selectFilter3.value;
+
+            mixer2.filter(selector2);
+
+            if(selectFilter2.value == ".leisure")
+                $('#type_path').text("休閒");
+            else if(selectFilter2.value == ".adventure")
+                $('#type_path').text("冒險");
+            else if(selectFilter2.value == ".action")
+                $('#type_path').text("動作");
+            else if(selectFilter2.value == ".tactic")
+                $('#type_path').text("策略");
+            else if(selectFilter2.value == ".cardType")
+                $('#type_path').text("卡牌");
+            else if(selectFilter2.value == ".car")
+                $('#type_path').text("汽機車模擬");
+            else if(selectFilter2.value == ".terrible")
+                $('#type_path').text("恐怖");
+            else if(selectFilter2.value == ".firstPerson")
+                $('#type_path').text("第一人稱");
+            else if(selectFilter2.value == ".single")
+                $('#type_path').text("單人");
+            else if(selectFilter2.value == ".multiperson")
+                $('#type_path').text("多人");
+            else if(selectFilter2.value == "all")
+                $('#type_path').text("所有類型");
+
+            if(selectFilter3.value == ".free")
+                $('#path').text("免費遊戲");
+            else if(selectFilter3.value == ".pay")
+                $('#path').text("付費遊戲");
+            else if(selectFilter3.value == "all")
+                $('#path').text("所有遊戲");
+        });
+
+        
+    
+       
+
+        
     });
+
+    
+    $('.dropdown li').on('click', function() {
+        $("selectBy").html($(this).html());
+
+        var or = $(this).attr("value");
+        alert(or);
+    });
+
+    
 
     /*------------------
         Background Set

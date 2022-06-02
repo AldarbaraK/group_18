@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2022-05-26 13:06:50
+-- 產生時間： 2022-05-31 15:15:13
 -- 伺服器版本： 10.4.22-MariaDB
 -- PHP 版本： 8.1.2
 
@@ -70,6 +70,7 @@ INSERT INTO `deal_record` (`member_account`, `game_ID`, `deal_score`, `deal_pric
 ('allan96452', 10, 5, 1190, '2022-05-26 12:42:57'),
 ('allan96452', 16, 4, 903, '2022-05-26 12:42:57'),
 ('member', 4, NULL, 325, '2022-05-11 14:57:26'),
+('member', 10, 3, 0, '2022-05-28 19:50:16'),
 ('member', 21, NULL, 108, '2022-05-03 05:57:26'),
 ('Unshun0120', 15, 3, 0, '2022-05-26 12:42:57'),
 ('Unshun0120', 22, NULL, 26, '2022-04-19 19:57:26');
@@ -299,8 +300,9 @@ CREATE TABLE `member_cart` (
 INSERT INTO `member_cart` (`member_account`, `game_ID`) VALUES
 ('allan96452', 8),
 ('allan96452', 9),
-('member', 1),
-('member', 5),
+('member', 3),
+('member', 14),
+('member', 15),
 ('Unshun0120', 4),
 ('Unshun0120', 5),
 ('Unshun0120', 6);
@@ -361,13 +363,22 @@ INSERT INTO `member_comment` (`game_ID`, `member_account`, `comment_time`, `comm
 
 CREATE TABLE `member_details` (
   `member_account` varchar(64) NOT NULL,
-  `member_level` varchar(64) NOT NULL,
+  `member_level` int(64) NOT NULL,
   `member_cost` int(11) NOT NULL,
   `login_count` int(11) NOT NULL,
   `bought_count` int(11) NOT NULL,
   `score_count` int(11) NOT NULL,
   `comment_count` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `member_details`
+--
+
+INSERT INTO `member_details` (`member_account`, `member_level`, `member_cost`, `login_count`, `bought_count`, `score_count`, `comment_count`) VALUES
+('allan96452', 3, 4432, 5, 9, 4, 9),
+('member', 2, 3334, 2, 3, 5, 6),
+('Unshun0120', 1, 4, 5, 6, 7, 3);
 
 -- --------------------------------------------------------
 
@@ -402,7 +413,7 @@ CREATE TABLE `member_info` (
   `member_name` varchar(30) NOT NULL COMMENT '會員姓名',
   `member_nickname` varchar(30) NOT NULL COMMENT '會員暱稱',
   `member_birth` date NOT NULL COMMENT '會員生日',
-  `member_phone` varchar(20) NOT NULL COMMENT '會員電話',
+  `member_phone` varchar(30) NOT NULL COMMENT '會員電話',
   `member_signupDate` date NOT NULL COMMENT '註冊日期',
   `member_sex` varchar(10) NOT NULL COMMENT '性別'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -412,9 +423,9 @@ CREATE TABLE `member_info` (
 --
 
 INSERT INTO `member_info` (`member_account`, `member_password`, `member_email`, `member_name`, `member_nickname`, `member_birth`, `member_phone`, `member_signupDate`, `member_sex`) VALUES
-('allan96452', '$2y$10$c0aTyVqszG6mtR.zpESvIuBgTZOC4woCsUpLLLZZxMf0bIOI1ZGnS', 'allan96452@gmail.com', '莊明憲', 'Xian', '2001-09-05', '963111111', '2022-05-14', '男性'),
-('member', '$2y$10$Vb1ZRb/zVvtUvm26Chx7QegncZBFend8F6H/1WB6WYFcUSVf3Z/I6', 'member@gmail.com', '測試帳號', '測試', '2022-05-14', '912345678', '2022-05-14', '男性'),
-('Unshun0120', '$2y$10$PWBkQkOyIqb9aZqxP73o6Olhq3WtxO6fQ9BwMLygLfx1Ksom7d84.', 'unshun0120@gmail.com', '李永紳', '紳', '2001-01-20', '972069867', '2022-05-14', '男性');
+('allan96452', '$2y$10$b5jAWRyZl76TBK7nzvVgIO94DIDiuV9./TvSbBUIKg8FzmKK9kIRu', 'allan96452@gmail.com', '莊明憲', 'Xian', '2001-09-05', '963111111', '2022-05-14', '男性'),
+('member', '$2y$10$NVL87TLxnw2Hy0ZN1uXHp.LuKfbtLuM1SrghtcfEuSRchX52sfjBm', 'member@gmail.com', '測試帳號', '測試', '2022-05-14', '0912345678', '2022-05-14', '男性'),
+('Unshun0120', '$2y$10$/pKwaCl0NlNZZhI.5rAuUeXwJiWRwSBQDKS8Wxx5oqGYPSeTqbIOm', 'unshun0120@gmail.com', '李永紳', '紳', '2001-01-20', '972069867', '2022-05-14', '男性');
 
 --
 -- 已傾印資料表的索引

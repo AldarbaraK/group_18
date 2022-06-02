@@ -53,16 +53,21 @@
                             <ul>
                                 <li class="active"><a href="index.php">首頁</a></li>
                                 <li><a href="categories.php">類別 <span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                    <form name="header_form" method="post" id="header_form">
+                                        <input type="hidden" id="selectBy" value="${selectBy}">
+                                        <ul class="dropdown header_select" id="headerSelect">
+                                            <li value=".leisure"><a href="categories.php">休閒</a></li>
+                                            <li value=".adventure"><a href="categories.php">冒險</a></li>
+                                            <li value=".action"><a href="categories.php">動作</a></li>
+                                            <li value=".tactic"><a href="categories.php">策略</a></li>
+                                            <li value=".cardType"><a href="categories.php">卡牌</a></li>
+                                            <li value=".car"><a href="categories.php">汽機車模擬</a></li>
+                                            <li value=".terrible"><a href="categories.php">恐怖</a></li>
+                                            <li value=".firstPerson"><a href="categories.php">第一人稱</a></li>
+                                            <li value=".single"><a href="categories.php">單人</a></li>
+                                            <li value=".multiperson"><a href="categories.php">多人</a></li>
+                                        </ul>
+                                    </form>
                                 </li>
                                 <?php
                                     if(isset($_SESSION['member_account'])){

@@ -57,6 +57,14 @@
         session_start();
         memberDataEdit($_SESSION['member_account'],$_POST['email'],$_POST['pwd'],$_POST['name'],$_POST['nickname'],$_POST['ratedRadio'],$_POST['birth'],$_POST['phone']);
     }
+    if($op=='selectGame')
+    {
+        selectGameCount($_POST['select_price'],$_POST['select_type']);
+    }
+    if($op=='headerSelectGame')
+    {
+        headerSelect();
+    }
 
     function isStaff()
     {
@@ -221,7 +229,9 @@
 
         if($account!="")
         {
-            if(strlen($account)>=4 && strlen($account)<=24)
+            if($pwd == "" || strlen($pwd) > 20 || strlen($pwd) < 8 )
+                echo "";
+            else if(strlen($account)>=4 && strlen($account)<=24)
             {
                 if ( $result = mysqli_query($link, "SELECT * FROM member_info where member_account='$account'") ) {
                     if(!($row = mysqli_fetch_assoc($result))||!(password_verify($pwd,$row['member_password']))) echo "此帳號不存在或密碼不正確!";
@@ -298,6 +308,106 @@
 
         header("Location:member-center-data.php");
 
+    }
+
+    function selectGameCount($selectPrice,$selectType)
+    {
+        global $link;
+
+        if($selectType != "all")
+        {
+            if($selectType == ".leisure")
+                $type = "休閒";
+            if($selectType == ".adventure")
+                $type = "冒險";
+            if($selectType == ".action")
+                $type = "動作";
+            if($selectType == ".tactic")
+                $type = "策略";
+            if($selectType == ".cardType")
+                $type = "卡牌";
+            if($selectType == ".car")
+                $type = "汽機車模擬";
+            if($selectType == ".terrible")
+                $type = "恐怖";
+            if($selectType == ".firstPerson")
+                $type = "第一人稱";
+            if($selectType == ".single")
+                $type = "單人";
+            if($selectType == ".multiperson")
+                $type = "多人";
+        }
+        else
+        {
+            $type = "";
+        }
+        
+
+        if($selectPrice == ".free")
+        {
+            if($selectType == "all")
+            {
+                if ($result = mysqli_query($link, "SELECT * FROM game_info WHERE game_price='0'")) {
+                    $num = mysqli_num_rows($result);
+                    echo $num. " 筆結果";
+                    mysqli_free_result($result); // 釋放佔用的記憶體
+                }
+            }
+            else
+            {
+                if ($result = mysqli_query($link, "SELECT a.game_ID FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID and game_price='0' and game_type='".$type."'")) {
+                    $num = mysqli_num_rows($result);
+                    echo $num. " 筆結果";
+                    mysqli_free_result($result); // 釋放佔用的記憶體
+                }
+            }
+            
+        }
+        else if($selectPrice == ".pay")
+        {
+            if($selectType == "all")
+            {
+                if ($result = mysqli_query($link, "SELECT * FROM game_info WHERE game_price!='0'")) {
+                    $num = mysqli_num_rows($result);
+                    echo $num. " 筆結果";
+                    mysqli_free_result($result); // 釋放佔用的記憶體
+                }
+            }
+            else
+            {
+                if ($result = mysqli_query($link, "SELECT a.game_ID FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID and game_price!='0' and game_type='".$type."'")) {
+                    $num = mysqli_num_rows($result);
+                    echo $num. " 筆結果";
+                    mysqli_free_result($result); // 釋放佔用的記憶體
+                }
+            }
+        }
+        else
+        {
+            if($selectType == "all")
+            {
+                if ($result = mysqli_query($link, "SELECT * FROM game_info")) {
+                    $num = mysqli_num_rows($result);
+                    echo $num. " 筆結果";
+                    mysqli_free_result($result); // 釋放佔用的記憶體
+                }
+            }
+            else
+            {
+                if ($result = mysqli_query($link, "SELECT a.game_ID FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID and game_type='".$type."'")) {
+                    $num = mysqli_num_rows($result);
+                    echo $num. " 筆結果";
+                    mysqli_free_result($result); // 釋放佔用的記憶體
+                }
+            }
+        }
+    }
+
+    function headerSelect()
+    {
+        global $link;
+
+        echo "1111"; 
     }
 
 
