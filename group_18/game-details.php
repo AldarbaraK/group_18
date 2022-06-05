@@ -60,7 +60,7 @@
 
         });*/
 
-        $(document).ready(function(){
+        /*$(document).ready(function(){
             $('#follow__btn1').click(function(){
                 $('#follow__btn1').toggleClass('fa').toggleClass('fa-heart');
 
@@ -70,17 +70,17 @@
                     $('#follow__btn1').html("追隨");
                     
             });
-        });
+        });*/
 
-        $(function() { //網頁完成後才會載入
+        /*$(function() { //網頁完成後才會載入
             $('#addCart_btn').on("click", function() {
                 $.ajax({
-                    url: "function.php?op=addCart&game_ID=<?php echo $_GET["game_ID"]?>",
+                    url: "function.php?op=addCart&game_ID=<?php //echo $_GET["game_ID"]?>",
                     data: $('#addcart_form').serialize(),
                     type: "POST",
                     dataType: 'text',
                     success: function(msg) {
-                        $("#show_msg").html(msg);//顯示訊息
+                        $("#show_msg").text(msg);//顯示訊息
                         //document.getElementById('show_msg').innerHTML= msg ;
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
@@ -89,7 +89,7 @@
                     }
                 });
             });
-        });
+        });*/
         
     </script>
 </head>
@@ -116,17 +116,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                <li><a href="categories.php">類別</a>
                                 </li>
                                 <?php
                                     if(isset($_SESSION['member_account'])){
@@ -285,9 +275,51 @@
                                 </p>
                                 <div class="game__details__btn">
                                     <div class="row">
-                                        <button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>追隨</span></button>
-                                        <form action="" method="post" id="addcart_form">
-                                            <button class="watch-btn" id="addCart_btn"><span id="show_msg"></span> <i class="fa fa-angle-right"></i></button>
+                                        <form action="function.php?op=followGame&game_ID=<?php echo $_GET["game_ID"]?>" method="post" id="followGame_form">
+                                            <?php
+                                                if(isset($_SESSION['member_account']))
+                                                {
+                                                    $follow_flag = false;
+                                                    if ($result = mysqli_query($link, "SELECT * FROM member_follow")) {
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                            if($row["member_account"] == $_SESSION['member_account'] && $row["game_ID"] == $_GET['game_ID']){
+                                                                echo '<button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>取消追隨</span></button>';
+                                                                $follow_flag = true;
+                                                            }
+                                                        }
+                                                        mysqli_free_result($result); // 釋放佔用的記憶體
+                                                        if($follow_flag == false)
+                                                            echo '<button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>追隨</span></button>';
+                                                    }
+                                                }
+                                                else{
+                                                    echo '<button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>追隨</span></button>';
+                                                }
+                                            ?>
+                                            <!--<button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>追隨</span></button>-->
+                                        </form>
+                                        <form action="function.php?op=addCart&game_ID=<?php echo $_GET["game_ID"]?>" method="post" id="addcart_form">
+                                            <?php
+                                                if(isset($_SESSION['member_account']))
+                                                {
+                                                    $bought_flag = false;
+                                                    if ($result = mysqli_query($link, "SELECT * FROM member_cart")) {
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                            if($row["member_account"] == $_SESSION['member_account'] && $row["game_ID"] == $_GET['game_ID']){
+                                                                echo '<button class="watch-btn" disabled="disabled" id="addCart_btn"><span>已加入購物車</span> <i class="fa fa-angle-right"></i></button>';
+                                                                $bought_flag = true;
+                                                            }
+                                                        }
+                                                        mysqli_free_result($result); // 釋放佔用的記憶體
+                                                        if($bought_flag == false)
+                                                            echo '<button type="submit" class="watch-btn" id="addCart_btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>';
+                                                    }
+                                                }
+                                                else{
+                                                    echo '<button class="watch-btn" id="addCart_btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>';
+                                                }
+                                            ?>
+                                            <!--<button class="watch-btn" id="addCart_btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>-->
                                         </form>
                                     </div>
                                 </div>
@@ -302,31 +334,39 @@
                         <div class="section-title">
                             <h5>評論</h5>
                         </div>
-                        <?php
-                            if ($result = mysqli_query($link, "SELECT * FROM member_comment")){
-                                while($row = mysqli_fetch_assoc($result)){
-                                    if($_GET['game_ID'] == $row['game_ID']){
-                                        echo ' <div class="game__review__item">
-                                                    <div class="game__review__item__pic">
-                                                        <img src="img/review/review-1.jpg" alt="">
-                                                    </div>
-                                                    <div class="game__review__item__text">
-                                                        <div class="row">
-                                                            <div class="col-lg-10">
-                                                                <h6>'.$row["member_account"].' - <span>'.$row["comment_time"].'</span></h6>
-                                                                <p>'.$row["comment"].'</p>
-                                                            </div>
-                                                            <div class="col-lg-2">
-                                                                <button class="fa fa-trash-o" id="delete__btn" name="delete__btn"><span> 刪除</span></button>
+                            <?php
+                                $comment_count = 0;
+                                $gameID = $_GET['game_ID'];
+                                if ($result = mysqli_query($link, "SELECT * FROM member_comment ORDER BY comment_time")){
+                                    while($row = mysqli_fetch_assoc($result)){
+                                        if($_GET['game_ID'] == $row['game_ID']){
+                                            echo ' <div class="game__review__item">
+                                                        <div class="game__review__item__pic">
+                                                            <img src="img/review/review-1.jpg" alt="">
+                                                        </div>
+                                                        <div class="game__review__item__text">
+                                                            <div class="row">
+                                                                <div class="col-lg-10">
+                                                                    <h6>'.$row["member_account"].' - <span>'.$row["comment_time"].'</span></h6>
+                                                                    <p>'.$row["comment"].'</p>
+                                                                </div>
+                                                                <div class="col-lg-2">
+                                                                    <form action="function.php?op=deleteComment&game_ID='.$gameID.'" id="delete_form" method="post">
+                                                                        <input type="hidden" value="'.$row["member_account"].'" name="account">
+                                                                        <input type="hidden" value="'.$row["comment_time"].'" name="time" >
+                                                                        <button type="submit" class="fa fa-trash-o" id="delete__btn" name="delete__btn"><span> 刪除</span></button>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div> 
-                                            ';
+                                                    </div> 
+                                                ';
+                                        }
+                                        $comment_count++;
                                     }
                                 }
-                            }
-                        ?>
+                            ?>
+                        
                         
                     </div>
                     <div class="game__details__form">

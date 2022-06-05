@@ -54,7 +54,22 @@
         $(document).ready(function($) {
             $("#signup_form").validate({
                 submitHandler: function(form) {
-                    form.submit();
+                    $.ajax({
+                        url: "function.php?op=signupCheckAjax",
+                        data: $('#signup_form').serialize(),
+                        type: "POST",
+                        dataType: 'text',
+                        success: function(msg) {
+                            $("#show_msg").html(msg);//顯示訊息
+                            if(msg != "此帳號已存在!")
+                                form.submit();
+                            //document.getElementById('show_msg').innerHTML= msg ;
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
                 },
                 rules: {
                     account: {
@@ -85,7 +100,8 @@
                         matches: new RegExp('^09\\d{8}$')
                     },
                     birthday: {
-                        required: true
+                        required: true,
+                        dateISO: true
                     },
                     sexRadio: {
                         required: true
@@ -93,7 +109,9 @@
                 },
                 messages: {
                     account:{
-                        required: "請輸入4到24位英數字組合帳號"
+                        required: "請輸入帳號",
+                        minlength: "請輸入4到24位英數字組合帳號",
+                        maxlength: "請輸入4到24位英數字組合帳號"
                     },
                     email: {
                         required: "請輸入電子郵箱",
@@ -109,6 +127,10 @@
                     phone: {
                         required: "請輸入電話號碼",
                         matches: "請輸入正確的10位手機格式"
+                    },
+                    birthday: {
+                        required: "請輸入生日日期",
+                        dateISO: "請輸入正確日期格式"
                     }
                 }
             });
@@ -157,17 +179,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                <li><a href="categories.php">類別</a>
                                 </li>
                                 <?php
                                     if(isset($_SESSION['member_account'])){

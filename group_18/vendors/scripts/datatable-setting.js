@@ -3,10 +3,6 @@ $('document').ready(function(){
 		scrollCollapse: true,
 		autoWidth: false,
 		responsive: true,
-		columnDefs: [{
-			targets: "datatable-nosort",
-			orderable: false,
-		}],
 		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 		"language": {
 			"processing": "處理中...",

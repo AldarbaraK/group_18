@@ -52,17 +52,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li class="active"><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別 <span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                <li><a href="categories.php">類別</a>
                                 </li>
                                 <?php
                                     if(isset($_SESSION['member_account'])){

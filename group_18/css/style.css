@@ -1548,6 +1548,7 @@ ol {
 .error {
 	color: #D82424;
 	font-weight: normal;
+	font-family: "微軟正黑體";
 	padding: 0px;
 }
 
@@ -2407,6 +2408,85 @@ ol {
 }
 
 /*---------------------
+  			分頁CSS
+-----------------------*/
+
+.controls-pagination {
+    padding: 1rem;
+    font-size: 0.1px;
+    text-align: justify;
+}
+
+.controls-pagination:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+
+.mixitup-page-list,
+.mixitup-page-stats {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.mixitup-page-list {
+    text-align: left;
+}
+
+.mixitup-page-stats {
+    font-size: 15px;
+    color: #b7b7b7;
+    font-weight: 600;
+}
+
+.mixitup-control {
+    display: inline-block;
+    text-align: center;
+    font-size: 15px;
+    color: #b7b7b7;
+    font-weight: 600;
+    height: 50px;
+    width: 50px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    line-height: 48px;
+    text-align: center;
+    -webkit-transition: all, 0.3s;
+    -o-transition: all, 0.3s;
+    transition: all, 0.3s;
+    cursor: pointer;
+}
+
+.mixitup-control:first-child {
+    border-radius: 3px 0 0 3px;
+}
+
+.mixitup-control:last-child {
+    border-radius: 0 3px 3px 0;
+}
+
+.mixitup-control:not(.mixitup-control-active):hover {
+    color: #ffffff;
+}
+
+.mixitup-control-active {
+    border: 1px solid #ffffff;
+    cursor: default;
+	color: #000;
+}
+
+.mixitup-control:disabled {
+    color: #b7b7b7;
+    cursor: default;
+}
+
+.mixitup-control-truncation-marker {
+    background: transparent;
+    pointer-events: none;
+    line-height: 2.2em;
+}
+
+/*---------------------
   customer 客服
 -----------------------*/
 
@@ -2649,6 +2729,14 @@ ol {
 	padding: 0 15px;
 }
 
+.custom-control .custom-control-label{
+		width: 80px;
+    font-size: 16px;
+    border: none;
+    background: 0 0;
+    color: #999;
+}
+
 .edit-model-show {
 	margin-top: 80px;
 	padding: 0 15px;
@@ -2689,14 +2777,6 @@ ol {
 .edit-form-Zindex {
 	z-index: 1060;
 
-}
-
-.edit-model-form label{
-	width: 80px;
-	font-size: 16px;
-	border: none;
-	background: 0 0;
-	color: #999;
 }
 
 .edit-switch-pos{
@@ -2925,13 +3005,24 @@ ol {
 }
 
 /*---------------------
-    管理員主頁
+    管理員
 -----------------------*/
 
 .admin{
 	margin: 0 auto;
 }
 
+.btn-color {
+    color: #fff;
+    background-color: #FF2E66;
+    border-color: #FF2E66;
+}
+
+.btn-color:hover, .btn-color:focus, .btn-color:active:hover {
+    color: #fff;
+    background-color: #FB8292;
+    border-color: #FB8292;
+}
 
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/

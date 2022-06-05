@@ -42,7 +42,25 @@
         $(document).ready(function($) {
             $("#login_form").validate({
                 submitHandler: function(form) {
-                    form.submit();
+                    $.ajax({
+                        async: false,
+                        url: "function.php?op=accountCheckAjax",
+                        data: $('#login_form').serialize(),
+                        type: "POST",
+                        dataType: 'text',
+                        success: function(msg) {
+                            $("#show_msg").html(msg);//顯示訊息
+                            if(msg != "此帳號不存在或密碼不正確!")
+                            {
+                                form.submit();
+                            }
+                            //document.getElementById('show_msg').innerHTML= msg ;
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
                 },
                 rules: {
                     account: {
@@ -72,12 +90,14 @@
         });
 
         $(function() { //網頁完成後才會載入
-            $('#login_btn').on("click", function(){
+            $('#account').keyup(function() {
                 $.ajax({
-                    url: "function.php?op=accountCheckAjax",
+                    url: "function.php?op=loginAccountAjax",
                     data: $('#login_form').serialize(),
-                    type: "POST",
+                    method: "POST",
                     dataType: 'text',
+                    processData: false,
+                    contentType: false,
                     success: function(msg) {
                         $("#show_msg").html(msg);//顯示訊息
                         //document.getElementById('show_msg').innerHTML= msg ;
@@ -88,8 +108,7 @@
                     }
                 });
             });
-
-            $('#account').keyup(function() {
+            $('#pwd').keyup(function() {
                 $.ajax({
                     url: "function.php?op=loginAccountAjax",
                     data: $('#login_form').serialize(),

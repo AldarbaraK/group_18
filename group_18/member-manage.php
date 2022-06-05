@@ -31,7 +31,8 @@
     <link rel="stylesheet" href="css/nice-select.css" type="text/css">
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">	
+    <link rel="stylesheet" href="css/toastr.min.css" type="text/css">
 </head>
 <body>
 
@@ -144,72 +145,78 @@
                                 </div>
                                 <div class="col-lg-2">
                                     <div class="manage-insert">
-                                        <button class="site-btn edit-switch">新增資料</button>
+                                        <button id="member_insert" class="site-btn edit-switch">新增資料</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-						<div class="pb-20">
-							<table class="data-table table stripe hover nowrap">
-								<thead>
-									<tr>
-										<th>姓名</th>
-										<th>暱稱</th>
-										<th>電子信箱</th>
-										<th class="datatable-nosort">密碼</th>
-										<th>性別</th>
-										<th>生日</th>
-										<th>電話</th>
-										<th>擁有遊戲數量</th>
-										<th class="datatable-nosort">動作</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td class="table-plus">李胖胖</td>
-										<td>Shun</td>
-										<td>shun8787@gmail.com</td>
-										<td>aaaaaaaaaaa</td>
-										<th>男性</th>
-										<td>29-03-2001</td>
-										<th>0963111111</th>
-										<th>25</th>
-										<td>
-											<div class="dropdown">
-												<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-													<i class="dw dw-more"></i>
-												</a>
-												<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-													<a class="dropdown-item edit-switch" href="#"><i class="dw dw-edit2"></i> Edit</a>
-													<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td class="table-plus">莊胖胖</td>
-										<td>Xian</td>
-										<td>xian8787@gmail.com</td>
-										<td>bbbbbbbbbb</td>
-										<th>男性</th>
-										<td>28-03-2001</td>
-										<th>0963222222</th>
-										<th>28</th>
-										<td>
-											<div class="dropdown">
-												<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-													<i class="dw dw-more"></i>
-												</a>
-												<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-													<a class="dropdown-item edit-switch" href="#"><i class="dw dw-edit2"></i> Edit</a>
-													<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-												</div>
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+						<table class="table stripe hover nowrap" id="member_datatable">
+							<thead>
+								<tr>
+									<th>帳號</th>
+									<th>電子信箱</th>
+									<th>姓名</th>
+									<th>暱稱</th>
+									<th>會員等級</th>
+									<th>性別</th>
+									<th>電話</th>
+									<th>生日</th>
+									<th>註冊日期</th>
+									<th class="datatable-nosort table-plus">密碼(已加密)</th>
+									<th>總消費次數</th>
+									<th>總消費金額</th>
+									<th>登入次數</th>
+									<th>評分次數</th>
+									<th>評論次數</th>
+									<th class="datatable-nosort">動作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+                                if ($result = mysqli_query($link, "SELECT * FROM member_info a,member_details b WHERE a.member_account = b.member_account")) {
+	                                    while ($row = mysqli_fetch_assoc($result)) {                  	
+											echo '<tr>
+												<td>'. $row["member_account"].'</td>
+												<td class="table-plus">'. $row["member_email"].'</td>
+												<td>'. $row["member_name"].'</td>
+												<td>'. $row["member_nickname"].'</td>
+												<td>';
+												if($row["member_level"] == 1)
+													echo '黃金會員';
+												else if($row["member_level"] == 2)
+													echo '白金會員';
+												else if($row["member_level"] == 3)
+													echo '鑽石會員';
+											echo '</td>
+												<td>'. $row["member_sex"].'</td>
+												<td>'. $row["member_phone"].'</td>
+												<td>'. $row["member_birth"].'</td>
+												<td>'. $row["member_signupDate"].'</td>
+												<td class="table-plus">'. $row["member_password"].'</td>
+												<td>'. $row["bought_count"].'</td>
+												<td>'. $row["member_cost"].'</td>
+												<td>'. $row["login_count"].'</td>
+												<td>'. $row["score_count"].'</td>
+												<td>'. $row["comment_count"].'</td>
+												<td>
+													<div class="dropdown">
+														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown" id = "test">
+															<i class="dw dw-more"></i>
+														</a>
+														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+															<a class="dropdown-item edit-switch" href="#" id= "member_update"><i class="dw dw-edit2"></i> 編輯</a>
+															<a class="dropdown-item" href="#" id="member_delete"><i class="dw dw-delete-3"></i> 刪除</a>
+														</div>
+													</div>
+												</td>
+											</tr>';
+										}
+	                                    $num = mysqli_num_rows($result); //查詢結果筆數
+	                                    mysqli_free_result($result); // 釋放佔用的記憶體
+	                                }
+	                            ?>
+							</tbody>
+						</table>
 					</div>
 					<!-- Simple Datatable End -->
 				</div>
@@ -229,21 +236,32 @@
 
 	<!-- Edit model Begin -->
     <div class="edit-model">
-        <div class="edit-model-show">
-	        <div class="edit-switch-pos">
-        		<div class="edit-close-switch"><i class="icon_check"></i></div>
-	    		<div class="edit-close-switch"><i class="icon_close"></i></div>	
-	    	</div>
-	    	<form class="edit-model-form">
+        <div class="edit-model-show"> 
+	    	<form class="edit-model-form" id="edit-member-form" method="post">
+	    		<input type="hidden" name="tableType" id="tableType" value="memberTable">
+        		<input type="hidden" name="oper" id="oper" value="insert">
+           		<input type="hidden" name="old-member_account" id="old-member_account" value="">
+           		<div class="edit-switch-pos">
+	        		<button class="edit-close-switch" type="submit" id="member_save"><i class="icon_check"></i></button>
+		    		<div class="edit-close-switch" id="member_cancel"><i class="icon_close"></i></div>	
+		    	</div>
 		        <div class="container">
 		        	<div class="row pt-5">
 		        		<div class="col-lg-6">
 		        			<div class="form-group">
         						<div class="row">
         							<div class="col-lg-3">
+	        							<div class="section-title"><h4>帳號</h4></div>
+	        						</div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-account" id="edit-member-account" placeholder="請輸入帳號"><label for="edit-member-account" class="error"></label><p class="error" id="account_check"></p></div>
+        						</div>
+        					</div>
+		        			<div class="form-group">
+        						<div class="row">
+        							<div class="col-lg-3">
 	        							<div class="section-title"><h4>電子信箱</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-email" placeholder="請輸入電子信箱"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-email" id="edit-member-email" placeholder="請輸入電子信箱"><label for="edit-member-email" class="error"></label></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -251,7 +269,23 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>密碼</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password" placeholder="請輸入密碼"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="password" name="edit-member-password" id="edit-member-password" placeholder="請輸入密碼"><label for="edit-member-password" class="error"></label></div>
+        						</div>
+        					</div>
+        					<div class="form-group">
+        						<div class="row">
+        							<div class="col-lg-3">
+	        							<div class="section-title"><h4>確認密碼</h4></div>
+	        						</div>
+	        						<div class="col-lg-9"><input class="form-control" type="password" name="edit-member-pwd" id="edit-member-pwd" placeholder="請確認輸入密碼"><label for="edit-member-pwd" class="error"></label></div>
+        						</div>
+        					</div>
+        					<div class="form-group">
+        						<div class="row">
+        							<div class="col-lg-3">
+	        							<div class="section-title"><h4>會員層級</h4></div>
+	        						</div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-level" id="edit-member-level" placeholder="請輸入會員層級"><label for="edit-member-level" class="error"></label></div>
         						</div>
         					</div>
 		        		</div>
@@ -261,7 +295,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>姓名</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-name" placeholder="請輸入姓名"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-name" id="edit-member-name" placeholder="請輸入姓名"><label for="edit-member-name" class="error"></label></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -269,7 +303,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>暱稱</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-nickname" placeholder="請輸入暱稱"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-nickname" id="edit-member-nickname" placeholder="請輸入暱稱"><label for="edit-member-nickname" class="error"></label></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -279,16 +313,17 @@
 	        						</div>
 									<div class="col-lg-2">
 										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex1" name="ratedRadio" class="custom-control-input edit-form-Zindex">
-											<label class="custom-control-label" for="sexRadio1">男性</label>
+											<input type="radio" id="edit-member-sex" name="edit-member-sex" value="M" class="custom-control-input edit-form-Zindex">
+											<label class="custom-control-label" for="edit-member-sex">男性</label>
 										</div>
 									</div>	
 									<div class="col-lg-2">
 										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex2" name="ratedRadio" class="custom-control-input edit-form-Zindex">
-											<label class="custom-control-label" for="sexRadio2">女性</label>
+											<input type="radio" id="edit-member-sex" name="edit-member-sex" value="F" class="custom-control-input edit-form-Zindex">
+											<label class="custom-control-label" for="edit-member-sex">女性</label>
 										</div>
-									</div>	
+									</div>
+									<label for="edit-member-sex" class="error"></label>	
 								</div>
         					</div>
         					<div class="form-group">
@@ -296,7 +331,7 @@
 	        						<div class="col-lg-3">
 	        							<div class="section-title"><h4>生日</h4></div>
 	        						</div>
-									<div class="col-lg-9"><input class="form-control date-picker" id="edit-member-birth" placeholder="選擇生日日期" type="text"></div>
+									<div class="col-lg-9"><input class="form-control date-picker" name="edit-member-birth" id="edit-member-birth" data-date-format="yyyy-mm-dd" placeholder="選擇生日日期" type="text"><label for="edit-member-birth" class="error"></label></div>
 								</div>
         					</div>
         					<div class="form-group">
@@ -304,7 +339,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>電話</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-phone" placeholder="請輸入電話"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-phone" id="edit-member-phone" placeholder="請輸入電話"><label for="edit-member-phone" class="error"></label></div>
         						</div>
         					</div>
 		        		</div>
@@ -323,22 +358,20 @@
 	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
 	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
 	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
-	<!-- buttons for Export datatable -->
-	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
-	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
-	<!-- Datatable Setting js -->
 	<script src="vendors/scripts/datatable-setting.js"></script>
-
-    <script src="js/bootstrap.min.js"></script>
+	 <!--表單驗證-->
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+	<script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh_TW.js "></script>
+	
     <script src="js/player.js"></script>
     <script src="js/jquery.nice-select.min.js"></script>
     <script src="js/mixitup.min.js"></script>
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/crud.js"></script>
+
 	</body>
 </html>
