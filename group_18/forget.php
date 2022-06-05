@@ -51,7 +51,24 @@
         $(document).ready(function($) {
             $("#forget_form").validate({
                 submitHandler: function(form) {
-                    form.submit();
+                    $.ajax({
+                        async: false,
+                        url: "function.php?op=forgetAccountEmailPhoneCheck",
+                        data: $('#forget_form').serialize(),
+                        type: "POST",
+                        dataType: 'text',
+                        success: function(msg) {
+                            $("#show_msg").html(msg);//顯示訊息
+                            if(msg != "此帳號、電子信箱或電話不存在!")
+                            {
+                                form.submit();
+                            }
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
                 },
                 rules: {
                     account: {
@@ -99,7 +116,7 @@
             });
         });
 
-        $(function() { //網頁完成後才會載入
+        /*$(function() { //網頁完成後才會載入
             $('#fix_btn').on("click", function(){
                 $.ajax({
                     url: "function.php?op=accountCheckAjax",
@@ -133,7 +150,7 @@
                     }
                 });
             });
-        });
+        });*/
 
     </script>
 
@@ -161,17 +178,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                <li><a href="categories.php">類別</a>
                                 </li>
                                 <?php
                                     if(isset($_SESSION['member_account'])){
@@ -227,12 +234,12 @@
             <div class="row">
                 <div class="signup__form">
                     <h3>修改</h3>
+                    <p id="show_msg" style="color:red"></p>
                     <form action="function.php?op=forget" id="forget_form" method="post">
                         <div class="input__item" >
                             <input type="text" name="account" id="account" placeholder="輸入帳號">
                             <span class="icon_profile"></span>
                         </div>
-                        <p id="show_msg" style="color:red"></p>
                         <div class="input__item">
                             <input type="text" name="email" id="email" placeholder="輸入您的郵箱">
                             <span class="icon_mail"></span>

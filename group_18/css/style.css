@@ -1068,6 +1068,7 @@ ol {
 .game__details__btn button {
 	background: #e5363600;
 	border-radius: 2px;
+	border:0;
 }
 
 
@@ -2404,6 +2405,84 @@ ol {
 .categories__page__filter .nice-select .list {
 	margin-top: 0;
 	border-radius: 0;
+}
+
+/* Pagination Controls
+---------------------------------------------------------------------- */
+
+.controls-pagination {
+    padding: 1rem;
+    font-size: 0.1px;
+    text-align: justify;
+}
+
+.controls-pagination:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+
+.mixitup-page-list,
+.mixitup-page-stats {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.mixitup-page-list {
+    text-align: left;
+}
+
+.mixitup-page-stats {
+    font-size: 15px;
+    color: #b7b7b7;
+    font-weight: 600;
+}
+
+.mixitup-control {
+    display: inline-block;
+    text-align: center;
+    font-size: 15px;
+    color: #b7b7b7;
+    font-weight: 600;
+    height: 50px;
+    width: 50px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    line-height: 48px;
+    text-align: center;
+    -webkit-transition: all, 0.3s;
+    -o-transition: all, 0.3s;
+    transition: all, 0.3s;
+    cursor: pointer;
+}
+
+.mixitup-control:first-child {
+    border-radius: 3px 0 0 3px;
+}
+
+.mixitup-control:last-child {
+    border-radius: 0 3px 3px 0;
+}
+
+.mixitup-control:not(.mixitup-control-active):hover {
+    color: #ffffff;
+}
+
+.mixitup-control-active {
+    border: 1px solid #ffffff;
+    cursor: default;
+	color: #000;
+}
+
+.mixitup-control:disabled {
+    color: #b7b7b7;
+    cursor: default;
+}
+
+.mixitup-control-truncation-marker {
+    background: transparent;
+    pointer-events: none;
+    line-height: 2.2em;
 }
 
 /*---------------------

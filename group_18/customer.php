@@ -50,6 +50,7 @@
         $(document).ready(function($) {
             $("#form1").validate({
                 submitHandler: function(form) {
+                    alert("已收到您的客服表單");
                     form.submit();
                 },
                 rules: {
@@ -63,6 +64,9 @@
                     phone: {
                         required:true,
                         matches: new RegExp('^09\\d{8}$')
+                    },
+                    "customRadio[]": {
+                        required: true
                     }
                 },
                 messages: {
@@ -115,17 +119,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別 <span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                <li><a href="categories.php">類別</a>
                                 </li>
                                 <?php
                                     if(isset($_SESSION['member_account'])){
@@ -239,33 +233,34 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <b>問題類型<br></b>
+                                            <b>問題類型</b>
+                                            <label for="customRadio[]" class="error" style="font-size: 18px"></label><br>
                                             <div class="custom-control custom-radio customer__page__form__radio">
                                                 <div class="row">
                                                     <div class="col-lg-4">
-                                                        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+                                                        <input type="radio" id="customRadio1" name="customRadio[]" class="custom-control-input" value="0">
                                                         <label class="custom-control-label" for="customRadio1">儲值相關問題</label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                                                        <input type="radio" id="customRadio2" name="customRadio[]" class="custom-control-input" value="1">
                                                         <label class="custom-control-label" for="customRadio2">帳號相關問題</label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
+                                                        <input type="radio" id="customRadio3" name="customRadio[]" class="custom-control-input" value="2">
                                                         <label class="custom-control-label" for="customRadio3">錯誤回報/申訴</label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-lg-4">
-                                                        <input type="radio" id="customRadio4" name="customRadio" class="custom-control-input">
+                                                        <input type="radio" id="customRadio4" name="customRadio[]" class="custom-control-input" value="3">
                                                         <label class="custom-control-label" for="customRadio4">連線相關問題</label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="radio" id="customRadio5" name="customRadio" class="custom-control-input">
+                                                        <input type="radio" id="customRadio5" name="customRadio[]" class="custom-control-input" value="4">
                                                         <label class="custom-control-label" for="customRadio5">檢舉/BUG</label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="radio" id="customRadio6" name="customRadio" class="custom-control-input">
+                                                        <input type="radio" id="customRadio6" name="customRadio[]" class="custom-control-input" value="5">
                                                         <label class="custom-control-label" for="customRadio6">其他問題</label>
                                                     </div>
                                                 </div>

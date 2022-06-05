@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 
+
 </head>
 
 <body>
@@ -52,17 +53,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li class="active"><a href="categories.php">類別 <span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                <li class="active"><a href="categories.php">類別</a>
                                 </li>
                                 <?php
                                     if(isset($_SESSION['member_account'])){
@@ -139,6 +130,12 @@
                                             <option value="all">所有遊戲</option>
                                             <option value=".free">免費遊戲</option>
                                             <option value=".pay">付費遊戲</option>
+                                            <?php
+                                                if(isset($_SESSION['member_account']))
+                                                {
+                                                    echo '<option value=".like">我的追隨</option>';
+                                                }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -226,10 +223,120 @@
                         </div>
                         <div class="row filter__game">
                             <?php 
+                                $data="";   
                                 if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_pic b WHERE a.game_ID = b.game_ID")) {
-                                    while ($row = mysqli_fetch_assoc($result)) {
+                                    while($row = mysqli_fetch_assoc($result)){
                                         $commentflag=0;
-                                        $boughtflag=0;  
+                                        $boughtflag=0;
+                                    /*$numOfGame = mysqli_num_rows($result);
+                                    $total_page = ceil($numOfGame/16);
+
+                                    if(!(isset($_GET['page']))){
+                                        $_GET['page'] = 1;
+                                    }
+                                    mysqli_data_seek($result, ($_GET['page'] - 1) * 16);
+
+                                    for($j = 1; $j <= 16; $j++){
+                                        if(!($row = mysqli_fetch_assoc($result)))
+                                            break;
+                                        $commentflag=0;
+                                        $boughtflag=0; 
+                                        $game_type_filter = "";
+                                        $boughtCount = "";
+                                        $commentCount = "";
+                                        $total_type = "";
+                                        if ($typeRes = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
+                                            while ($type = mysqli_fetch_assoc($typeRes)) {
+                                                if($row["game_ID"] == $type["game_ID"]) {
+                                                    if($type["game_type"] == "休閒")
+                                                        $game_type_filter.=" leisure";
+                                                    if($type["game_type"] == "冒險")
+                                                        $game_type_filter.=" adventure";
+                                                    if($type["game_type"] == "動作")
+                                                        $game_type_filter.=" action";
+                                                    if($type["game_type"] == "策略")
+                                                        $game_type_filter.=" tactic";
+                                                    if($type["game_type"] == "卡牌")
+                                                        $game_type_filter.=" cardType";
+                                                    if($type["game_type"] == "汽機車模擬")
+                                                        $game_type_filter.=" car";
+                                                    if($type["game_type"] == "恐怖")
+                                                        $game_type_filter.=" terrible";
+                                                    if($type["game_type"] == "第一人稱")
+                                                        $game_type_filter.=" firstPerson";
+                                                    if($type["game_type"] == "單人")
+                                                        $game_type_filter.=" single";
+                                                    if($type["game_type"] == "多人")
+                                                        $game_type_filter.=" multiperson";
+                                                    
+                                                    if($type["game_price"] == "0")
+                                                        $game_type_filter.=" free";
+                                                    else
+                                                        $game_type_filter.=" pay";
+                                                }
+                                            }  
+                                            mysqli_free_result($typeRes); // 釋放佔用的記憶體
+                                        }  
+                                        if($game_type_filter == "")
+                                            break;
+                                        if ($followRes = mysqli_query($link, "SELECT * FROM member_follow")){
+                                            while ($follow = mysqli_fetch_assoc($followRes)) {
+                                                if($row["game_ID"] == $follow["game_ID"] && $_SESSION['member_account'] == $follow['member_account']) 
+                                                {    
+                                                    $game_type_filter.=" like";
+                                                }
+                                            }  
+                                            mysqli_free_result($followRes); // 釋放佔用的記憶體
+                                        }
+
+                                        if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
+                                            while ($people = mysqli_fetch_assoc($boughtResult)) {
+                                                if($row["game_ID"] == $people["game_ID"]) 
+                                                {    
+                                                    $boughtCount.= " ". $people["count"];
+                                                    $boughtflag = 1;
+                                                }
+                                            }  
+                                            mysqli_free_result($boughtResult); // 釋放佔用的記憶體
+                                        }
+                                        if($boughtflag == 0)
+                                            $boughtCount.= " 0";
+
+                                        if ($commentResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM member_comment GROUP BY game_ID")){
+                                            while ($people = mysqli_fetch_assoc($commentResult)) {
+                                                if($row["game_ID"] == $people["game_ID"]) 
+                                                {   
+                                                    $commentCount.= " ". $people["count"];
+                                                    $commentflag = 1;
+                                                }
+                                            }  
+                                            mysqli_free_result($commentResult); // 釋放佔用的記憶體
+                                        }
+                                        if($commentflag == 0)
+                                            $commentCount.= " 0";
+
+                                        if ($cateResult = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
+                                            while ($categories = mysqli_fetch_assoc($cateResult)) {
+                                                if($row["game_ID"] == $categories["game_ID"]) $total_type.= "<a href = 'categories.php'><li>". $categories["game_type"]."</li> </a>";
+                                            }  
+                                            mysqli_free_result($cateResult); // 釋放佔用的記憶體
+                                        }   
+
+                                        $data .= "<div class='col-lg-3 col-md-6 col-sm-6 mix".$game_type_filter."' data-date='".$row["game_date"]."' data-name='".$row["game_name"]."' data-sell='".$boughtCount."'>
+                                                    <div class='product__item'>
+                                                        <a href='game-details.php?game_ID=". $row["game_ID"]."'>
+                                                            <div class='product__item__pic set-bg' data-setbg='img/product/". $row["game_picture"].".jpg'>
+                                                                <div class='comment'><i class='fa fa-comments'></i>$commentCount</div>
+                                                                <div class='view'><i class='fa fa-download'></i>$boughtCount</div>
+                                                            </div>
+                                                        </a>
+                                                        <div class='product__item__text'>
+                                                            <ul>$total_type</ul>
+                                                            <h5><a href='game-details.php?game_ID=". $row["game_ID"]."'>". $row["game_name"]."</a></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ";*/
                                         echo '<div class="col-lg-3 col-md-6 col-sm-6 mix';
                                                 if ($typeRes = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
                                                     while ($type = mysqli_fetch_assoc($typeRes)) {
@@ -262,7 +369,21 @@
                                                         }
                                                     }  
                                                     mysqli_free_result($typeRes); // 釋放佔用的記憶體
-                                                }      
+                                                }  
+
+                                                if(isset($_SESSION['member_account']))
+                                                {
+                                                    if ($followRes = mysqli_query($link, "SELECT * FROM member_follow")){
+                                                        while ($follow = mysqli_fetch_assoc($followRes)) {
+                                                            if($row["game_ID"] == $follow["game_ID"] && $_SESSION['member_account'] == $follow['member_account']) 
+                                                            {    
+                                                                echo " like";
+                                                            }
+                                                        }  
+                                                        mysqli_free_result($followRes); // 釋放佔用的記憶體
+                                                    }
+                                                }
+
                                             echo '" data-date="'.$row["game_date"].'" data-name="'.$row["game_name"].'" data-sell="';
                                                 if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
                                                     while ($people = mysqli_fetch_assoc($boughtResult)) {
@@ -297,10 +418,13 @@
                                                             <div class="view"><i class="fa fa-download"></i> ';
                                                                 if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
                                                                     while ($people = mysqli_fetch_assoc($boughtResult)) {
-                                                                        if($row["game_ID"] == $people["game_ID"]) 
-                                                                        {    
-                                                                            echo " ". $people["count"];
-                                                                            $boughtflag = 1;
+                                                                        if($row["game_ID"] != null)
+                                                                        {
+                                                                            if($row["game_ID"] == $people["game_ID"]) 
+                                                                            {    
+                                                                                echo " ". $people["count"];
+                                                                                $boughtflag = 1;
+                                                                            }
                                                                         }
                                                                     }  
                                                                     mysqli_free_result($boughtResult); // 釋放佔用的記憶體
@@ -323,20 +447,30 @@
                                                     </div>
                                                 </div>
                                             </div>';
+                                    //}
                                     }
                                     $num = mysqli_num_rows($result); //查詢結果筆數
                                     mysqli_free_result($result); // 釋放佔用的記憶體
                                 }
                             ?> 
+                            <?php //echo $data; ?>
                         </div>
                     </div>
-                    <div class="product__pagination">
-                        <a href="#" class="current-page">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#"><i class="fa fa-angle-double-right"></i></a>
+                    <!--<div class="product__pagination">
+                        <?php
+                            /*for( $i = 1; $i <= $total_page; $i++ ){
+                                if($i == $_GET['page']){
+                                    echo '<a href="'. $_SERVER['PHP_SELF'].'?page='.$i.'" class="current-page">'.$i.'</a>';
+                                }
+                                else{
+                                    echo '<a href="'. $_SERVER['PHP_SELF'].'?page='.$i.'">'.$i.'</a>';
+                                }
+                            }*/
+                        ?>
+                    </div>-->
+                    <div class="controls-pagination">
+                        <div class="mixitup-page-list"></div>
+                        <div class="mixitup-page-stats"></div>
                     </div>
                 </div>
                 
@@ -399,6 +533,7 @@
 <script src="js/jquery.slicknav.js"></script>
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
+<script src="js/mixitup-pagination.js"></script>
 
 </body>
 
