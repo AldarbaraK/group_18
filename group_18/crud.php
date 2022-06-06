@@ -65,7 +65,22 @@
                   exit;
             }
             else if($type == "dealTable"){
-
+                  if ($result = mysqli_query($link, "SELECT * FROM game_info a,deal_record b WHERE a.game_ID = b.game_ID")) {
+                              while ($row = mysqli_fetch_assoc($result)) { 
+                                    $a['data'][] = array($row["member_account"],$row["game_ID"],$row["game_name"],$row["deal_price"],$row["deal_score"],$row["deal_datetime"],'<div class="dropdown">
+                                                                                                <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown" id = "test">
+                                                                                                      <i class="dw dw-more"></i>
+                                                                                                </a>
+                                                                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                                                                                      <a class="dropdown-item" href="#" id="deal_delete"><i class="dw dw-delete-3"></i> 刪除</a>
+                                                                                                </div>
+                                                                                          </div>');    
+                              }
+                  }            
+                  mysqli_free_result($result); // 釋放佔用的記憶體
+                  mysqli_close($link); // 關閉資料庫連結
+                  echo json_encode($a);
+                  exit;
             }
       }
 
@@ -125,10 +140,6 @@
                         exit;
                   }      
             }
-            else if($type == "dealTable"){
-
-            }
-            
       }
 
       if ($oper == "update") {
@@ -217,10 +228,7 @@
                         echo json_encode($a);
                         exit;
                   }    
-            }
-            else if($type == "dealTable"){
-
-            }          
+            }        
       }
 
       if ($oper == "delete") {
@@ -262,7 +270,19 @@
                   } 
             }
             else if($type == "dealTable"){
-
+                  $sql = "delete from deal_record where member_account='" . $_POST['deal_member_account'] . "' and game_ID='" . $_POST['deal_game_ID'] . "'";
+                  if (strlen($sql) > 10) {
+                        if ($result = mysqli_query($link, $sql)) {
+                              $a["code"] = 0;
+                              $a["message"] = "資料" . $arr_oper[$oper] . "成功!";
+                        } else {
+                              $a["code"] = mysqli_errno($link);
+                              $a["message"] = "資料" . $arr_oper[$oper] . "失敗! <br> 錯誤訊息: " . mysqli_error($link);
+                        }
+                        mysqli_close($link); // 關閉資料庫連結
+                        echo json_encode($a);
+                        exit;
+                  }
             }
 
                     

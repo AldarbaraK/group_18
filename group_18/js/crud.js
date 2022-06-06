@@ -458,4 +458,80 @@ jQuery(document).ready(function($) {
             });
         }
 
+        /************************
+         *   交易紀錄CRUD        *
+         ************************/
+        //查詢
+        var deal_tbl = $('#deal_datatable').DataTable({
+            scrollCollapse: true,
+            autoWidth: false,
+            responsive: true,
+            "ajax": {
+                url: "crud.php",
+                data: function(d) {
+                      return $('#delete-deal-form').serialize() + "&oper=query";
+                },
+                type: 'POST',
+                dataType: 'json'
+            },
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 項結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                }    
+            }
+        });
+
+        //刪除
+        $('tbody').on('click', '#deal_delete', function() {
+          var data = deal_tbl.row($(this).closest('tr')).data();
+          if (!confirm('是否確定要刪除?'))
+                return false;
+            $("#tableType").val("dealTable");
+            $("#oper").val("delete");
+            $("#deal_member_account").val(data[0]); 
+            $("#deal_game_ID").val(data[1]);
+            $("#deal_game_name").val(data[2]);
+            $("#deal_price").val(data[3]);
+            $("#deal_score").val(data[4]);
+            $("#deal_datetime").val(data[5]);  
+            deal_CRUD();
+       }); 
+
+        function deal_CRUD() {
+            $.ajax({
+                url: "crud.php",
+                data: $("#delete-deal-form").serialize(),
+                type: 'POST',
+                dataType: "json",
+                success: function(JData) {                 
+                      if (JData.code){
+                            toastr.error(JData.message);
+                            console.log(JData.message);
+                      }
+                      else {
+                            $("#oper").val("delete");
+                            deal_tbl.ajax.reload();   
+                            toastr.success(JData.message);
+                      }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.responseText);
+                    alert(xhr.responseText);
+                }
+            });
+        }
+
 });

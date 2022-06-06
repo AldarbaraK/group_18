@@ -342,12 +342,12 @@
       </footer>
       <!-- Footer Section End -->
 
-      <!-- Search model Begin -->
-      <div class="search-model">
+    <!-- Search model Begin -->
+    <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
+            <form class="search-model-form" action="function.php?op=search" method="post">
+                <input type="text" id="search-input" name="search-input" placeholder="請在這裡輸入搜尋內容">
             </form>
         </div>
     </div>

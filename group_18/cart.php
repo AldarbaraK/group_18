@@ -54,19 +54,16 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                <li><a href="categories.php">類別</a>
                                 </li>
-                                <li><a href="member-center-data.php">會員中心</a></li>
+                                <?php
+                                    if(isset($_SESSION['member_account'])){
+                                        echo '<li><a href="member-center-data.php">會員中心</a></li>';
+                                    }
+                                    else{
+                                        echo '<li><a href="login.php">會員中心</a></li>';
+                                    }
+                                ?>
                                 <li><a href="customer.php">客服中心</a></li>
                                 <li><a href="admin.php">管理員中心</a></li>
                             </ul>
@@ -95,7 +92,7 @@
                                 echo '<a href="login.php"><span class="icon_profile"></span></a>';
                             }
                         ?>
-                    </div>
+                    </div>                                      
                 </div>
             </div>
             <div id="mobile-menu-wrap"></div>
@@ -261,8 +258,8 @@
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
+            <form class="search-model-form" action="function.php?op=search" method="post">
+                <input type="text" id="search-input" name="search-input" placeholder="請在這裡輸入搜尋內容">
             </form>
         </div>
     </div>

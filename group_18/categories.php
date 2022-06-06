@@ -187,7 +187,13 @@
                     <div class="categories__item">
                         <p id="show_msg" style="color:white">
                             <?php 
-                                if ($result = mysqli_query($link, "SELECT * FROM game_info")) 
+                                if(isset($_GET['search'])){
+                                    $sql = "select * from game_info where game_name like '%". $_GET['search'] ."%'";
+                                }
+                                else{
+                                    $sql = "select * from game_info";
+                                }
+                                if ($result = mysqli_query($link, $sql)) 
                                     $num = mysqli_num_rows($result); //查詢結果筆數
                                 echo $num 
                             ?> 筆結果
@@ -215,9 +221,14 @@
                             </div>
                         </div>
                         <div class="row filter__game">
-                            <?php 
-                                $data="";   
-                                if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_pic b WHERE a.game_ID = b.game_ID")) {
+                            <?php   
+                                if(isset($_GET['search'])){
+                                    $sql = "select * from game_info a,game_pic b where a.game_ID = b.game_ID and game_name like '%". $_GET['search'] ."%'";
+                                }
+                                else{
+                                    $sql = "select * from game_info a,game_pic b where a.game_ID = b.game_ID";
+                                }
+                                if ($result = mysqli_query($link, $sql)) {
                                     while($row = mysqli_fetch_assoc($result)){
                                         $commentflag=0;
                                         $boughtflag=0;
@@ -337,11 +348,10 @@
                                     mysqli_free_result($result); // 釋放佔用的記憶體
                                 }
                             ?> 
-                            <?php //echo $data; ?>
                         </div>
                     </div>
 
-                    </div>-->
+                    </div>
                     <div class="controls-pagination">
                         <div class="mixitup-page-list"></div>
                         <div class="mixitup-page-stats"></div>
@@ -387,16 +397,16 @@
   </footer>
   <!-- Footer Section End -->
 
-  <!-- Search model Begin -->
-  <div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch"><i class="icon_close"></i></div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
+    <!-- Search model Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch"><i class="icon_close"></i></div>
+            <form class="search-model-form" action="function.php?op=search" method="post">
+                <input type="text" id="search-input" name="search-input" placeholder="請在這裡輸入搜尋內容">
+            </form>
+        </div>
     </div>
-</div>
-<!-- Search model end -->
+    <!-- Search model end -->
 
 <!-- Js Plugins -->
 <script src="js/jquery-3.3.1.min.js"></script>

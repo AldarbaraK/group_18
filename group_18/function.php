@@ -78,6 +78,10 @@
     {
         deleteComment($_POST['account'],$_POST['time'],$_GET['game_ID']);
     }
+    if($op=='search')
+    {
+        search($_POST['search-input']);
+    }
 
     function isStaff()
     {
@@ -519,6 +523,10 @@
             mysqli_free_result($result); // 釋放佔用的記憶體
         }
 
+    }
+    function search($input)
+    {
+        header("Location:categories.php?search=".$input);
     }
 
 
