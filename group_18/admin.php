@@ -126,6 +126,7 @@
 							<ul class="submenu">
 								<li><a href="product-manage.php">管理商品</a></li>
 								<li><a href="member-manage.php">管理會員</a></li>
+								<li><a href="admin-manage.php">管理管理員</a></li>
 								<li><a href="deal-manage.php">管理交易紀錄</a></li>
 							</ul>
 						</li>

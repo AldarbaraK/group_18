@@ -104,22 +104,45 @@
     function checkLogin($account, $password)
     {
         global $link;
-        $memberQ = mysqli_query($link, "SELECT * FROM member_info WHERE member_account='".$account."'");
+        $memberQ = mysqli_query($link, "SELECT * FROM member_info WHERE member_account='$account'");
 
-        $member = mysqli_fetch_assoc($memberQ);
+        $num = mysqli_num_rows($memberQ);
 
-        if($account == $member['member_account'] && password_verify($password,$member['member_password']) )
-        {       
-            session_start();
-            $_SESSION['member_account'] = $account;
+        if($num > 0){
+            $member = mysqli_fetch_assoc($memberQ);
+            if($account == $member['member_account'] && password_verify($password,$member['member_password']) )
+            {       
+                session_start();
+                $_SESSION['member_account'] = $account;
 
-            header("Location:index.php");
+                header("Location:index.php");
+            }
+            else
+            {
+                header("Location:login.php");
+            }
         }
-        else
-        {
-            header("Location:login.php");
+
+
+        $adminQ = mysqli_query($link, "SELECT * FROM admin_info WHERE admin_account='$account'");
+
+        $num = mysqli_num_rows($adminQ);
+
+        if($num > 0){
+            $admin = mysqli_fetch_assoc($adminQ);
+            if($account == $admin['admin_account'] && password_verify($password,$admin['admin_password']) )
+            {       
+                session_start();
+                $_SESSION['member_account'] = $account;
+
+                header("Location:index.php");
+            }
+            else
+            {
+                header("Location:login.php");
+            }
         }
-       
+
     }
 
     function addCart($account,$game_ID)
@@ -229,16 +252,25 @@
         global $link;
         
         $sql = "SELECT * FROM member_info where member_account='$account' ";
+        $sql2 = "SELECT * FROM admin_info where admin_account='$account' ";
 
         if($account!="")
         {
             if(strlen($account)>=4 && strlen($account)<=24)
             {
+                $isExist = false;
                 if ( $result = mysqli_query($link, $sql) ) {
-                    if($row = mysqli_fetch_assoc($result)) echo "此帳號已存在!";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
+                    if($row = mysqli_fetch_assoc($result)) $isExist = true;           
                 }
-    
+                if(!$isExist){
+                    if ( $result = mysqli_query($link, $sql2) ) {
+                        if($row = mysqli_fetch_assoc($result)) $isExist = true;          
+                    }
+                }
+                if($isExist)
+                    echo "此帳號已存在!";
+
+                mysqli_free_result($result); // 釋放佔用的記憶體
                 mysqli_close($link); // 關閉資料庫連結
             }
             else
@@ -258,11 +290,23 @@
                 echo "";
             else if(strlen($account)>=4 && strlen($account)<=24)
             {
+                $valid = true;
                 if ( $result = mysqli_query($link, "SELECT * FROM member_info where member_account='$account'") ) {
-                    if(!($row = mysqli_fetch_assoc($result))||!(password_verify($pwd,$row['member_password']))) echo "此帳號不存在或密碼不正確!";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
+                    if(!($row = mysqli_fetch_assoc($result))||!(password_verify($pwd,$row['member_password'])))
+                        $valid = false;
                 }
-    
+                if(!$valid){
+                    if ( $result = mysqli_query($link, "SELECT * FROM admin_info where admin_account='$account'") ) {
+                        if(!($row = mysqli_fetch_assoc($result))||!(password_verify($pwd,$row['admin_password'])))
+                            $valid = false;
+                        else
+                            $valid = true;       
+                    }
+                }
+                if(!$valid)
+                    echo "此帳號不存在或密碼不正確!";
+                
+                mysqli_free_result($result); // 釋放佔用的記憶體
                 mysqli_close($link); // 關閉資料庫連結
             }
             else

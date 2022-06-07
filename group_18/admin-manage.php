@@ -145,71 +145,46 @@
 						<div class="container">
                             <div class="row pd-20">
                                 <div class="col-lg-10">
-                                        <h4 class="text-blue h3">管理會員</h4>
+                                        <h4 class="text-blue h3">管理管理員</h4>
                                 </div>
                                 <div class="col-lg-2">
                                     <div class="manage-insert">
-                                        <button id="member_insert" class="site-btn edit-switch">新增資料</button>
+                                        <button id="admin_insert" class="site-btn edit-switch">新增資料</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-						<table class="table stripe hover nowrap" id="member_datatable">
+						<table class="table stripe hover nowrap" id="admin_datatable">
 							<thead>
 								<tr>
-									<th>帳號</th>
-									<th>電子信箱</th>
-									<th>姓名</th>
-									<th>暱稱</th>
-									<th>會員等級</th>
-									<th>性別</th>
-									<th>電話</th>
-									<th>生日</th>
-									<th>註冊日期</th>
-									<th class="datatable-nosort table-plus">密碼(已加密)</th>
-									<th>總消費次數</th>
-									<th>總消費金額</th>
-									<th>登入次數</th>
-									<th>評分次數</th>
-									<th>評論次數</th>
-									<th class="datatable-nosort">動作</th>
+									<th>管理員帳號</th>
+									<th class="table-plus">電子信箱</th>
+									<th>管理員名稱</th>
+									<th>聯絡電話</th>
+									<th>新增日期</th>
+									<th class="table-plus table-nosort">密碼(已加密)</th>
+									<th class="table-nosort">動作</th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php 
-                                if ($result = mysqli_query($link, "SELECT * FROM member_info a,member_details b WHERE a.member_account = b.member_account")) {
+                                if ($result = mysqli_query($link, "SELECT * FROM admin_info")) {
 	                                    while ($row = mysqli_fetch_assoc($result)) {                  	
 											echo '<tr>
-												<td>'. $row["member_account"].'</td>
-												<td class="table-plus">'. $row["member_email"].'</td>
-												<td>'. $row["member_name"].'</td>
-												<td>'. $row["member_nickname"].'</td>
-												<td>';
-												if($row["member_level"] == 1)
-													echo '黃金會員';
-												else if($row["member_level"] == 2)
-													echo '白金會員';
-												else if($row["member_level"] == 3)
-													echo '鑽石會員';
-											echo '</td>
-												<td>'. $row["member_sex"].'</td>
-												<td>'. $row["member_phone"].'</td>
-												<td>'. $row["member_birth"].'</td>
-												<td>'. $row["member_signupDate"].'</td>
-												<td class="table-plus">'. $row["member_password"].'</td>
-												<td>'. $row["bought_count"].'</td>
-												<td>'. $row["member_cost"].'</td>
-												<td>'. $row["login_count"].'</td>
-												<td>'. $row["score_count"].'</td>
-												<td>'. $row["comment_count"].'</td>
+												<td>'. $row["admin_account"].'</td>
+												<td class="table-plus">'. $row["admin_email"].'</td>
+												<td>'. $row["admin_name"].'</td>
+												<td>'. $row["admin_phone"].'</td>
+												<td>'. $row["admin_insertDate"].'</td>
+												<td class="table-plus table-nosort">'. $row["admin_password"].'</td>
 												<td>
 													<div class="dropdown">
-														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown" id = "test">
+														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-															<a class="dropdown-item edit-switch" href="#" id= "member_update"><i class="dw dw-edit2"></i> 編輯</a>
-															<a class="dropdown-item" href="#" id="member_delete"><i class="dw dw-delete-3"></i> 刪除</a>
+															<a class="dropdown-item edit-switch" href="#" id= "admin_update"><i class="dw dw-edit2"></i> 編輯</a>
+															<a class="dropdown-item" href="#" id="admin_delete"><i class="dw dw-delete-3"></i> 刪除</a>
 														</div>
 													</div>
 												</td>
@@ -241,13 +216,13 @@
 	<!-- Edit model Begin -->
     <div class="edit-model">
         <div class="edit-model-show"> 
-	    	<form class="edit-model-form" id="edit-member-form" method="post">
-	    		<input type="hidden" name="tableType" id="tableType" value="memberTable">
+	    	<form class="edit-model-form" id="edit-admin-form" method="post">
+	    		<input type="hidden" name="tableType" id="tableType" value="adminTable">
         		<input type="hidden" name="oper" id="oper" value="insert">
-           		<input type="hidden" name="old-member_account" id="old-member_account" value="">
+           		<input type="hidden" name="old-admin_account" id="old-admin_account" value="">
            		<div class="edit-switch-pos">
-	        		<button class="edit-close-switch" type="submit" id="member_save"><i class="icon_check"></i></button>
-		    		<div class="edit-close-switch" id="member_cancel"><i class="icon_close"></i></div>	
+	        		<button class="edit-close-switch" type="submit" id="admin_save"><i class="icon_check"></i></button>
+		    		<div class="edit-close-switch" id="admin_cancel"><i class="icon_close"></i></div>	
 		    	</div>
 		        <div class="container">
 		        	<div class="row pt-5">
@@ -257,15 +232,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>帳號</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-account" id="edit-member-account" placeholder="請輸入帳號"><label for="edit-member-account" class="error"></label><p class="error" id="account_check"></p></div>
-        						</div>
-        					</div>
-		        			<div class="form-group">
-        						<div class="row">
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>電子信箱</h4></div>
-	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-email" id="edit-member-email" placeholder="請輸入電子信箱"><label for="edit-member-email" class="error"></label></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-admin-account" id="edit-admin-account" placeholder="請輸入帳號"><label for="edit-admin-account" class="error"></label><p class="error" id="account_check"></p></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -273,7 +240,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>密碼</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="password" name="edit-member-password" id="edit-member-password" placeholder="請輸入密碼"><label for="edit-member-password" class="error"></label></div>
+	        						<div class="col-lg-9"><input class="form-control" type="password" name="edit-admin-password" id="edit-admin-password" placeholder="請輸入密碼"><label for="edit-admin-password" class="error"></label></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -281,15 +248,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>確認密碼</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="password" name="edit-member-pwd" id="edit-member-pwd" placeholder="請確認輸入密碼"><label for="edit-member-pwd" class="error"></label></div>
-        						</div>
-        					</div>
-        					<div class="form-group">
-        						<div class="row">
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>會員層級</h4></div>
-	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-level" id="edit-member-level" placeholder="請輸入會員層級"><label for="edit-member-level" class="error"></label></div>
+	        						<div class="col-lg-9"><input class="form-control" type="password" name="edit-admin-pwd" id="edit-admin-pwd" placeholder="請確認輸入密碼"><label for="edit-admin-pwd" class="error"></label></div>
         						</div>
         					</div>
 		        		</div>
@@ -297,53 +256,25 @@
 		        			<div class="form-group">
         						<div class="row">
         							<div class="col-lg-3">
-	        							<div class="section-title"><h4>姓名</h4></div>
+	        							<div class="section-title"><h4>電子信箱</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-name" id="edit-member-name" placeholder="請輸入姓名"><label for="edit-member-name" class="error"></label></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-admin-email" id="edit-admin-email" placeholder="請輸入電子信箱"><label for="edit-admin-email" class="error"></label></div>
         						</div>
         					</div>
+		        			<div class="form-group">
+        						<div class="row">
+        							<div class="col-lg-3">
+	        							<div class="section-title"><h4>名稱</h4></div>
+	        						</div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-admin-name" id="edit-admin-name" placeholder="請輸入名稱"><label for="edit-admin-name" class="error"></label></div>
+        						</div>
+        					</div>	
         					<div class="form-group">
         						<div class="row">
         							<div class="col-lg-3">
-	        							<div class="section-title"><h4>暱稱</h4></div>
+	        							<div class="section-title"><h4>聯絡電話</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-nickname" id="edit-member-nickname" placeholder="請輸入暱稱"><label for="edit-member-nickname" class="error"></label></div>
-        						</div>
-        					</div>
-        					<div class="form-group">
-        						<div class="row">	
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>性別</h4></div>
-	        						</div>
-									<div class="col-lg-2">
-										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex" name="edit-member-sex" value="M" class="custom-control-input edit-form-Zindex">
-											<label class="custom-control-label" for="edit-member-sex">男性</label>
-										</div>
-									</div>	
-									<div class="col-lg-2">
-										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex" name="edit-member-sex" value="F" class="custom-control-input edit-form-Zindex">
-											<label class="custom-control-label" for="edit-member-sex">女性</label>
-										</div>
-									</div>
-									<label for="edit-member-sex" class="error"></label>	
-								</div>
-        					</div>
-        					<div class="form-group">
-        						<div class="row">	
-	        						<div class="col-lg-3">
-	        							<div class="section-title"><h4>生日</h4></div>
-	        						</div>
-									<div class="col-lg-9"><input class="form-control date-picker" name="edit-member-birth" id="edit-member-birth" data-date-format="yyyy-mm-dd" placeholder="選擇生日日期" type="text"><label for="edit-member-birth" class="error"></label></div>
-								</div>
-        					</div>
-        					<div class="form-group">
-        						<div class="row">
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>電話</h4></div>
-	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-phone" id="edit-member-phone" placeholder="請輸入電話"><label for="edit-member-phone" class="error"></label></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-admin-phone" id="edit-admin-phone" placeholder="請輸入電話"><label for="edit-admin-phone" class="error"></label></div>
         						</div>
         					</div>
 		        		</div>
