@@ -2440,6 +2440,7 @@ ol {
 }
 
 .mixitup-control {
+	background: transparent;
     display: inline-block;
     text-align: center;
     font-size: 15px;
@@ -2472,7 +2473,6 @@ ol {
 .mixitup-control-active {
     border: 1px solid #ffffff;
     cursor: default;
-	color: #000;
 }
 
 .mixitup-control:disabled {
