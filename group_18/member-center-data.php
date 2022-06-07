@@ -120,33 +120,32 @@
         <div class="loader"></div>
     </div>
 
-	<!-- Header Section Begin -->
+    <!-- Header Section Begin -->
     <header class="header">
         <div class="container">
             <div class="row">
-            	<div class="col-lg-1">
-					<div class="header-left">
-						<div class="menu-icon dw dw-menu"></div>
-					</div>
-				</div> 		 
-                <div class="col-lg-9">
+                <div class="col-lg-2">
+                    <div class="header__logo">
+                        <a href="index.php">
+                            <img src="img/logo.svg" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
                     <div class="header__nav">
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別 <span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                <li><a href="categories.php">類別</a>
                                 </li>
-                                <li class="active"><a href="member-center-data.php">會員中心</a></li>
+                                <?php
+                                    if(isset($_SESSION['member_account'])){
+                                        echo '<li class="active"><a href="member-center-data.php">會員中心</a></li>';
+                                    }
+                                    else{
+                                        echo '<li><a href="login.php">會員中心</a></li>';
+                                    }
+                                ?>
                                 <li><a href="customer.php">客服中心</a></li>
                                 <li><a href="admin.php">管理員中心</a></li>
                             </ul>

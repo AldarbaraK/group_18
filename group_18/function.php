@@ -64,10 +64,18 @@
     if($op=='selectGame')
     {
         session_start();
-        if(isset($_SESSION['member_account']))
-            selectGameCount($_POST['select_price'],$_POST['select_type'],$_SESSION['member_account']);
-        else
-            selectGameCount($_POST['select_price'],$_POST['select_type'],"");
+        if(isset($_POST['search_data'])){
+            if(isset($_SESSION['member_account']))
+                selectGameCount($_POST['select_price'],$_POST['select_type'],$_SESSION['member_account'],$_POST['search_data']);
+            else
+                selectGameCount($_POST['select_price'],$_POST['select_type'],"",$_POST['search_data']);
+        }
+        else{
+            if(isset($_SESSION['member_account']))
+                selectGameCount($_POST['select_price'],$_POST['select_type'],$_SESSION['member_account'],"");
+            else
+                selectGameCount($_POST['select_price'],$_POST['select_type'],"","");
+        }
     }
     if($op=='followGame')
     {
@@ -327,7 +335,7 @@
 
     }
 
-    function selectGameCount($selectPrice,$selectType,$account)
+    function selectGameCount($selectPrice,$selectType,$account,$search_data)
     {
         global $link;
 
@@ -364,19 +372,17 @@
         {
             if($selectType == "all")
             {
-                if ($result = mysqli_query($link, "SELECT * FROM game_info WHERE game_price='0'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select * from game_info where game_price='0'";
+                else
+                    $sql = "select * from game_info where game_price='0' and game_name like '%". $search_data ."%'";             
             }
             else
             {
-                if ($result = mysqli_query($link, "SELECT a.game_ID FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID and game_price='0' and game_type='".$type."'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_price='0' and game_type='".$type."'";
+                else
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_price='0' and game_type='".$type."' and game_name like '%". $search_data ."%'";
             }
             
         }
@@ -384,65 +390,60 @@
         {
             if($selectType == "all")
             {
-                if ($result = mysqli_query($link, "SELECT * FROM game_info WHERE game_price!='0'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select * from game_info where game_price!='0'";
+                else
+                    $sql = "select * from game_info where game_price!='0' and game_name like '%". $search_data ."%'";
             }
             else
             {
-                if ($result = mysqli_query($link, "SELECT a.game_ID FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID and game_price!='0' and game_type='".$type."'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_price!='0' and game_type='".$type."'";
+                else
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_price!='0' and game_type='".$type."' and game_name like '%". $search_data ."%'";
             }
         }
         else if($selectPrice == "all")
         {
             if($selectType == "all")
             {
-                if ($result = mysqli_query($link, "SELECT * FROM game_info")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select * from game_info";
+                else
+                    $sql = "select * from game_info where game_name like '%". $search_data ."%'";
             }
             else
             {
-                if ($result = mysqli_query($link, "SELECT a.game_ID FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID and game_type='".$type."'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_type='".$type."'";
+                else
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_type='".$type."' and game_name like '%". $search_data ."%'";
             }
         }
         else if($selectPrice == ".like")
         {
             if($selectType == "all")
             {
-                $count=0;
-                if ($result = mysqli_query($link, "SELECT * FROM member_follow")) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        if($row['member_account'] == $account)
-                            $count++;
-                    }
-                    echo $count. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select * from game_info a,member_follow b where a.game_ID = b.game_ID and member_account='".$account."'";
+                else
+                    $sql = "select * from game_info a,member_follow b where a.game_ID = b.game_ID and member_account='".$account."' and game_name like '%". $search_data ."%'";
             }
             else
             {
-                $count=0;
-                if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_categories b,member_follow c WHERE a.game_ID = b.game_ID and b.game_ID=c.game_ID and game_type='".$type."'")) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        if($row['member_account'] == $account)
-                            $count++;
-                    }
-                    echo $count. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
+                if($search_data == ""){
+                    "select * from game_info a,game_categories b,member_follow c where a.game_ID = b.game_ID and b.game_ID=c.game_ID and game_type='".$type."' and member_account='".$account."'";
                 }
+                else{
+                    "select * from game_info a,game_categories b,member_follow c where a.game_ID = b.game_ID and b.game_ID=c.game_ID and game_type='".$type."' and member_account='".$account."' and game_name like '%". $search_data ."%'";
+                }
+            }
+        }
+        if(isset($sql)){
+            if ($result = mysqli_query($link, $sql)) {
+                $num = mysqli_num_rows($result);
+                echo $num. " 筆結果";
+                mysqli_free_result($result); // 釋放佔用的記憶體
             }
         }
     }

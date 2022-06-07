@@ -121,6 +121,11 @@
             <div class="row">
                 <div class="col-lg-9">
                     <form name="select_form" method="post" id="select_form">
+                        <?php
+                            if(isset($_GET['search'])){
+                                echo "<input type='hidden' name='search_data' id='search_data' value='" . $_GET['search'] . "'>";
+                            }
+                        ?>
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="categories__page__filter">
