@@ -46,14 +46,7 @@
     <header class="header">
         <div class="container">
             <div class="row">
-                <div class="col-lg-2">
-                    <div class="header__logo">
-                        <a href="index.php">
-                            <img src="img/logo.svg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
+                <div class="col-lg-10">
                     <div class="header__nav">
                         <nav class="header__menu mobile-menu">
                             <ul>

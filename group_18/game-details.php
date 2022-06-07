@@ -3,7 +3,7 @@
     session_start();
 ?>
 <?php
-    if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_pic b WHERE a.game_ID = b.game_ID")){
+    if ($result = mysqli_query($link, "SELECT * FROM game_info a LEFT JOIN (SELECT game_ID,round(AVG(deal_score),1) avg_score FROM deal_record GROUP BY game_ID) c ON a.game_ID = c.game_ID,game_pic b WHERE a.game_ID = b.game_ID")){
         while($row = mysqli_fetch_assoc($result)){
             if($_GET['game_ID'] == $row['game_ID']){
                 $name = $row['game_name'];
@@ -14,10 +14,17 @@
                 $story = $row['game_story'];
                 $price = $row['game_price'];
                 $pic = $row['game_picture'];    
-                $discount = $row['game_discount'];          
+                $discount = $row['game_discount'];
+                $game_ID = $_GET['game_ID'];
+                $score = $row['avg_score'];
+                
+                //$sql = "select * from game_info a LEFT JOIN (select game_ID, round(AVG(deal_record),1) avg_score form deal_record group by game_ID) c on a.game_ID = c.game_ID and a.game_ID = '".$game_ID."')";
+                //$result = mysqli_query($link, );
             }
         }
     }
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -191,15 +198,6 @@
                             <div class="game__details__title">
                                 <h3><?php echo $name ?></h3>
                             </div>
-                            <div class="game__details__rating">
-                                <div class="rating">
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star-half-o"></i></a>
-                                </div>
-                            </div>
                             <div class="game__details__widget">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-6">
@@ -222,8 +220,22 @@
                                             <li><span>發行日期:</span><?php echo $date ?></li>
                                             <li><span>開發人員:</span> <?php echo $developer ?></li>
                                             <li><span>發行商:</span> <?php echo $publisher?></li>
-                                            <li><span>支援語言:</span> 繁體中文 / 英文 / 日文</li>
+                                            <li><span>支援語言:</span>
+                                                <?php
+                                                    if ($langResult = mysqli_query($link, "SELECT * FROM game_language a WHERE a.game_ID = '". $game_ID ."'")){
+                                                        $lang_num = mysqli_num_rows($langResult); //查詢結果筆數
+                                                        $lang_cnt = 0;
+                                                        while ($lang = mysqli_fetch_assoc($langResult)) {
+                                                                echo $lang["game_lang"];
+                                                                if($lang_cnt != $lang_num - 1) echo'/';
+                                                                $lang_cnt ++;
+                                                        }  
+                                                        mysqli_free_result($langResult); // 釋放佔用的記憶體 
+                                                    } 
+                                                ?>
+                                            </li>
                                             <li><span>遊戲分級:</span> <?php echo $rate ?></li>
+                                            <li><span>評分:</span><?php echo $score ?></li>
                                             <li><span>購買人數:</span> 
                                                 <?php
                                                     $boughtflag=0;

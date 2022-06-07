@@ -270,6 +270,9 @@
                         $password = password_hash($_POST['edit-admin-password'], PASSWORD_BCRYPT);
                         $sql = "update admin_info set admin_password='" . $password . "',admin_email='" . $_POST['edit-admin-email'] . "',admin_name='" . $_POST['edit-admin-name'] . "',admin_phone='" . $_POST['edit-admin-phone'] . "' where admin_account='" . $_POST['old-admin_account'] . "'";  
                   }
+                  else{
+                        $sql = "update admin_info set admin_email='" . $_POST['edit-admin-email'] . "',admin_name='" . $_POST['edit-admin-name'] . "',admin_phone='" . $_POST['edit-admin-phone'] . "' where admin_account='" . $_POST['old-admin_account'] . "'";  
+                  }
 
                   if (strlen($sql) > 10) {
                         if ($result = mysqli_query($link, $sql)) {

@@ -2408,7 +2408,11 @@ ol {
 }
 
 .mixitup-control {
+<<<<<<< HEAD
 		background: transparent;
+=======
+	background: transparent;
+>>>>>>> 3330587f1c84ff66ee9fd90ffd0c99247fdd2273
     display: inline-block;
     text-align: center;
     font-size: 15px;
