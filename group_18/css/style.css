@@ -895,38 +895,6 @@ ol {
 	border-radius: 0;
 }
 
-.product__pagination {
-	padding-top: 15px;
-}
-
-.product__pagination a {
-	display: inline-block;
-	font-size: 15px;
-	color: #b7b7b7;
-	font-weight: 600;
-	height: 50px;
-	width: 50px;
-	border: 1px solid transparent;
-	border-radius: 50%;
-	line-height: 48px;
-	text-align: center;
-	-webkit-transition: all, 0.3s;
-	-o-transition: all, 0.3s;
-	transition: all, 0.3s;
-}
-
-.product__pagination a:hover {
-	color: #ffffff;
-}
-
-.product__pagination a.current-page {
-	border: 1px solid #ffffff;
-}
-
-.product__pagination a i {
-	color: #b7b7b7;
-	font-size: 15px;
-}
 
 /*---------------------
   Game Details
@@ -2440,7 +2408,11 @@ ol {
 }
 
 .mixitup-control {
+<<<<<<< HEAD
+		background: transparent;
+=======
 	background: transparent;
+>>>>>>> 3330587f1c84ff66ee9fd90ffd0c99247fdd2273
     display: inline-block;
     text-align: center;
     font-size: 15px;

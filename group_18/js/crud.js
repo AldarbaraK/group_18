@@ -458,4 +458,332 @@ jQuery(document).ready(function($) {
             });
         }
 
+        /************************
+         *   交易紀錄CRUD        *
+         ************************/
+        //查詢
+        var deal_tbl = $('#deal_datatable').DataTable({
+            scrollCollapse: true,
+            autoWidth: false,
+            responsive: true,
+            "ajax": {
+                url: "crud.php",
+                data: function(d) {
+                      return $('#delete-deal-form').serialize() + "&oper=query";
+                },
+                type: 'POST',
+                dataType: 'json'
+            },
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 項結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                }    
+            }
+        });
+
+        //刪除
+        $('tbody').on('click', '#deal_delete', function() {
+          var data = deal_tbl.row($(this).closest('tr')).data();
+          if (!confirm('是否確定要刪除?'))
+                return false;
+            $("#tableType").val("dealTable");
+            $("#oper").val("delete");
+            $("#deal_member_account").val(data[0]); 
+            $("#deal_game_ID").val(data[1]);
+            $("#deal_game_name").val(data[2]);
+            $("#deal_price").val(data[3]);
+            $("#deal_score").val(data[4]);
+            $("#deal_datetime").val(data[5]);  
+            deal_CRUD();
+       }); 
+
+        function deal_CRUD() {
+            $.ajax({
+                url: "crud.php",
+                data: $("#delete-deal-form").serialize(),
+                type: 'POST',
+                dataType: "json",
+                success: function(JData) {                 
+                      if (JData.code){
+                            toastr.error(JData.message);
+                            console.log(JData.message);
+                      }
+                      else {
+                            $("#oper").val("delete");
+                            deal_tbl.ajax.reload();   
+                            toastr.success(JData.message);
+                      }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.responseText);
+                    alert(xhr.responseText);
+                }
+            });
+        }
+
+        /************************
+         *      管理員CRUD        *
+         ************************/
+        //查詢
+        var admin_tbl = $('#admin_datatable').DataTable({
+            scrollCollapse: true,
+            autoWidth: false,
+            responsive: true,
+            "ajax": {
+                url: "crud.php",
+                data: function(d) {
+                      return $('#edit-admin-form').serialize() + "&oper=query";
+                },
+                type: 'POST',
+                dataType: 'json'
+            },
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 項結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                }    
+            }
+        });
+        //新增
+        $('tbody').on('click', '#admin_insert', function() {
+            $("#tableType").val("adminTable");
+            $("#oper").val("insert");
+        });        
+        //修改
+        $('tbody').on('click', '#admin_update', function() {
+            var data = admin_tbl.row(this).data();
+            $('#edit-admin-account').val(data[0]);     
+            $('#edit-admin-email').val(data[1]);
+            $('#edit-admin-name').val(data[2]);
+            $('#edit-admin-phone').val(data[3]);
+            $("#tableType").val("adminTable");
+            $('#old-admin_account').val(data[0]);
+            $("#oper").val("update");
+            if($("#oper").val() == "update"){
+                $("#edit-admin-account").prop('readonly', true);
+            }
+        });
+
+       //取消
+       $('#admin_cancel').on('click', function () {         
+            $("#oper").val("insert");
+            $("#edit-admin-form").get(0).reset();
+            formData.delete('account');
+            $('#account_check').text('');
+            admin_validator.resetForm();  
+            $("#edit-admin-account").prop('readonly', false);
+            $('.edit-model').fadeOut(400);
+        });
+
+       //刪除
+       $('tbody').on('click', '#admin_delete', function() {
+          var data = admin_tbl.row(this).data();
+          if (!confirm('是否確定要刪除?'))
+                return false;
+            $("#tableType").val("adminTable");
+            $("#old-admin_account").val(data[0]);
+            $("#oper").val("delete"); //刪除
+            admin_CRUD();
+       });  
+
+       //送出表單 (儲存)
+       jQuery.validator.methods.matches = function( value, element, params ) {
+            var re = new RegExp(params);
+            return this.optional( element ) || re.test( value );
+        }
+
+        $.validator.addMethod("pwd",function(value,element,params){
+            var pwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+            return (pwd.test(value));
+        },"請填寫長度在8-20之間,需包含一個字母和一個數字!");
+
+        var formData = new FormData();
+        $('#edit-admin-account').keyup(function() {
+            if($("#oper").val() == 'insert'){
+                formData.set('account', $('#edit-admin-account').val());
+                $.ajax({
+                    url: "function.php?op=signupCheckAjax",
+                    data: formData,
+                    type: "POST",
+                    dataType: 'text',
+                    processData: false,
+                    contentType: false,
+                    success: function(msg) {
+                        $('#account_check').text(msg); 
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+            }    
+        });
+        
+        var admin_validator = $("#edit-admin-form").validate({
+          submitHandler: function() {
+                if($("#oper").val() == 'insert'){
+                    formData.set('account', $('#edit-admin-account').val());
+                    $.ajax({
+                        url: "function.php?op=signupCheckAjax",
+                        data: formData,
+                        type: "POST",
+                        dataType: 'text',
+                        processData: false,
+                        contentType: false,
+                        success: function(msg) {
+                            $('#account_check').text(msg); 
+                            if(msg != "此帳號已存在!")
+                            {
+                                $('.edit-model').fadeOut(400);
+                                admin_CRUD();
+                            }
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    }); 
+                } 
+                else{
+                    $('.edit-model').fadeOut(400);
+                    admin_CRUD();
+                }         
+          },
+          rules: {
+                "edit-admin-account": {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 24
+                },
+                "edit-admin-email": {
+                    required: true,
+                    email: true
+                },
+                "edit-admin-password": {
+                    required: {
+                        depends: function(element) {
+                            if ($("#oper").val() == 'insert') {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    },
+                    pwd: {
+                        depends: function(element) {
+                            if ($("#oper").val() == 'insert') {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+                },
+                "edit-admin-pwd": {
+                    required: {
+                        depends: function(element) {
+                            if ($("#oper").val() == 'insert') {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    },
+                    equalTo: {
+                        param: '#edit-admin-password',
+                        depends: function(element) { 
+                            return $("#oper").val() == 'insert'; 
+                        }
+                    }
+                },
+                "edit-admin-name": {
+                    required: true
+                },
+                "edit-admin-phone": {
+                    required: true,
+                    matches: new RegExp('^09\\d{8}$')
+                }
+            },
+            messages: {
+                "edit-admin-account":{
+                    required: "請輸入管理員帳號",
+                    minlength: "請輸入4到24位英數字組合",
+                    maxlength: "請輸入4到24位英數字組合"
+                },
+                "edit-admin-email": {
+                    required: "請輸入電子郵箱",
+                    email: "請輸入正確郵箱格式"
+                },
+                "edit-admin-password": {
+                    required: "請輸入密碼"
+                },
+                "edit-admin-pwd": {
+                    required: "請輸入確認密碼",
+                    equalTo: "密碼不相符"
+                },
+                "edit-admin-name": {
+                    required: "請輸入管理員名稱"
+                },
+                "edit-admin-phone": {
+                    required: "請輸入電話號碼",
+                    matches: "請輸入正確的10位手機格式"
+                }
+            }
+        });
+
+        function admin_CRUD() {
+            $.ajax({
+                url: "crud.php",
+                data: $("#edit-admin-form").serialize(),
+                type: 'POST',
+                dataType: "json",
+                success: function(JData) {                 
+                    $("#edit-admin-form").get(0).reset();
+                    admin_validator.resetForm();
+                    $("#edit-admin-account").prop('readonly', false);
+                      if (JData.code){
+                            toastr.error(JData.message);
+                            console.log(JData.message);
+                      }
+                      else {
+                            $("#oper").val("insert");
+                            admin_tbl.ajax.reload();   
+                            toastr.success(JData.message);    
+                      }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    $("#edit-admin-form").get(0).reset();
+                    admin_validator.resetForm();
+                    $("#edit-admin-account").prop('readonly', false);
+                    console.log(xhr.responseText);
+                    alert(xhr.responseText);
+                }
+            });
+        }
+
 });

@@ -644,7 +644,7 @@
              * @default     '${startPageAt} to ${endPageAt} of ${totalTargets}'
              */
 
-            this.pageStats = '${startPageAt} to ${endPageAt} of ${totalTargets}';
+            this.pageStats = '顯示第 ${startPageAt} 至 ${endPageAt} 項結果，共 ${totalTargets} 項';
 
             /**
              * @name        pageStatsSingle
@@ -664,7 +664,7 @@
              * @default     'None found'
              */
 
-            this.pageStatsFail = 'None found';
+            this.pageStatsFail = '找不到搜尋結果';
         });
 
         /**

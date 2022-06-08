@@ -64,10 +64,18 @@
     if($op=='selectGame')
     {
         session_start();
-        if(isset($_SESSION['member_account']))
-            selectGameCount($_POST['select_price'],$_POST['select_type'],$_SESSION['member_account']);
-        else
-            selectGameCount($_POST['select_price'],$_POST['select_type'],"");
+        if(isset($_POST['search_data'])){
+            if(isset($_SESSION['member_account']))
+                selectGameCount($_POST['select_price'],$_POST['select_type'],$_SESSION['member_account'],$_POST['search_data']);
+            else
+                selectGameCount($_POST['select_price'],$_POST['select_type'],"",$_POST['search_data']);
+        }
+        else{
+            if(isset($_SESSION['member_account']))
+                selectGameCount($_POST['select_price'],$_POST['select_type'],$_SESSION['member_account'],"");
+            else
+                selectGameCount($_POST['select_price'],$_POST['select_type'],"","");
+        }
     }
     if($op=='followGame')
     {
@@ -77,6 +85,10 @@
     if($op=='deleteComment')
     {
         deleteComment($_POST['account'],$_POST['time'],$_GET['game_ID']);
+    }
+    if($op=='search')
+    {
+        search($_POST['search-input']);
     }
 
     function isStaff()
@@ -92,22 +104,45 @@
     function checkLogin($account, $password)
     {
         global $link;
-        $memberQ = mysqli_query($link, "SELECT * FROM member_info WHERE member_account='".$account."'");
+        $memberQ = mysqli_query($link, "SELECT * FROM member_info WHERE member_account='$account'");
 
-        $member = mysqli_fetch_assoc($memberQ);
+        $num = mysqli_num_rows($memberQ);
 
-        if($account == $member['member_account'] && password_verify($password,$member['member_password']) )
-        {       
-            session_start();
-            $_SESSION['member_account'] = $account;
+        if($num > 0){
+            $member = mysqli_fetch_assoc($memberQ);
+            if($account == $member['member_account'] && password_verify($password,$member['member_password']) )
+            {       
+                session_start();
+                $_SESSION['member_account'] = $account;
 
-            header("Location:index.php");
+                header("Location:index.php");
+            }
+            else
+            {
+                header("Location:login.php");
+            }
         }
-        else
-        {
-            header("Location:login.php");
+
+
+        $adminQ = mysqli_query($link, "SELECT * FROM admin_info WHERE admin_account='$account'");
+
+        $num = mysqli_num_rows($adminQ);
+
+        if($num > 0){
+            $admin = mysqli_fetch_assoc($adminQ);
+            if($account == $admin['admin_account'] && password_verify($password,$admin['admin_password']) )
+            {       
+                session_start();
+                $_SESSION['member_account'] = $account;
+
+                header("Location:index.php");
+            }
+            else
+            {
+                header("Location:login.php");
+            }
         }
-       
+
     }
 
     function addCart($account,$game_ID)
@@ -217,16 +252,25 @@
         global $link;
         
         $sql = "SELECT * FROM member_info where member_account='$account' ";
+        $sql2 = "SELECT * FROM admin_info where admin_account='$account' ";
 
         if($account!="")
         {
             if(strlen($account)>=4 && strlen($account)<=24)
             {
+                $isExist = false;
                 if ( $result = mysqli_query($link, $sql) ) {
-                    if($row = mysqli_fetch_assoc($result)) echo "此帳號已存在!";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
+                    if($row = mysqli_fetch_assoc($result)) $isExist = true;           
                 }
-    
+                if(!$isExist){
+                    if ( $result = mysqli_query($link, $sql2) ) {
+                        if($row = mysqli_fetch_assoc($result)) $isExist = true;          
+                    }
+                }
+                if($isExist)
+                    echo "此帳號已存在!";
+
+                mysqli_free_result($result); // 釋放佔用的記憶體
                 mysqli_close($link); // 關閉資料庫連結
             }
             else
@@ -246,11 +290,23 @@
                 echo "";
             else if(strlen($account)>=4 && strlen($account)<=24)
             {
+                $valid = true;
                 if ( $result = mysqli_query($link, "SELECT * FROM member_info where member_account='$account'") ) {
-                    if(!($row = mysqli_fetch_assoc($result))||!(password_verify($pwd,$row['member_password']))) echo "此帳號不存在或密碼不正確!";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
+                    if(!($row = mysqli_fetch_assoc($result))||!(password_verify($pwd,$row['member_password'])))
+                        $valid = false;
                 }
-    
+                if(!$valid){
+                    if ( $result = mysqli_query($link, "SELECT * FROM admin_info where admin_account='$account'") ) {
+                        if(!($row = mysqli_fetch_assoc($result))||!(password_verify($pwd,$row['admin_password'])))
+                            $valid = false;
+                        else
+                            $valid = true;       
+                    }
+                }
+                if(!$valid)
+                    echo "此帳號不存在或密碼不正確!";
+                
+                mysqli_free_result($result); // 釋放佔用的記憶體
                 mysqli_close($link); // 關閉資料庫連結
             }
             else
@@ -323,7 +379,7 @@
 
     }
 
-    function selectGameCount($selectPrice,$selectType,$account)
+    function selectGameCount($selectPrice,$selectType,$account,$search_data)
     {
         global $link;
 
@@ -360,19 +416,17 @@
         {
             if($selectType == "all")
             {
-                if ($result = mysqli_query($link, "SELECT * FROM game_info WHERE game_price='0'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select * from game_info where game_price='0'";
+                else
+                    $sql = "select * from game_info where game_price='0' and game_name like '%". $search_data ."%'";             
             }
             else
             {
-                if ($result = mysqli_query($link, "SELECT a.game_ID FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID and game_price='0' and game_type='".$type."'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_price='0' and game_type='".$type."'";
+                else
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_price='0' and game_type='".$type."' and game_name like '%". $search_data ."%'";
             }
             
         }
@@ -380,65 +434,60 @@
         {
             if($selectType == "all")
             {
-                if ($result = mysqli_query($link, "SELECT * FROM game_info WHERE game_price!='0'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select * from game_info where game_price!='0'";
+                else
+                    $sql = "select * from game_info where game_price!='0' and game_name like '%". $search_data ."%'";
             }
             else
             {
-                if ($result = mysqli_query($link, "SELECT a.game_ID FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID and game_price!='0' and game_type='".$type."'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_price!='0' and game_type='".$type."'";
+                else
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_price!='0' and game_type='".$type."' and game_name like '%". $search_data ."%'";
             }
         }
         else if($selectPrice == "all")
         {
             if($selectType == "all")
             {
-                if ($result = mysqli_query($link, "SELECT * FROM game_info")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select * from game_info";
+                else
+                    $sql = "select * from game_info where game_name like '%". $search_data ."%'";
             }
             else
             {
-                if ($result = mysqli_query($link, "SELECT a.game_ID FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID and game_type='".$type."'")) {
-                    $num = mysqli_num_rows($result);
-                    echo $num. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_type='".$type."'";
+                else
+                    $sql = "select a.game_ID from game_info a,game_categories b where a.game_ID = b.game_ID and game_type='".$type."' and game_name like '%". $search_data ."%'";
             }
         }
         else if($selectPrice == ".like")
         {
             if($selectType == "all")
             {
-                $count=0;
-                if ($result = mysqli_query($link, "SELECT * FROM member_follow")) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        if($row['member_account'] == $account)
-                            $count++;
-                    }
-                    echo $count. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
-                }
+                if($search_data == "")
+                    $sql = "select * from game_info a,member_follow b where a.game_ID = b.game_ID and member_account='".$account."'";
+                else
+                    $sql = "select * from game_info a,member_follow b where a.game_ID = b.game_ID and member_account='".$account."' and game_name like '%". $search_data ."%'";
             }
             else
             {
-                $count=0;
-                if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_categories b,member_follow c WHERE a.game_ID = b.game_ID and b.game_ID=c.game_ID and game_type='".$type."'")) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        if($row['member_account'] == $account)
-                            $count++;
-                    }
-                    echo $count. " 筆結果";
-                    mysqli_free_result($result); // 釋放佔用的記憶體
+                if($search_data == ""){
+                    "select * from game_info a,game_categories b,member_follow c where a.game_ID = b.game_ID and b.game_ID=c.game_ID and game_type='".$type."' and member_account='".$account."'";
                 }
+                else{
+                    "select * from game_info a,game_categories b,member_follow c where a.game_ID = b.game_ID and b.game_ID=c.game_ID and game_type='".$type."' and member_account='".$account."' and game_name like '%". $search_data ."%'";
+                }
+            }
+        }
+        if(isset($sql)){
+            if ($result = mysqli_query($link, $sql)) {
+                $num = mysqli_num_rows($result);
+                echo $num. " 筆結果";
+                mysqli_free_result($result); // 釋放佔用的記憶體
             }
         }
     }
@@ -519,6 +568,10 @@
             mysqli_free_result($result); // 釋放佔用的記憶體
         }
 
+    }
+    function search($input)
+    {
+        header("Location:categories.php?search=".$input);
     }
 
 

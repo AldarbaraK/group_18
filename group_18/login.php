@@ -153,17 +153,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別 <span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="categories.php">休閒</a></li>
-                                        <li><a href="categories.php">冒險</a></li>
-                                        <li><a href="categories.php">動作</a></li>
-                                        <li><a href="categories.php">多人</a></li>
-                                        <li><a href="categories.php">策略</a></li>
-                                        <li><a href="categories.php">競速</a></li>
-                                        <li><a href="categories.php">運動</a></li>
-                                        <li><a href="categories.php">卡牌</a></li>
-                                    </ul>
+                                <li><a href="categories.php">類別</a>
                                 </li>
                                 <?php
                                     if(isset($_SESSION['member_account'])){
@@ -184,14 +174,24 @@
                         <a href="#" class="search-switch"><span class="icon_search"></span></a>
                         <?php
                             if(isset($_SESSION['member_account'])){
-                                echo '<a href="cart.php"><span class="icon_cart"></span></a>';
+                                echo '<a href="cart.php"><span class="icon_cart"></span>';
+                                $TagResult = mysqli_query($link, "SELECT * FROM member_cart WHERE member_account = '". $_SESSION['member_account'] ."'") ;
+                                $TagNum = mysqli_num_rows($TagResult); //查詢結果筆數
+                                echo '<span class="header__right__cartTag">'.$TagNum.'</span></a>';
                             }
                             else{
                                 echo '<a href="login.php"><span class="icon_cart"></span></a>';
                             }
                         ?>
-                        <a href="login.php"><span class="icon_profile"></span></a>
-                    </div>
+                        <?php
+                            if(isset($_SESSION['member_account'])){
+                                echo '<a href="function.php?op=logout"><span class="fa fa-sign-out"></span></a>';
+                            }
+                            else{
+                                echo '<a href="login.php"><span class="icon_profile"></span></a>';
+                            }
+                        ?>
+                    </div>                                      
                 </div>
             </div>
             <div id="mobile-menu-wrap"></div>
@@ -281,12 +281,12 @@
       </footer>
       <!-- Footer Section End -->
 
-      <!-- Search model Begin -->
-      <div class="search-model">
+    <!-- Search model Begin -->
+    <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
+            <form class="search-model-form" action="function.php?op=search" method="post">
+                <input type="text" id="search-input" name="search-input" placeholder="請在這裡輸入搜尋內容">
             </form>
         </div>
     </div>

@@ -3,7 +3,7 @@
       //一般控制項
       $arr_rated = array('G' => '普通級', 'PG' => '保護級', 'PG-13' => '輔導級', 'R' => '限制級');
       $arr_oper = array("insert" => "新增", "update" => "修改", "delete" => "刪除");
-      $arr_type = array("gameTable" => "遊戲", "memberTable" => "會員", "dealTable" => "訂單");
+      $arr_type = array("gameTable" => "遊戲", "memberTable" => "會員", "dealTable" => "交易紀錄", "adminTable" => "管理員");
       $arr_lang = array(1 => "繁體中文", 2 => "英文", 3 => "日文");
       $arr_level = array(1 => "黃金會員", 2 => "白金會員", 3 => "鑽石會員");
       $arr_sex = array('M' => "男性", 'F' => "女性");
@@ -65,7 +65,41 @@
                   exit;
             }
             else if($type == "dealTable"){
-
+                  if ($result = mysqli_query($link, "SELECT * FROM game_info a,deal_record b WHERE a.game_ID = b.game_ID")) {
+                              while ($row = mysqli_fetch_assoc($result)) { 
+                                    $a['data'][] = array($row["member_account"],$row["game_ID"],$row["game_name"],$row["deal_price"],$row["deal_score"],$row["deal_datetime"],'<div class="dropdown">
+                                                                                                <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown" id = "test">
+                                                                                                      <i class="dw dw-more"></i>
+                                                                                                </a>
+                                                                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                                                                                      <a class="dropdown-item" href="#" id="deal_delete"><i class="dw dw-delete-3"></i> 刪除</a>
+                                                                                                </div>
+                                                                                          </div>');    
+                              }
+                  }            
+                  mysqli_free_result($result); // 釋放佔用的記憶體
+                  mysqli_close($link); // 關閉資料庫連結
+                  echo json_encode($a);
+                  exit;
+            }
+            else if($type == "adminTable"){
+                  if ($result = mysqli_query($link, "SELECT * FROM admin_info")) {
+                              while ($row = mysqli_fetch_assoc($result)) { 
+                                    $a['data'][] = array($row["admin_account"],$row["admin_email"],$row["admin_name"],$row["admin_phone"],$row["admin_insertDate"],$row["admin_password"],'<div class="dropdown">
+                                                                                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                                                                          <i class="dw dw-more"></i>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                                                                          <a class="dropdown-item edit-switch" href="#" id= "admin_update"><i class="dw dw-edit2"></i> 編輯</a>
+                                                                                          <a class="dropdown-item" href="#" id="admin_delete"><i class="dw dw-delete-3"></i> 刪除</a>
+                                                                                    </div>
+                                                                              </div>');    
+                              }
+                  }            
+                  mysqli_free_result($result); // 釋放佔用的記憶體
+                  mysqli_close($link); // 關閉資料庫連結
+                  echo json_encode($a);
+                  exit;
             }
       }
 
@@ -125,10 +159,23 @@
                         exit;
                   }      
             }
-            else if($type == "dealTable"){
-
+            else if($type == "adminTable") {
+                  $password = password_hash($_POST['edit-admin-password'], PASSWORD_BCRYPT);
+                  $sql = "insert into admin_info(admin_account,admin_password,admin_email,admin_name,admin_phone,admin_insertDate) values ('" . $_POST['edit-admin-account'] . "','" . $password . "','" . $_POST['edit-admin-email'] . "','" . $_POST['edit-admin-name'] ."','" . $_POST['edit-admin-phone'] ."', NOW()" . ")";
+                  if (strlen($sql) > 10) {
+                        if ($result = mysqli_query($link, $sql)) {
+                              $a["message"] = $arr_type[$type] . "資料" . $arr_oper[$oper] . "成功!";
+                              $a["code"] = 0;
+                              
+                        } else {
+                              $a["code"] = mysqli_errno($link);
+                              $a["message"] = $arr_type[$type] . "資料" . $arr_oper[$oper] . "失敗! <br> 錯誤訊息: " . mysqli_error($link);
+                        }
+                        mysqli_close($link); // 關閉資料庫連結
+                        echo json_encode($a);
+                        exit;
+                  }      
             }
-            
       }
 
       if ($oper == "update") {
@@ -217,9 +264,29 @@
                         echo json_encode($a);
                         exit;
                   }    
-            }
-            else if($type == "dealTable"){
+            }  
+            else if($type == "adminTable") {
+                  if($_POST['edit-admin-password']!=''){
+                        $password = password_hash($_POST['edit-admin-password'], PASSWORD_BCRYPT);
+                        $sql = "update admin_info set admin_password='" . $password . "',admin_email='" . $_POST['edit-admin-email'] . "',admin_name='" . $_POST['edit-admin-name'] . "',admin_phone='" . $_POST['edit-admin-phone'] . "' where admin_account='" . $_POST['old-admin_account'] . "'";  
+                  }
+                  else{
+                        $sql = "update admin_info set admin_email='" . $_POST['edit-admin-email'] . "',admin_name='" . $_POST['edit-admin-name'] . "',admin_phone='" . $_POST['edit-admin-phone'] . "' where admin_account='" . $_POST['old-admin_account'] . "'";  
+                  }
 
+                  if (strlen($sql) > 10) {
+                        if ($result = mysqli_query($link, $sql)) {
+                              $a["message"] = $arr_type[$type] . "資料" . $arr_oper[$oper] . "成功!";
+                              $a["code"] = 0;
+                              
+                        } else {
+                              $a["code"] = mysqli_errno($link);
+                              $a["message"] = $arr_type[$type] . "資料" . $arr_oper[$oper] . "失敗! <br> 錯誤訊息: " . mysqli_error($link);
+                        }
+                        mysqli_close($link); // 關閉資料庫連結
+                        echo json_encode($a);
+                        exit;
+                  }    
             }          
       }
 
@@ -262,10 +329,36 @@
                   } 
             }
             else if($type == "dealTable"){
-
+                  $sql = "delete from deal_record where member_account='" . $_POST['deal_member_account'] . "' and game_ID='" . $_POST['deal_game_ID'] . "'";
+                  if (strlen($sql) > 10) {
+                        if ($result = mysqli_query($link, $sql)) {
+                              $a["code"] = 0;
+                              $a["message"] = "資料" . $arr_oper[$oper] . "成功!";
+                        } else {
+                              $a["code"] = mysqli_errno($link);
+                              $a["message"] = "資料" . $arr_oper[$oper] . "失敗! <br> 錯誤訊息: " . mysqli_error($link);
+                        }
+                        mysqli_close($link); // 關閉資料庫連結
+                        echo json_encode($a);
+                        exit;
+                  }
             }
-
-                    
+            else if($type == "adminTable") {
+                  $sql = "delete from admin_info where admin_account='" . $_POST['old-admin_account'] . "'";
+                  if (strlen($sql) > 10) {
+                        if ($result = mysqli_query($link, $sql)) {
+                              $a["code"] = 0;
+                              $a["message"] = "資料" . $arr_oper[$oper] . "成功!";
+                        } else {
+                              $a["code"] = mysqli_errno($link);
+                              $a["message"] = "資料" . $arr_oper[$oper] . "失敗! <br> 錯誤訊息: " . mysqli_error($link);
+                        }
+                        mysqli_close($link); // 關閉資料庫連結
+                        echo json_encode($a);
+                        exit;
+                  } 
+            }
+                
       }
 
 ?>
