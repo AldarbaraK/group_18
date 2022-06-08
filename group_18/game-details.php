@@ -17,9 +17,8 @@
                 $discount = $row['game_discount'];
                 $game_ID = $_GET['game_ID'];
                 $score = $row['avg_score'];
-                
-                //$sql = "select * from game_info a LEFT JOIN (select game_ID, round(AVG(deal_record),1) avg_score form deal_record group by game_ID) c on a.game_ID = c.game_ID and a.game_ID = '".$game_ID."')";
-                //$result = mysqli_query($link, );
+                if($score=="")
+                    $score=0;
             }
         }
     }
@@ -314,18 +313,28 @@
                                             <?php
                                                 if(isset($_SESSION['member_account']))
                                                 {
-                                                    $bought_flag = false;
+                                                    $addCart_flag = false;
                                                     if ($result = mysqli_query($link, "SELECT * FROM member_cart")) {
                                                         while ($row = mysqli_fetch_assoc($result)) {
                                                             if($row["member_account"] == $_SESSION['member_account'] && $row["game_ID"] == $_GET['game_ID']){
                                                                 echo '<button class="watch-btn" disabled="disabled" id="addCart_btn"><span>已加入購物車</span> <i class="fa fa-angle-right"></i></button>';
+                                                                $addCart_flag = true;
+                                                            }
+                                                        }
+                                                        mysqli_free_result($result); // 釋放佔用的記憶體
+                                                    }
+                                                    $bought_flag=false;
+                                                    if ($result = mysqli_query($link, "SELECT * FROM deal_record")) {
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                            if($row["member_account"] == $_SESSION['member_account'] && $row["game_ID"] == $_GET['game_ID']){
+                                                                echo '<button class="watch-btn" disabled="disabled" id="addCart_btn"><span>已購買此遊戲</span> <i class="fa fa-angle-right"></i></button>';
                                                                 $bought_flag = true;
                                                             }
                                                         }
                                                         mysqli_free_result($result); // 釋放佔用的記憶體
-                                                        if($bought_flag == false)
-                                                            echo '<button type="submit" class="watch-btn" id="addCart_btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>';
                                                     }
+                                                    if($addCart_flag == false && $bought_flag == false)
+                                                        echo '<button type="submit" class="watch-btn" id="addCart_btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>';
                                                 }
                                                 else{
                                                     echo '<button class="watch-btn" id="addCart_btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>';
