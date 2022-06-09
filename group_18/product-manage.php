@@ -46,21 +46,18 @@
     <header class="header">
         <div class="container">
             <div class="row">
-                <div class="col-lg-10">
+            	<div class="col-lg-1">
+					<div class="header-left">
+						<div class="menu-icon dw dw-menu"></div>
+					</div>
+				</div> 		 
+                <div class="col-lg-9">
                     <div class="header__nav">
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別</a>
-                                </li>
-                                <?php
-                                    if(isset($_SESSION['member_account'])){
-                                        echo '<li><a href="member-center-data.php">會員中心</a></li>';
-                                    }
-                                    else{
-                                        echo '<li><a href="login.php">會員中心</a></li>';
-                                    }
-                                ?>
+                                <li><a href="categories.php">類別</a></li>
+                                <li><a href="member-center-data.php">會員中心</a></li>
                                 <li><a href="customer.php">客服中心</a></li>
                                 <li class="active"><a href="admin.php">管理員中心</a></li>
                             </ul>
@@ -72,10 +69,7 @@
                         <a href="#" class="search-switch"><span class="icon_search"></span></a>
                         <?php
                             if(isset($_SESSION['member_account'])){
-                                echo '<a href="cart.php"><span class="icon_cart"></span>';
-                                $TagResult = mysqli_query($link, "SELECT * FROM member_cart WHERE member_account = '". $_SESSION['member_account'] ."'") ;
-                                $TagNum = mysqli_num_rows($TagResult); //查詢結果筆數
-                                echo '<span class="header__right__cartTag">'.$TagNum.'</span></a>';
+                                echo '<a href="cart.php"><span class="icon_cart"></span></a>';
                             }
                             else{
                                 echo '<a href="login.php"><span class="icon_cart"></span></a>';
@@ -102,7 +96,7 @@
                     <img src="img/logo.svg" alt="">
                 </a>
                 <div class="close-sidebar" data-toggle="left-sidebar-close">
-					<i class="ion-close-round"></i>
+					<i class="icon-close-round"></i>
 				</div>
             </div>
 			<div class="menu-block customscroll">
