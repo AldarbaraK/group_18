@@ -363,7 +363,7 @@
                                         if($_GET['game_ID'] == $row['game_ID']){
                                             echo ' <div class="game__review__item">
                                                         <div class="game__review__item__pic">
-                                                            <img src="img/review/review-1.jpg" alt="">
+                                                            <img src="img/review/nlnlouo.jpg" alt="">
                                                         </div>
                                                         <div class="game__review__item__text">
                                                             <div class="row">
