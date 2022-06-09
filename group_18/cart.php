@@ -192,10 +192,10 @@
             </div>
             <div class="cart__upbtnSet">
                 <div class="cart__self__btn">
-                    <button>自用</button>
+                    <button class="self-cart-pay" id="self-show">自用</button>
                 </div>
                 <div class="cart__gift__btn">
-                    <button>贈禮</button>
+                    <button class="gift-cart-pay" id="gift-show">贈禮</button>
                 </div>
             </div>
             <div class="row">
@@ -264,6 +264,102 @@
         </div>
     </div>
     <!-- Search model end -->
+
+    <!-- Self model Begin -->
+    <div class="edit-model self-cart-model">
+        <div class="edit-model-show"> 
+            <form class="edit-model-form" id="self-pay-form" method="post">
+                <div class="edit-switch-pos">
+                    <div class="edit-close-switch" id="cart-cancel"><i class="icon_close"></i></div> 
+                </div>
+                <div class="container">
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-8" style="text-align: center;">
+                            <div class="game__details__title">
+                                <h3>購買商品</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-5"><div class="section-title"><h4>總價: NT$ <?php echo $total;?> 元</h4></div></div>
+                    </div>
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-5"><div class="section-title"><h4>總共 <?php echo $num;?> 件商品</h4></div></div>
+                    </div>
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-2">
+                            <div class="section-title"><h4>付款資訊</h4></div>
+                        </div>
+                        <div class="col-lg-3"><input class="form-control" type="text" name="self-credit-card" id="self-credit-card" placeholder="請輸入信用卡卡號"><label for="self-credit-card" class="error" style="display: inline;"></label></div>
+                    </div> 
+                    <div class="row justify-content-center">
+                        <div class="col-lg-2">
+                            <div class="section-title">
+                                <div class="personal-btn">
+                                    <button class="site-btn">完成</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </form>    
+        </div>
+    </div>
+    <!-- Self model end -->
+
+    <!-- Gift model Begin -->
+    <div class="edit-model gift-cart-model">
+        <div class="edit-model-show"> 
+            <form class="edit-model-form" id="gift-pay-form" method="post">
+                <div class="edit-switch-pos">
+                    <div class="edit-close-switch" id="cart-cancel"><i class="icon_close"></i></div> 
+                </div>
+                <div class="container">
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-8" style="text-align: center;">
+                            <div class="game__details__title">
+                                <h3>贈送禮物</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-5"><div class="section-title"><h4>總價: NT$ <?php echo $total;?> 元</h4></div></div>
+                    </div>
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-5"><div class="section-title"><h4>總共 <?php echo $num;?> 件商品</h4></div></div>
+                    </div>
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-2">
+                            <div class="section-title"><h4>贈禮對象</h4></div>
+                        </div>
+                        <div class="col-lg-3"><input class="form-control" type="text" name="gift-target" id="gift-target" placeholder="請輸入贈禮對象帳號"><label for="gift-target" class="error" style="display: inline;"></label><p class="error" id="account_check"></p></div>
+                    </div>
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-2">
+                            <div class="section-title"><h4>付款資訊</h4></div>
+                        </div>
+                        <div class="col-lg-3"><input class="form-control" type="text" name="gift-credit-card" id="gift-credit-card" placeholder="請輸入信用卡卡號"><label for="gift-credit-card" class="error" style="display: inline;"></label></div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5"><div class="section-title"><h4>想說些什麼</h4></div></div>
+                    </div>
+                    <div class="row justify-content-center edit-comment">
+                        <div class="col-lg-5"><textarea class="form-control edit-message-text" name = "gift-message" id="gift-comment" type="text" placeholder="對贈禮對象說些什麼吧"></textarea></div>
+                    </div>  
+                    <div class="row justify-content-center">
+                        <div class="col-lg-2">
+                            <div class="section-title">
+                                <div class="personal-btn">
+                                    <button class="site-btn">完成</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>    
+        </div>
+    </div>
+    <!-- Gift model end -->
 
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>

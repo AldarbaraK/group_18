@@ -300,7 +300,7 @@
 									<div class="section-title"><h5>電話</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p><?php echo "0". $phone?></p>
+									<p><?php echo $phone; ?></p>
 								</div>
 							</div>
 						</div>
@@ -319,7 +319,7 @@
 									<div class="section-title"><h5>註冊日期</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p><?php echo $signupDate?></p>
+									<p><?php echo $signupDate ?></p>
 								</div>
 							</div>
 							<div class="row personal-basic">

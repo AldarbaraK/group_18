@@ -136,7 +136,7 @@ jQuery(document).ready(function($) {
                 "edit-game-date": {
                     required: true
                 },
-                game_lang: {
+                "game_cate[]": {
                     required: true
                 },
                 game_rated: {

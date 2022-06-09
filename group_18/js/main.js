@@ -186,6 +186,18 @@
         $('.edit-model').fadeIn(400);
     });
 
+    //Cart Model
+
+    $(document).on('click', '.self-cart-pay' , function () {
+        $('.self-cart-model').fadeIn(400);
+    });
+
+    $(document).on('click', '.gift-cart-pay' , function () {
+        $('.gift-cart-model').fadeIn(400);
+    });
+    $(document).on('click', '#cart-cancel' , function () {
+        $('.edit-model').fadeOut(400);
+    });
 
     /*------------------
 		Navigation

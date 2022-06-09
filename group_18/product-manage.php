@@ -435,7 +435,7 @@
 		        							<div class="row">
 												<div class="col-lg-3">
 													<div class="custom-control custom-checkbox">
-														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="1">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="1" required>
 														<label class="custom-control-label" for="languageCheck1">休閒</label>
 													</div>
 												</div>
@@ -497,6 +497,7 @@
 														<label class="custom-control-label" for="languageCheck1">多人</label>
 													</div>
 												</div>
+												<div class="col-lg-3"><label for="game_cate[]" class="error"></label></div>
 			        						</div>
 		        						</div>		
 									</div>
