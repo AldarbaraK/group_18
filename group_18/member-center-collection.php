@@ -31,10 +31,19 @@
     <link rel="stylesheet" href="css/nice-select.css" type="text/css">
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/star-rating.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
-</head>
-<body>
+    <script src="js/jquery-3.3.1.min.js"></script>
 
+    <script>
+		$(document).ready(function(){
+		    $("#input-id").rating();
+		});
+	</script>
+</head>
+
+
+<body>
 	<div id="preloder">
         <div class="loader"></div>
     </div>
@@ -159,7 +168,7 @@
 														<td>'. $row["game_name"].'</td>
 														<td>'. $row["deal_datetime"].'</td>
 														<td>'. $row["deal_price"].'</td>
-														<td>'. $row["deal_score"].'</td>
+														<td><input id="input-id" type="number" class="rating" min=0 max=5 step=0.5 data-size="xs" ></td>
 														<td class="datatable-nosort">
 															<div class="dropdown">
 																<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -281,15 +290,10 @@
 	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
 	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
 	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
-	<!-- buttons for Export datatable -->
-	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
-	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
+
 	<!-- Datatable Setting js -->
 	<script src="vendors/scripts/datatable-setting.js"></script>
+
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/player.js"></script>
@@ -297,6 +301,7 @@
     <script src="js/mixitup.min.js"></script>
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
+    <script src="js/star-rating.min.js"></script>
     <script src="js/main.js"></script>
 	</body>
 </html>
