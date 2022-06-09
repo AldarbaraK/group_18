@@ -209,11 +209,11 @@
 														<td class="table-plus">'. $row["game_story"].'</td>
 														<td>
 															<div class="dropdown">
-																<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown" id = "test">
+																<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 																	<i class="dw dw-more"></i>
 																</a>
 																<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-																	<a class="dropdown-item view-switch" href="#"><i class="dw dw-eye"></i> 預覽</a>
+																	<a class="dropdown-item" href="game-details.php?game_ID='.$row["game_ID"].'"><i class="dw dw-eye"></i> 預覽</a>
 																	<a class="dropdown-item edit-switch" href="#" id= "game_update"><i class="dw dw-edit2"></i> 編輯</a>
 																	<a class="dropdown-item" href="#" id="game_delete"><i class="dw dw-delete-3"></i> 刪除</a>
 																</div>
@@ -243,73 +243,6 @@
         </div>
     </div>
     <!-- Search model end -->	
-
-    <!-- View model Begin -->
-    <div class="view-model">
-        <div class="view-model-show">
-        	<div class="view-close-pos">
-        		<div class="view-close-switch"><i class="icon_close"></i></div>
-       		</div>
-			<div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="game__details__pic set-bg" data-setbg="img/product/product_2.jpg">
-                            <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                            <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="game__details__text">
-                            <div class="game__details__title">
-                                <h3>星之卡比 探索發現</h3>
-                            </div>
-                            <div class="game__details__rating">
-                                <div class="rating">
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star-half-o"></i></a>
-                                </div>
-                            </div>
-                            <div class="game__details__widget">
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-6">
-                                        <div class="game__item__tag">
-                                            <ul>
-                                                <li><span>類型:</span><p>休閒</p>　<p>冒險</p></li>
-                                            </ul>
-                                        </div>
-                                        <ul>
-                                            <li><span>發行日期:</span>2022 年 3 月 25 日</li>
-                                            <li><span>開發人員:</span> HAL研究所</li>
-                                            <li><span>發行商:</span> 任天堂</li>
-                                            <li><span>支援語言:</span> 繁體中文 / 英文 / 日文</li>
-                                            <li><span>遊戲分級:</span> 普通級</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> 
-                <div class="row">
-                	<div class="col-lg-12">
-                		<div class="game__details__text">
-                            <div class="section-title">
-                                <h5>故事</h5>
-                            </div>
-                            <p>《星之卡比 探索發現》是《星之卡比》系列第一款 3D 動作遊戲，除了過往熟悉的複製能力，這回還能透過塞滿嘴獲得新能力。
-                                故事背景設定在一個「過去已有文明存在的世界」。卡比為了救出被神祕敵人「野獸軍團」俘虜的瓦豆魯迪們而展開冒險，
-                                在各關卡中必須與野獸軍團戰鬥、解開難題，遊戲場景豐富度可說是歷代之最。</p>
-		                </div> 
-                	</div>
-                </div>	  
-	        </div>
-        </div>
-    </div>
-    <!-- View model end -->
-
 
 	<!-- Edit model Begin -->
     <div class="edit-model">
@@ -491,6 +424,81 @@
 												<label class="custom-control-label" for="languageCheck3">日文</label>
 											</div>
 										</div>
+									</div>
+	        					</div>
+	        					<div class="form-group">
+	        						<div class="row">	
+	        							<div class="col-lg-3">
+		        							<div class="section-title"><h4>選擇類型</h4></div>
+		        						</div>
+		        						<div class="col-lg-9">
+		        							<div class="row">
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="1">
+														<label class="custom-control-label" for="languageCheck1">休閒</label>
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="2">
+														<label class="custom-control-label" for="languageCheck1">冒險</label>
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="3">
+														<label class="custom-control-label" for="languageCheck1">動作</label>
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="4">
+														<label class="custom-control-label" for="languageCheck1">策略</label>
+													</div>
+												</div>
+			        						</div>
+			        						<div class="row">
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="5">
+														<label class="custom-control-label" for="languageCheck1">卡牌</label>
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="6">
+														<label class="custom-control-label" for="languageCheck1">汽機車模擬</label>
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="7">
+														<label class="custom-control-label" for="languageCheck1">恐怖</label>
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="8">
+														<label class="custom-control-label" for="languageCheck1">第一人稱</label>
+													</div>
+												</div>
+			        						</div>
+			        						<div class="row">
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="9">
+														<label class="custom-control-label" for="languageCheck1">單人</label>
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input edit-form-Zindex" id="game_cate" name="game_cate[]" value="10">
+														<label class="custom-control-label" for="languageCheck1">多人</label>
+													</div>
+												</div>
+			        						</div>
+		        						</div>		
 									</div>
 	        					</div>
 	        					<div class="form-group">

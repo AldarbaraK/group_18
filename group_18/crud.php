@@ -45,7 +45,7 @@
                                                                   <i class="dw dw-more"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                                                  <a class="dropdown-item view-switch" href="#"><i class="dw dw-eye"></i> 預覽</a>
+                                                                  <a class="dropdown-item" href="game-details.php?game_ID='.$row["game_ID"].'"><i class="dw dw-eye"></i> 預覽</a>
                                                                   <a class="dropdown-item edit-switch" href="#" id= "game_update"><i class="dw dw-edit2"></i> 編輯</a>
                                                                   <a class="dropdown-item" href="#" id="game_delete"><i class="dw dw-delete-3"></i> 刪除</a>
                                                             </div>
@@ -249,8 +249,46 @@
                               }
                         }
                   }
+
+                  if(isset($_POST['game_cate'])){
+                        $categories = $_POST['game_cate'];
+                        $not_cate = false;
+                  }
+                  else
+                        $not_cate = true;
+
+                  for($i = 1;$i <= 10;$i++){
+                        $ischeck = false;
+                        $checkCate = true;
+                        if($not_cate){
+                              $sql3 = "delete from game_categories where game_ID='" . $_POST['edit-game_ID'] . "' and game_type='" . $arr_cate[$i] . "'";
+                        }
+                        else{
+                              for($j = 0;$j < count($categories);$j++){
+                                    if( $categories[$j] == $i){
+                                          $ischeck = true;
+                                          break;
+                                    }
+                              }
+                              if($ischeck){
+                                    $sql3 = "replace into game_categories VALUE('" . $_POST['edit-game_ID'] . "','" . $arr_cate[$i] . "')";
+                              }
+                              else{
+                                    $sql3 = "delete from game_categories where game_ID='" . $_POST['edit-game_ID'] . "' and game_type='" . $arr_cate[$i] . "'";
+                              }
+                        }
+
+                        if (strlen($sql3) > 10) {
+                              if ($result3 = mysqli_query($link, $sql3)) {
+                                    $a["code"] = 0;
+                              } else {
+                                    $checkCate = false;
+                                    $a["code"] = mysqli_errno($link);
+                              }
+                        }
+                  }
                   if (strlen($sql) > 10) {
-                        if ($result = mysqli_query($link, $sql) && $checkLang) {
+                        if ($result = mysqli_query($link, $sql) && $checkLang && $checkCate) {
                               $a["code"] = 0;
                               $a["message"] = $arr_type[$type] . "資料" . $arr_oper[$oper] . "成功!";
                         } else {

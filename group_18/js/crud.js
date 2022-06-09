@@ -75,7 +75,31 @@ jQuery(document).ready(function($) {
            $("#edit-game-discount").val(discount[0]);
            $("#edit-game-developer").val(data[9]);
            $("#edit-game-publisher").val(data[10]);
-           $("#edit-game-story").val(data[11]);
+           let categories = data[11].split('/');
+            for(var i=0;i<categories.length;i++){
+                if(categories[i] == "休閒")
+                    $('input[name="game_cate[]"][value=1]').prop('checked', true);
+                else if(categories[i] == "冒險")
+                    $('input[name="game_cate[]"][value=2]').prop('checked', true);
+                else if(categories[i] == "動作")
+                    $('input[name="game_cate[]"][value=3]').prop('checked', true);
+                else if(categories[i] == "策略")
+                    $('input[name="game_cate[]"][value=4]').prop('checked', true);
+                else if(categories[i] == "卡牌")
+                    $('input[name="game_cate[]"][value=5]').prop('checked', true);
+                else if(categories[i] == "汽機車模擬")
+                    $('input[name="game_cate[]"][value=6]').prop('checked', true);
+                else if(categories[i] == "恐怖")
+                    $('input[name="game_cate[]"][value=7]').prop('checked', true);
+                else if(categories[i] == "第一人稱")
+                    $('input[name="game_cate[]"][value=8]').prop('checked', true);
+                else if(categories[i] == "單人")
+                    $('input[name="game_cate[]"][value=9]').prop('checked', true);
+                else if(categories[i] == "多人")
+                    $('input[name="game_cate[]"][value=10]').prop('checked', true);
+            }
+
+           $("#edit-game-story").val(data[12]);
            $("#oper").val("update");
         });
 

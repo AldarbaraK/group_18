@@ -186,20 +186,6 @@
         $('.edit-model').fadeIn(400);
     });
 
-    //View Model
-    $('.view-switch').on('click', '.view-switch' , function () {
-        $('.view-model').fadeIn(400);
-    });
-    $(document).on('click', '.view-switch' , function () {
-        $('.view-model').fadeIn(400);
-    });
-
-    $('.view-close-switch').on('click', function () {
-        $('.view-model').fadeOut(400, function () {
-            $('#view-input').val('');
-        });
-    });
-
 
     /*------------------
 		Navigation
