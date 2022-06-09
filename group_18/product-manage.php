@@ -164,7 +164,8 @@
 									<th>評分</th>
 									<th>開發人員</th>
 									<th>發行商</th>
-									<th class="table-plus">故事</th>
+									<th class="datatable-nosort">類型</th>
+									<th class="table-plus datatable-nosort">故事</th>
 									<th class="datatable-nosort">動作</th>
 								</tr>
 							</thead>
@@ -199,6 +200,18 @@
 														<td>'. $row["avg_score"].'</td>
 														<td>'. $row["game_developer"].'</td>
 														<td>'. $row["game_publisher"].'</td>
+														<td>';
+														if ($cateResult = mysqli_query($link, "SELECT * FROM game_categories a WHERE a.game_ID = '". $row["game_ID"] ."'")){
+															$cate_num = mysqli_num_rows($cateResult); //查詢結果筆數
+															$cate_cnt = 0;
+                                                            while ($cate = mysqli_fetch_assoc($cateResult)) {
+                                                                	echo $cate["game_type"];
+                                                                	if($cate_cnt != $cate_num - 1) echo'/';
+                                                                	$cate_cnt ++;
+                                                            }  
+                                                            mysqli_free_result($cateResult); // 釋放佔用的記憶體 
+                                                        } 
+														echo'</td>
 														<td class="table-plus">'. $row["game_story"].'</td>
 														<td>
 															<div class="dropdown">

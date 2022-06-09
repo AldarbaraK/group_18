@@ -5,6 +5,7 @@
       $arr_oper = array("insert" => "新增", "update" => "修改", "delete" => "刪除");
       $arr_type = array("gameTable" => "遊戲", "memberTable" => "會員", "dealTable" => "交易紀錄", "adminTable" => "管理員", "commentTable" => "評論");
       $arr_lang = array(1 => "繁體中文", 2 => "英文", 3 => "日文");
+      $arr_cate = array(1 => "休閒", 2 => "冒險", 3 => "動作", 4 => "策略", 5 => "卡牌", 6 => "汽機車模擬", 7 => "恐怖", 8 => "第一人稱", 9 => "單人", 10 => "多人");
       $arr_level = array(1 => "黃金會員", 2 => "白金會員", 3 => "鑽石會員");
       $arr_sex = array('M' => "男性", 'F' => "女性");
       $oper = $_POST['oper'];
@@ -26,9 +27,20 @@
                                           }  
                                           mysqli_free_result($langResult); // 釋放佔用的記憶體 
                                     }  
+                                    if ($cateResult = mysqli_query($link, "SELECT * FROM game_categories a WHERE a.game_ID = '". $row["game_ID"] ."'")){
+                                          $cate_num = mysqli_num_rows($cateResult); //查詢結果筆數
+                                          $cate_cnt = 0;
+                                          $strcate = "";
+                                          while ($cate = mysqli_fetch_assoc($cateResult)) {
+                                                $strcate .= $cate["game_type"];
+                                                if($cate_cnt != $cate_num - 1) $strcate .= '/';
+                                                $cate_cnt ++;
+                                          }  
+                                          mysqli_free_result($cateResult); // 釋放佔用的記憶體 
+                                    }
                                     $a['data'][] = array('<div class="image-view">
                                                             <img id="datatable-img'. $row["game_ID"].'" src="img/product/'. $row["game_picture"].'.jpg" alt="">
-                                                      </div>',$row["game_ID"],$row["game_name"],$row["game_date"],$strlang,$row["game_rating"],$row["game_price"],$row["game_discount"],$row["avg_score"],$row["game_developer"],$row["game_publisher"],$row["game_story"],'<div class="dropdown">
+                                                      </div>',$row["game_ID"],$row["game_name"],$row["game_date"],$strlang,$row["game_rating"],$row["game_price"],$row["game_discount"],$row["avg_score"],$row["game_developer"],$row["game_publisher"],$strcate,$row["game_story"],'<div class="dropdown">
                                                             <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown" id = "test">
                                                                   <i class="dw dw-more"></i>
                                                             </a>
