@@ -114,7 +114,7 @@
             {       
                 session_start();
                 $_SESSION['member_account'] = $account;
-
+                mysqli_query($link, "UPDATE member_details SET login_count=login_count+1 WHERE member_account='$account'");
                 header("Location:index.php");
             }
             else

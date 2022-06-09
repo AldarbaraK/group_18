@@ -17,10 +17,7 @@
                 $sex = $row['member_sex'];
                 $level = $row['member_level'];    
                 $totalCost = $row['member_cost']; 
-				$loginCount = $row['login_count'];
-				$boughtCount = $row['bought_count'];
-				$scoreCount = $row['score_count'];         
-				$commentCount = $row['comment_count'];
+				$loginCount = $row['login_count'];      
             }
         }
     }
@@ -338,7 +335,17 @@
 									<div class="section-title"><h5>消費次數</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p><?php echo $boughtCount?></p>
+									<p>
+										<?php 
+											if ($dealResult = mysqli_query($link, "SELECT member_account,count(*) bought_count FROM deal_record GROUP BY member_account")){
+												while($dealrow = mysqli_fetch_assoc($dealResult)){
+													if($account == $dealrow['member_account']){
+														echo $dealrow['bought_count'];
+													}
+												}
+											}
+										?>
+									</p>
 								</div>
 							</div>
 						</div>
@@ -350,7 +357,19 @@
 									<div class="section-title"><h5>消費總額</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p><?php echo $totalCost?></p>
+									<p>
+										<?php 
+											$bought_total=0;
+											if ($dealResult = mysqli_query($link, "SELECT member_account,deal_price FROM deal_record")){
+												while($dealrow = mysqli_fetch_assoc($dealResult)){
+													if($account == $dealrow['member_account']){
+														$bought_total += $dealrow['deal_price'];
+													}
+												}
+											}
+											echo $bought_total;
+										?>
+									</p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -358,7 +377,19 @@
 									<div class="section-title"><h5>評價次數</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p><?php echo $scoreCount?></p>
+									<p>
+										<?php 
+											$score_count=0;
+											if ($dealResult = mysqli_query($link, "SELECT member_account,deal_score FROM deal_record")){
+												while($dealrow = mysqli_fetch_assoc($dealResult)){
+													if($account == $dealrow['member_account'] && $dealrow['deal_score'] != NULL){
+														$score_count++;
+													}
+												}
+											}
+											echo $score_count;
+										?>
+									</p>
 								</div>
 							</div>
 							<div class="row personal-basic">
@@ -366,7 +397,17 @@
 									<div class="section-title"><h5>評論總數</h5></div>
 								</div>
 								<div class="col-lg-9">
-									<p><?php echo $commentCount?></p>
+									<p>
+										<?php 
+											if ($dealResult = mysqli_query($link, "SELECT member_account,count(*) comment_count FROM member_comment GROUP BY member_account")){
+												while($dealrow = mysqli_fetch_assoc($dealResult)){
+													if($account == $dealrow['member_account']){
+														echo $dealrow['comment_count'];
+													}
+												}
+											}
+										?>
+									</p>
 								</div>
 							</div>		
 						</div>
