@@ -194,8 +194,8 @@ jQuery(window).on('load',function(){
     var canvas;
     if (cropper) {
       canvas = cropper.getCroppedCanvas({
-        width: 320,
-        height: 180,
+        width: 1280,
+        height: 720,
       });
       uploadedImageURL = canvas.toDataURL();
       canvas.toBlob(function (blob) {

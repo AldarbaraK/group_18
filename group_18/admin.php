@@ -132,45 +132,35 @@
 							<div class="card-box height-100-p pd-20">
 								<h2 class="h2 mb-30">今日焦點</h2>
 								<div class="hero__slider owl-carousel">
-					                <div class="hero__items set-bg" data-setbg="img/product/choose/choose-1.jpg">
-					                    <div class="row">
-					                        <div class="col-lg-6">
-					                            <div class="hero__text">
-					                                <a href="categories.php"><div class="label">動作</div></a>
-					                                <a href="categories.php"><div class="label">冒險</div></a>
-					                                <a href="game-details.php"><h2>艾爾登法環</h2></a>
-					                                <p></p>
-					                                <a href="game-details.php"><span>立即查看</span> <i class="fa fa-angle-right"></i></a>
-					                            </div>
-					                        </div>
-					                    </div>
-					                </div>
-					                <div class="hero__items set-bg" data-setbg="img/product/choose/choose-2.jpg">
-					                    <div class="row">
-					                        <div class="col-lg-6">
-					                            <div class="hero__text">
-					                                <a href="categories.php"><div class="label">動作</div></a>
-					                                <a href="categories.php"><div class="label">冒險</div></a>
-					                                <a href="game-details.php"><h2>魔物獵人</h2></a>
-					                                <p></p>
-					                                <a href="game-details.php"><span>立即查看</span> <i class="fa fa-angle-right"></i></a>
-					                            </div>
-					                        </div>
-					                    </div>
-					                </div>
-					                <div class="hero__items set-bg" data-setbg="img/product/choose/choose-3.jpg">
-					                    <div class="row">
-					                        <div class="col-lg-6">
-					                            <div class="hero__text">
-					                                <a href="categories.php"><div class="label">卡牌</div></a>
-					                                <a href="categories.php"><div class="label">策略</div></a>
-					                                <a href="game-details.php"><h2>遊戲王 Master-duel</h2></a>
-					                                <p></p>
-					                                <a href="game-details.php"><span>立即查看</span> <i class="fa fa-angle-right"></i></a>
-					                            </div>
-					                        </div>
-					                    </div>
-					                </div>
+					                <?php 
+					                    if ($result = mysqli_query($link, "SELECT * FROM game_info a LEFT JOIN (SELECT game_ID,COUNT(*) game_count FROM member_comment GROUP BY game_ID) c ON a.game_ID = c.game_ID,game_pic b WHERE a.game_ID = b.game_ID ORDER BY game_count DESC")) {
+					                        $count=0;
+					                        while ($row = mysqli_fetch_assoc($result)) {
+					                            if($count>=3)
+					                                break;
+					                            echo '<div class="hero__items set-bg" data-setbg="img/product/'. $row["game_picture"].'.jpg">
+					                                    <div class="row">
+					                                        <div class="col-lg-6">
+					                                            <div class="hero__text">';
+					                                                if ($cateResult = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
+					                                                    while ($categories = mysqli_fetch_assoc($cateResult)) {
+					                                                        if($row["game_ID"] == $categories["game_ID"]) echo '<a href="categories.php"><div class="label">'. $categories["game_type"].'</div></a> ';
+					                                                    }  
+					                                                    mysqli_free_result($cateResult); // 釋放佔用的記憶體
+					                                                }
+					                                                echo '<a href="game-details.php?game_ID='. $row["game_ID"].'"><h2>'. $row["game_name"].'</h2></a>
+					                                                <p></p>
+					                                                <a href="game-details.php?game_ID='. $row["game_ID"].'"><span>立即查看</span> <i class="fa fa-angle-right"></i></a>
+					                                            </div>
+					                                        </div>
+					                                    </div>
+					                                </div>';
+					                            $count++;
+					                        }
+					                        $num = mysqli_num_rows($result); //查詢結果筆數
+					                        mysqli_free_result($result); // 釋放佔用的記憶體
+					                    }
+					                ?> 
 					            </div>
 							</div>
 						</div>
@@ -180,8 +170,16 @@
 							<div class="card-box height-100-p widget-style1">
 								<div class="d-flex flex-wrap align-items-center">
 									<div class="widget-data">
-										<div class="h3 mb-0">1321</div>
-										<div class="weight-600 font-14">瀏覽次數</div>
+										<div class="h3 mb-0">
+										<?php 
+											if ($Result = mysqli_query($link, "SELECT MONTH(NOW()) AS mon, count(*) as mon_comment_count FROM member_comment WHERE MONTH(comment_time) = MONTH(NOW())")){
+												while($row = mysqli_fetch_assoc($Result)){
+													echo $row['mon_comment_count'];
+												}
+											}
+										?>
+										</div>
+										<div class="weight-600 font-14">本月評論總數</div>
 									</div>
 								</div>
 							</div>
@@ -190,8 +188,17 @@
 							<div class="card-box height-100-p widget-style1">
 								<div class="d-flex flex-wrap align-items-center">
 									<div class="widget-data">
-										<div class="h3 mb-0">32</div>
-										<div class="weight-600 font-14">新增會員</div>
+										<div class="h3 mb-0">
+										<?php 
+											if ($Result = mysqli_query($link, "SELECT MONTH(NOW()) AS mon, count(*) as mon_member_count FROM member_info WHERE MONTH(member_signupDate) = MONTH(NOW())")){
+												while($row = mysqli_fetch_assoc($Result)){
+													echo $row['mon_member_count'];
+												}
+											}
+											
+										?>
+										</div>
+										<div class="weight-600 font-14">本月新增會員</div>
 									</div>
 								</div>
 							</div>
@@ -200,8 +207,16 @@
 							<div class="card-box height-100-p widget-style1">
 								<div class="d-flex flex-wrap align-items-center">
 									<div class="widget-data">
-										<div class="h3 mb-0">476</div>
-										<div class="weight-600 font-14">購買次數</div>
+										<div class="h3 mb-0">
+										<?php 
+											if ($Result = mysqli_query($link, "SELECT MONTH(NOW()) AS mon, count(*) as mon_deal_count FROM deal_record WHERE MONTH(deal_datetime) = MONTH(NOW())")){
+												while($row = mysqli_fetch_assoc($Result)){
+													echo $row['mon_deal_count'];
+												}
+											}			
+										?>
+										</div>
+										<div class="weight-600 font-14">本月購買總數</div>
 									</div>
 								</div>
 							</div>
@@ -210,51 +225,19 @@
 							<div class="card-box height-100-p widget-style1">
 								<div class="d-flex flex-wrap align-items-center">
 									<div class="widget-data">
-										<div class="h3 mb-0">$355123</div>
-										<div class="weight-600 font-14">獲利</div>
+										<div class="h3 mb-0">$
+										<?php 
+											if ($Result = mysqli_query($link, "SELECT MONTH(NOW()) AS mon, sum(deal_price) as mon_deal_price FROM deal_record WHERE MONTH(deal_datetime) = MONTH(NOW())")){
+												while($row = mysqli_fetch_assoc($Result)){
+													echo $row['mon_deal_price'];
+												}
+											}
+											mysqli_free_result($Result); // 釋放佔用的記憶體
+                  							mysqli_close($link); // 關閉資料庫連結
+										?>
+										</div>
+										<div class="weight-600 font-14">本月獲利</div>
 									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xl-8 mb-30">
-							<div class="card-box height-100-p pd-20">
-								<h2 class="h4 mb-20">新增會員趨勢</h2>
-								<div id="chart1"></div>
-							</div>
-						</div>
-						<div class="col-xl-4 mb-30">
-							<div class="card-box pd-30 pt-10 height-100-p">
-								<h2 class="mb-30 h4">瀏覽器預覽比例</h2>
-								<div class="browser-visits">
-									<ul>
-										<li class="d-flex flex-wrap align-items-center">
-											<div class="icon"><img src="img/admin/chrome.png" alt=""></div>
-											<div class="browser-name">Google Chrome</div>
-											<div class="visit"><span class="badge badge-pill badge-primary">50%</span></div>
-										</li>
-										<li class="d-flex flex-wrap align-items-center">
-											<div class="icon"><img src="img/admin/firefox.png" alt=""></div>
-											<div class="browser-name">Mozilla Firefox</div>
-											<div class="visit"><span class="badge badge-pill badge-secondary">40%</span></div>
-										</li>
-										<li class="d-flex flex-wrap align-items-center">
-											<div class="icon"><img src="img/admin/safari.png" alt=""></div>
-											<div class="browser-name">Safari</div>
-											<div class="visit"><span class="badge badge-pill badge-success">40%</span></div>
-										</li>
-										<li class="d-flex flex-wrap align-items-center">
-											<div class="icon"><img src="img/admin/edge.png" alt=""></div>
-											<div class="browser-name">Microsoft Edge</div>
-											<div class="visit"><span class="badge badge-pill badge-warning">20%</span></div>
-										</li>
-										<li class="d-flex flex-wrap align-items-center">
-											<div class="icon"><img src="img/admin/opera.png" alt=""></div>
-											<div class="browser-name">Opera Mini</div>
-											<div class="visit"><span class="badge badge-pill badge-info">20%</span></div>
-										</li>
-									</ul>
 								</div>
 							</div>
 						</div>
@@ -274,112 +257,11 @@
     </div>
     <!-- Search model end -->
 
-	<!-- Edit model Begin -->
-    <div class="edit-model">
-        <div class="edit-model-show">
-	        <div class="edit-switch-pos">
-        		<div class="edit-close-switch"><i class="icon_check"></i></div>
-	    		<div class="edit-close-switch"><i class="icon_close"></i></div>	
-	    	</div>
-	    	<form class="edit-model-form">
-		        <div class="container">
-		        	<div class="row pt-5">
-		        		<div class="col-lg-6">
-		        			<div class="form-group">
-        						<div class="row">
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>電子信箱</h4></div>
-	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-email" placeholder="請輸入電子信箱"></div>
-        						</div>
-        					</div>
-        					<div class="form-group">
-        						<div class="row">
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>密碼</h4></div>
-	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password" placeholder="請輸入密碼"></div>
-        						</div>
-        					</div>
-		        		</div>
-		        		<div class="col-lg-6">
-		        			<div class="form-group">
-        						<div class="row">
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>姓名</h4></div>
-	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-name" placeholder="請輸入姓名"></div>
-        						</div>
-        					</div>
-        					<div class="form-group">
-        						<div class="row">
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>暱稱</h4></div>
-	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-nickname" placeholder="請輸入暱稱"></div>
-        						</div>
-        					</div>
-        					<div class="form-group">
-        						<div class="row">	
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>性別</h4></div>
-	        						</div>
-									<div class="col-lg-2">
-										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex1" name="ratedRadio" class="custom-control-input edit-form-Zindex">
-											<label class="custom-control-label" for="sexRadio1">男性</label>
-										</div>
-									</div>	
-									<div class="col-lg-2">
-										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex2" name="ratedRadio" class="custom-control-input edit-form-Zindex">
-											<label class="custom-control-label" for="sexRadio2">女性</label>
-										</div>
-									</div>	
-								</div>
-        					</div>
-        					<div class="form-group">
-        						<div class="row">	
-	        						<div class="col-lg-3">
-	        							<div class="section-title"><h4>生日</h4></div>
-	        						</div>
-									<div class="col-lg-9"><input class="form-control date-picker" id="edit-member-birth" placeholder="選擇生日日期" type="text"></div>
-								</div>
-        					</div>
-        					<div class="form-group">
-        						<div class="row">
-        							<div class="col-lg-3">
-	        							<div class="section-title"><h4>電話</h4></div>
-	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-phone" placeholder="請輸入電話"></div>
-        						</div>
-        					</div>
-		        		</div>
-		        	</div>
-		        </div>
-		    </form>    
-        </div>
-    </div>
-    <!-- Edit model end -->
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
-	<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
-	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
-	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
-	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
-	<script src="src/plugins/apexcharts/apexcharts.min.js"></script>
-	<!-- buttons for Export datatable -->
-	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
-	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
-	<!-- Datatable Setting js -->
-	<script src="vendors/scripts/datatable-setting.js"></script></body>
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/player.js"></script>
