@@ -3,7 +3,7 @@
       //一般控制項
       $arr_rated = array('G' => '普通級', 'PG' => '保護級', 'PG-13' => '輔導級', 'R' => '限制級');
       $arr_oper = array("insert" => "新增", "update" => "修改", "delete" => "刪除");
-      $arr_type = array("gameTable" => "遊戲", "memberTable" => "會員", "dealTable" => "交易紀錄", "adminTable" => "管理員");
+      $arr_type = array("gameTable" => "遊戲", "memberTable" => "會員", "dealTable" => "交易紀錄", "adminTable" => "管理員", "commentTable" => "評論");
       $arr_lang = array(1 => "繁體中文", 2 => "英文", 3 => "日文");
       $arr_level = array(1 => "黃金會員", 2 => "白金會員", 3 => "鑽石會員");
       $arr_sex = array('M' => "男性", 'F' => "女性");
@@ -92,6 +92,25 @@
                                                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                                                                                           <a class="dropdown-item edit-switch" href="#" id= "admin_update"><i class="dw dw-edit2"></i> 編輯</a>
                                                                                           <a class="dropdown-item" href="#" id="admin_delete"><i class="dw dw-delete-3"></i> 刪除</a>
+                                                                                    </div>
+                                                                              </div>');    
+                              }
+                  }            
+                  mysqli_free_result($result); // 釋放佔用的記憶體
+                  mysqli_close($link); // 關閉資料庫連結
+                  echo json_encode($a);
+                  exit;
+            }
+            else if($type == "commentTable"){
+                  if ($result = mysqli_query($link, "SELECT * FROM member_comment a,game_info b WHERE a.game_ID = b.game_ID")) {
+                              while ($row = mysqli_fetch_assoc($result)) { 
+                                    $a['data'][] = array($row["game_ID"],$row["game_name"],$row["member_account"],$row["comment_time"],$row["comment"],'<div class="dropdown">
+                                                                                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                                                                          <i class="dw dw-more"></i>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                                                                          <a class="dropdown-item edit-switch" href="#" id= "comment_update"><i class="dw dw-edit2"></i> 編輯</a>
+                                                                                          <a class="dropdown-item" href="#" id="comment_delete"><i class="dw dw-delete-3"></i> 刪除</a>
                                                                                     </div>
                                                                               </div>');    
                               }
@@ -287,7 +306,24 @@
                         echo json_encode($a);
                         exit;
                   }    
-            }          
+            } 
+            else if($type == "commentTable") {
+                  $sql = "update member_comment set game_ID='" . $_POST['comment_game_ID'] . "',member_account='" . $_POST['comment_member_account'] . "',comment_time='" . $_POST['comment_datetime'] . "',comment='" . $_POST['edit-comment'] . "' where game_ID='" . $_POST['comment_game_ID'] . "' and member_account='" . $_POST['comment_member_account'] . "' and comment_time='" . $_POST['comment_datetime'] . "'"; 
+
+                  if (strlen($sql) > 10) {
+                        if ($result = mysqli_query($link, $sql)) {
+                              $a["message"] = $arr_type[$type] . "資料" . $arr_oper[$oper] . "成功!";
+                              $a["code"] = 0;
+                              
+                        } else {
+                              $a["code"] = mysqli_errno($link);
+                              $a["message"] = $arr_type[$type] . "資料" . $arr_oper[$oper] . "失敗! <br> 錯誤訊息: " . mysqli_error($link);
+                        }
+                        mysqli_close($link); // 關閉資料庫連結
+                        echo json_encode($a);
+                        exit;
+                  }    
+            }         
       }
 
       if ($oper == "delete") {
@@ -345,6 +381,21 @@
             }
             else if($type == "adminTable") {
                   $sql = "delete from admin_info where admin_account='" . $_POST['old-admin_account'] . "'";
+                  if (strlen($sql) > 10) {
+                        if ($result = mysqli_query($link, $sql)) {
+                              $a["code"] = 0;
+                              $a["message"] = "資料" . $arr_oper[$oper] . "成功!";
+                        } else {
+                              $a["code"] = mysqli_errno($link);
+                              $a["message"] = "資料" . $arr_oper[$oper] . "失敗! <br> 錯誤訊息: " . mysqli_error($link);
+                        }
+                        mysqli_close($link); // 關閉資料庫連結
+                        echo json_encode($a);
+                        exit;
+                  } 
+            }
+            else if($type == "commentTable") {
+                  $sql = "delete from member_comment where game_ID='" . $_POST['comment_game_ID'] . "' and member_account='" . $_POST['comment_member_account'] . "' and comment_time='" . $_POST['comment_datetime'] . "'";
                   if (strlen($sql) > 10) {
                         if ($result = mysqli_query($link, $sql)) {
                               $a["code"] = 0;

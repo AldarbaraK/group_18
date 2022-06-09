@@ -138,46 +138,40 @@
 					<div class="card-box mb-30">
 						<div class="container">
                             <div class="row pd-20">
-                                <div class="col-lg-10">
-                                        <h4 class="text-blue h3">管理交易紀錄</h4>
+                                <div class="col-lg-12">
+                                        <h4 class="text-blue h3">管理會員</h4>
                                 </div>
                             </div>
                         </div>
-						<table class="table stripe hover nowrap" id="deal_datatable">
+						<table class="table stripe hover nowrap" id="comment_datatable">
 							<thead>
 								<tr>
-									<th>會員帳號</th>
 									<th>遊戲ID</th>
 									<th>遊戲名稱</th>
-									<th>成交金額</th>
-									<th>評價分數</th>
-									<th class="table-plus">完成時間</th>
+									<th>會員帳號</th>
+									<th>評論時間</th>
+									<th class="datatable-nosort table-plus">評論內容</th>
 									<th class="datatable-nosort">動作</th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php 
-                                if ($result = mysqli_query($link, "SELECT * FROM game_info a,deal_record b WHERE a.game_ID = b.game_ID")) {
+                                if ($result = mysqli_query($link, "SELECT * FROM member_comment a,game_info b WHERE a.game_ID = b.game_ID")) {
 	                                    while ($row = mysqli_fetch_assoc($result)) {                  	
 											echo '<tr>
-												<td>'. $row["member_account"].'</td>
 												<td>'. $row["game_ID"].'</td>
 												<td>'. $row["game_name"].'</td>
-												<td>'. $row["deal_price"].'</td>
-												<td>';
-												if($row["deal_score"] == null)
-													echo '尚未評價';
-												else 
-													echo $row["deal_score"];
-											echo '</td>
-												<td class="table-plus">'. $row["deal_datetime"].'</td>
-												<td>
+												<td>'. $row["member_account"].'</td>
+												<td>'. $row["comment_time"].'</td>
+												<td class="datatable-nosort table-plus">'. $row["comment"].'</td>
+												<td class="datatable-nosort">
 													<div class="dropdown">
 														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-															<a class="dropdown-item" href="#" id="deal_delete"><i class="dw dw-delete-3"></i> 刪除</a>
+															<a class="dropdown-item edit-switch" href="#" id= "comment_update"><i class="dw dw-edit2"></i> 編輯</a>
+															<a class="dropdown-item" href="#" id="comment_delete"><i class="dw dw-delete-3"></i> 刪除</a>
 														</div>
 													</div>
 												</td>
@@ -195,17 +189,6 @@
 			</div>
 		</div>
 
-	<form id="delete-deal-form" method="post">
-		<input type="hidden" name="tableType" id="tableType" value="dealTable">
-		<input type="hidden" name="oper" id="oper" value="delete">
-		<input type="hidden" name="deal_member_account" id="deal_member_account" value="">
-		<input type="hidden" name="deal_game_ID" id="deal_game_ID" value="">
-		<input type="hidden" name="deal_datetime" id="deal_datetime" value="">
-		<input type="hidden" name="deal_game_name" id="deal_game_name" value="">
-		<input type="hidden" name="deal_price" id="deal_price" value="">
-		<input type="hidden" name="deal_score" id="deal_score" value="">
-		<input type="hidden" name="deal_datetime" id="deal_datetime" value="">
-	</form>		
     <!-- Search model Begin -->
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
@@ -217,6 +200,48 @@
     </div>
     <!-- Search model end -->	
 
+	<!-- Edit model Begin -->
+    <div class="edit-model">
+        <div class="edit-model-show"> 
+	    	<form class="edit-model-form" id="edit-comment-form" method="post">
+	    		<input type="hidden" name="tableType" id="tableType" value="commentTable">
+        		<input type="hidden" name="oper" id="oper" value="update">
+        		<input type="hidden" name="comment_game_ID" id="comment_game_ID" value="update">
+        		<input type="hidden" name="comment_member_account" id="comment_member_account" value="update">
+        		<input type="hidden" name="comment_datetime" id="comment_datetime" value="update">
+           		<div class="edit-switch-pos">
+	        		<button class="edit-close-switch" type="submit" id="comment_save"><i class="icon_check"></i></button>
+		    		<div class="edit-close-switch" id="comment_cancel"><i class="icon_close"></i></div>	
+		    	</div>
+		        <div class="container">
+		        	<div class="row justify-content-center edit-comment">
+		        		<div class="col-lg-8" style="text-align: center;">
+		        			<div class="game__details__title">
+                                <h3 id="comment-name-view"></h3>
+                            </div>
+                        </div>
+		        	</div>
+		        	<div class="row justify-content-center edit-comment">
+		        		<div class="game__details__widget">
+	                        <div class="col-lg-12">
+	                            <ul>
+	                                <li id="comment-account-view"><span>會員帳號:</span></li>
+	                                <li id="comment-datetime-view"><span>評論時間:</span></li>
+	                            </ul>
+	                        </div>
+	                    </div>    
+                    </div>
+		        	<div class="row justify-content-center">
+		        		<div class="col-lg-5"><div class="section-title"><h4>評論內容</h4></div></div>
+		        	</div>
+		        	<div class="row justify-content-center">
+		        		<div class="col-lg-5"><textarea class="form-control edit-comment-text" name = "edit-comment" id="edit-comment" type="text" placeholder="請輸入評論內容"></textarea></div>
+		        	</div>	
+		        </div>
+		    </form>    
+        </div>
+    </div>
+    <!-- Edit model end -->
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>

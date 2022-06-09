@@ -2408,11 +2408,7 @@ ol {
 }
 
 .mixitup-control {
-<<<<<<< HEAD
 		background: transparent;
-=======
-	background: transparent;
->>>>>>> 3330587f1c84ff66ee9fd90ffd0c99247fdd2273
     display: inline-block;
     text-align: center;
     font-size: 15px;
@@ -2994,6 +2990,15 @@ ol {
     color: #fff;
     background-color: #FB8292;
     border-color: #FB8292;
+}
+
+.edit-comment-text{
+	max-width: 500px;
+	max-height: 150px;
+}
+
+.edit-comment{
+	margin-bottom: 25px;
 }
 
 
