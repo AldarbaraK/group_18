@@ -138,84 +138,44 @@
 						<table class="data-table table hover nowrap">
 							<thead>
 								<tr>
-									<th class="datatable-nosort">預覽圖</th>
+									<th class="datatable-nosort table-plus">預覽圖</th>
 									<th>遊戲名稱</th>
 									<th>購買日期</th>
-									<th>價格</th>
-									<th>折扣</th>
+									<th>購買價格</th>
 									<th>評分</th>
 									<th class="datatable-nosort">動作</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr>
-									<td class="table-plus">
-										<div class="image-view">
-											<img src="img/product/all/all-1.jpg" alt="">
-										</div>
-									</td>
-									<td>
-										<h5 class="font-16">Tales of Arise</h5>
-									</td>
-									<td>2021 年 11 月 23 日</td>
-									<td>1490</td>
-									<td>none</td>
-									<td>
-										<div class="game__details__rating">
-											<div class="rating">
-												<a href="#"><i class="fa fa-star"></i></a>
-												<a href="#"><i class="fa fa-star"></i></a>
-												<a href="#"><i class="fa fa-star"></i></a>
-												<a href="#"><i class="fa fa-star"></i></a>
-												<a href="#"><i class="fa fa-star-half-o"></i></a>
-											</div>
-										</div>
-									</td>
-									<td>
-										<div class="dropdown">
-											<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-												<i class="dw dw-more"></i>
-											</a>
-											<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-												<a class="dropdown-item view-switch" href="#"><i class="dw dw-edit"></i> 評分</a>
-											</div>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td class="table-plus">
-										<div class="image-view">
-											<img src="img/product/all/all-2.jpg" alt="">
-										</div>
-									</td>
-									<td>
-										<h5 class="font-16">Marvel's Guardians of the Galaxy</h5>
-									</td>
-									<td>2021 年 10 月 27 日</td>
-									<td>1790</td>
-									<td>20%</td>
-									<td>
-										<div class="game__details__rating">
-											<div class="rating">
-												<a href="#"><i class="fa fa-star"></i></a>
-												<a href="#"><i class="fa fa-star"></i></a>
-												<a href="#"><i class="fa fa-star"></i></a>
-												<a href="#"><i class="fa fa-star"></i></a>
-												<a href="#"><i class="fa fa-star-o"></i></a>
-											</div>
-										</div>
-									</td>
-									<td>
-										<div class="dropdown">
-											<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-												<i class="dw dw-more"></i>
-											</a>
-											<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-												<a class="dropdown-item view-switch" href="#"><i class="dw dw-edit"></i> 評分</a>
-											</div>
-										</div>
-									</td>
-								</tr>
+							<tbody> 
+								<?php 
+	                                if ($result = mysqli_query($link, "SELECT * FROM game_info a,member_collection b,deal_record c,game_pic d WHERE a.game_ID = b.game_ID and b.game_ID = c.game_ID and a.game_ID = d.game_ID and b.member_account = c.member_account and b.member_account ='". $_SESSION["member_account"]. "'")) {
+		                                    while ($row = mysqli_fetch_assoc($result)) {
+		                                        	echo '<tr>
+														<td class="datatable-nosort table-plus">
+															<div class="image-view">
+																<img id="datatable-img'. $row["game_ID"].'" src="img/product/'. $row["game_picture"].'.jpg" alt="">
+															</div>
+														</td>
+														<td>'. $row["game_name"].'</td>
+														<td>'. $row["deal_datetime"].'</td>
+														<td>'. $row["deal_price"].'</td>
+														<td>'. $row["deal_score"].'</td>
+														<td class="datatable-nosort">
+															<div class="dropdown">
+																<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+																	<i class="dw dw-more"></i>
+																</a>
+																<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+																	<a class="dropdown-item edit-switch" href="#"><i class="dw dw-edit"></i> 評分</a>
+																</div>
+															</div>
+														</td>
+													</tr>';        
+	                                   	 	}
+	                                    $num = mysqli_num_rows($result); //查詢結果筆數
+	                                    mysqli_free_result($result); // 釋放佔用的記憶體
+	                                }
+	                            ?>
 							</tbody>
 						</table>
 					</div>
@@ -238,7 +198,7 @@
     <!-- Search model end -->	
 
 	<!-- View model Begin -->
-    <div class="view-model">
+    <div class="edit-model">
         <div class="view-model-show">
         	<div class="view-close-pos">
         		<div class="view-close-switch"><i class="icon_close"></i></div>
