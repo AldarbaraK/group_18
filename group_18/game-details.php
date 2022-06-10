@@ -325,15 +325,17 @@
                                                                 <div class="col-lg-10">
                                                                     <h6>'.$row["member_account"].' - <span>'.$row["comment_time"].'</span></h6>
                                                                     <p>'.$row["comment"].'</p>
-                                                                </div>
-                                                                <div class="col-lg-2">
+                                                                </div>';
+                                                                if(isset($_SESSION['admin_account'])){
+                                                                    echo '<div class="col-lg-2">
                                                                     <form action="function.php?op=deleteComment&game_ID='.$gameID.'" id="delete_form" method="post">
                                                                         <input type="hidden" value="'.$row["member_account"].'" name="account">
                                                                         <input type="hidden" value="'.$row["comment_time"].'" name="time" >
                                                                         <button type="submit" class="fa fa-trash-o" id="delete__btn" name="delete__btn"><span> 刪除</span></button>
                                                                     </form>
-                                                                </div>
-                                                            </div>
+                                                                </div>';
+                                                                }
+                                                        echo '</div>
                                                         </div>
                                                     </div> 
                                                 ';
