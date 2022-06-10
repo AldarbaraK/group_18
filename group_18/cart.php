@@ -268,7 +268,8 @@
     <!-- Self model Begin -->
     <div class="edit-model self-cart-model">
         <div class="edit-model-show"> 
-            <form class="edit-model-form" id="self-pay-form" method="post">
+            <form action="function.php?op=addSelfProduct" class="edit-model-form" id="self-pay-form" method="post">
+                <input type="hidden" value="<?php echo $_SESSION['member_account']; ?>" name="account">
                 <div class="edit-switch-pos">
                     <div class="edit-close-switch" id="cart-cancel"><i class="icon_close"></i></div> 
                 </div>
@@ -310,7 +311,8 @@
     <!-- Gift model Begin -->
     <div class="edit-model gift-cart-model">
         <div class="edit-model-show"> 
-            <form class="edit-model-form" id="gift-pay-form" method="post">
+            <form action="function.php?op=addGiftProduct" class="edit-model-form" id="gift-pay-form" method="post">
+                <input type="hidden" value="<?php echo $_SESSION['member_account']; ?>" name="account">
                 <div class="edit-switch-pos">
                     <div class="edit-close-switch" id="cart-cancel"><i class="icon_close"></i></div> 
                 </div>
