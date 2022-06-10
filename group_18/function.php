@@ -8,6 +8,11 @@
     {
         checkLogin($_POST['account'],$_POST['pwd']);
     }
+    if($op=='checkGiftAccount')
+    {
+        checkGiftAccount($_POST['gift-target']);
+    }
+
     if($op=='logout')
     {
         logout();
@@ -648,6 +653,30 @@
             }
             header("Location:categories.php");
         }
+
+    }
+
+    function checkGiftAccount($target)
+    {
+        global $link;
+        if($target!="")
+        {
+            if(strlen($target)>=4 && strlen($target)<=24)
+            {
+                if ( $result = mysqli_query($link, "SELECT * FROM member_info where member_account='$target'") ) {
+                    $num = mysqli_num_rows($result); //查詢結果筆數
+                }
+                if($num <= 0)
+                    echo "贈送對象帳號不存在!";
+                
+                mysqli_free_result($result); // 釋放佔用的記憶體
+                mysqli_close($link); // 關閉資料庫連結
+            }
+            else
+                echo "";
+        }
+        else
+            echo "";
 
     }
 

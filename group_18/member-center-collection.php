@@ -31,15 +31,10 @@
     <link rel="stylesheet" href="css/nice-select.css" type="text/css">
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/toastr.min.css" type="text/css">
     <link rel="stylesheet" href="css/star-rating.min.css" type="text/css">
+    <link rel="stylesheet" href="css//theme.css" media="all" type="text/css"/>
     <link rel="stylesheet" href="css/style.css" type="text/css">
-    <script src="js/jquery-3.3.1.min.js"></script>
-
-    <script>
-		$(document).ready(function(){
-		    $("#input-id").rating();
-		});
-	</script>
 </head>
 
 
@@ -48,7 +43,7 @@
         <div class="loader"></div>
     </div>
 
-	    <!-- Header Section Begin -->
+	<!-- Header Section Begin -->
     <header class="header">
         <div class="container">
             <div class="row">
@@ -144,14 +139,14 @@
 						<div class="pd-20">
 							<h4 class="text-blue h4">收藏庫</h4>
 						</div>
-						<table class="data-table table hover nowrap">
+						<table class="table hover nowrap" id="collection_datatable">
 							<thead>
 								<tr>
 									<th class="datatable-nosort table-plus">預覽圖</th>
 									<th>遊戲名稱</th>
 									<th>購買日期</th>
 									<th>購買價格</th>
-									<th>評分</th>
+									<th class="table-plus">評分</th>
 									<th class="datatable-nosort">動作</th>
 								</tr>
 							</thead>
@@ -168,14 +163,15 @@
 														<td>'. $row["game_name"].'</td>
 														<td>'. $row["deal_datetime"].'</td>
 														<td>'. $row["deal_price"].'</td>
-														<td><input id="input-id" type="number" class="rating" min=0 max=5 step=0.5 data-size="xs" ></td>
+														<td class="table-plus"><input id="deal_rating_view" name="deal_rating_view" data-show-clear="false" data-show-caption="false" data-step="0.1" value="'. $row["deal_score"].'" class="rating" data-readonly="true" data-size="sm"></td>
 														<td class="datatable-nosort">
 															<div class="dropdown">
+																<input type="hidden" name="tbl_game_ID" id="tbl_game_ID" value="'. $row["game_ID"].'">
 																<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 																	<i class="dw dw-more"></i>
 																</a>
 																<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-																	<a class="dropdown-item edit-switch" href="#"><i class="dw dw-edit"></i> 評分</a>
+																	<a class="dropdown-item edit-switch" href="#" id="collection_update"><i class="dw dw-edit"></i> 評分</a>
 																</div>
 															</div>
 														</td>
@@ -206,81 +202,54 @@
     </div>
     <!-- Search model end -->	
 
-	<!-- View model Begin -->
+	<!-- Edit model Begin -->
     <div class="edit-model">
-        <div class="view-model-show">
-        	<div class="view-close-pos">
-        		<div class="view-close-switch"><i class="icon_close"></i></div>
-       		</div>
-			<div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="game__details__pic set-bg" data-setbg="img/product/discount/discount-2.jpg">
-                            <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                            <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="game__details__text">
-                            <div class="game__details__title">
-                                <h3>星之卡比 探索發現</h3>
-                            </div>
-                            <div class="game__details__rating">
-                                <div class="rating">
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star-half-o"></i></a>
-                                </div>
-                            </div>
-                            <div class="game__details__widget">
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-6">
-                                        <div class="game__item__tag">
-                                            <ul>
-                                                <li><span>類型:</span><p>休閒</p>　<p>冒險</p></li>
-                                            </ul>
-                                        </div>
-                                        <ul>
-                                            <li><span>發行日期:</span>2022 年 3 月 25 日</li>
-                                            <li><span>開發人員:</span> HAL研究所</li>
-                                            <li><span>發行商:</span> 任天堂</li>
-                                            <li><span>支援語言:</span> 繁體中文 / 英文 / 日文</li>
-                                            <li><span>遊戲分級:</span> 普通級</li>
-                                        </ul>
-                                    </div>
-                                </div>
+        <div class="edit-model-show"> 
+	    	<form class="edit-model-form" id="member-collection" method="post">
+	    		<input type="hidden" name="tableType" id="tableType" value="collectionTable">
+        		<input type="hidden" name="oper" id="oper" value="update">
+        		<input type="hidden" name="game_name" id="game_name" value="">
+        		<input type="hidden" name="game_ID" id="game_ID" value="">
+        		<input type="hidden" name="member_account" id="member_account" value="<?php echo $_SESSION['member_account']; ?>">
+           		<div class="edit-switch-pos">
+		    		<div class="edit-close-switch" id="collection_cancel"><i class="icon_close"></i></div>	
+		    	</div>
+		        <div class="container">
+		        	<div class="row justify-content-center edit-comment">
+		        		<div class="col-lg-8" style="text-align: center;">
+		        			<div class="game__details__title">
+                                <h3 id="game-name-view"></h3>
                             </div>
                         </div>
+		        	</div>
+		        	<div class="row justify-content-center edit-comment">
+		        		<div class="col-lg-6"><div class="section-title"><h4 id="member-account-view">會員帳號 :</h4></div></div>
                     </div>
-                </div> 
-                <div class="row ml-5">
-                	<div class="col-lg-12">
-                		<div class="game__details__text">
+                    <div class="row justify-content-center edit-comment">
+		        		<div class="col-lg-2"><div class="section-title"><h4>為此遊戲評分</h4></div></div>
+		        		<div class="col-lg-4"><input id="deal_rating" name="deal_rating" class="rating" data-min="0" data-max="5" data-step="1"></div>
+                    </div>
+		        	<div class="row justify-content-center">
+		        		<div class="col-lg-6"><div class="section-title"><h4>新增評論</h4></div></div>
+		        	</div>
+		        	<div class="row justify-content-center edit-comment">
+		        		<div class="col-lg-6"><textarea class="form-control edit-comment-text" name = "member_comment" id="member_comment" type="text" placeholder="請輸入評論內容"></textarea></div>
+		        	</div>	
+		        	<div class="row justify-content-center">
+                        <div class="col-lg-2">
                             <div class="section-title">
-                                <h5>評論</h5>
+                                <div class="personal-btn">
+                                    <button type="submit" class="site-btn">完成</button>
+                                </div>
                             </div>
-	    					<form class="score-model-form ">
-								<div class="row">
-									<div class="col-lg-9">
-										<textarea class="form-control" placeholder="請輸入文字敘述"></textarea>
-									</div>
-									<div class="col-lg-3">
-										<div class="collect__send__btn">
-											<button type="submit" class="site-btn">送出</button>
-										</div>
-									</div>
-								</div>
-							</form>
-							<br><br>
-		                </div> 
-                	</div>
-                </div>	  
-	        </div>
+                        </div>
+                    </div>
+		        </div>
+		    </form>    
         </div>
     </div>
-    <!-- View model end -->
+    <!-- Edit model end -->
+
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
@@ -294,6 +263,10 @@
 	<!-- Datatable Setting js -->
 	<script src="vendors/scripts/datatable-setting.js"></script>
 
+	 <!--表單驗證-->
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+	<script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh_TW.js "></script>
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/player.js"></script>
@@ -301,7 +274,17 @@
     <script src="js/mixitup.min.js"></script>
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="js/star-rating.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/main.js"></script>	
+    <script src="js/member_center.js"></script>	
+    <script>
+		$(document).ready(function(){
+			$('#deal_rating').rating(); 
+        	$('#deal_rating_view').rating('refresh');
+		});
+
+	</script>
 	</body>
 </html>

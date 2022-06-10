@@ -3,7 +3,7 @@
       //一般控制項
       $arr_rated = array('G' => '普通級', 'PG' => '保護級', 'PG-13' => '輔導級', 'R' => '限制級');
       $arr_oper = array("insert" => "新增", "update" => "修改", "delete" => "刪除");
-      $arr_type = array("gameTable" => "遊戲", "memberTable" => "會員", "dealTable" => "交易紀錄", "adminTable" => "管理員", "commentTable" => "評論");
+      $arr_type = array("gameTable" => "遊戲", "memberTable" => "會員", "dealTable" => "交易紀錄", "adminTable" => "管理員", "commentTable" => "評論", "collectionTable" => "評價");
       $arr_lang = array(1 => "繁體中文", 2 => "英文", 3 => "日文");
       $arr_cate = array(1 => "休閒", 2 => "冒險", 3 => "動作", 4 => "策略", 5 => "卡牌", 6 => "汽機車模擬", 7 => "恐怖", 8 => "第一人稱", 9 => "單人", 10 => "多人");
       $arr_level = array(1 => "黃金會員", 2 => "白金會員", 3 => "鑽石會員");
@@ -132,6 +132,26 @@
                   echo json_encode($a);
                   exit;
             }
+           /* else if($type == "collectionTable"){
+                  if ($result = mysqli_query($link, "SELECT * FROM game_info a,member_collection b,deal_record c,game_pic d WHERE a.game_ID = b.game_ID and b.game_ID = c.game_ID and a.game_ID = d.game_ID and b.member_account = c.member_account and b.member_account ='". $_POST["member_account"]. "'")) {
+                              while ($row = mysqli_fetch_assoc($result)) { 
+                                    $a['data'][] = array('<div class="image-view">
+                                                <img id="datatable-img'. $row["game_ID"].'" src="img/product/'. $row["game_picture"].'.jpg" alt="">
+                                          </div>',$row["game_name"],$row["deal_datetime"],$row["deal_price"],'<input id="deal_rating_view" name="deal_rating_view" value="'. $row["deal_score"].'" class="rating" data-readonly="true" data-size="sm">','<div class="dropdown">
+                                                      <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                                            <i class="dw dw-more"></i>
+                                                      </a>
+                                                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                                            <a class="dropdown-item edit-switch" href="#" id="collection_update"><i class="dw dw-edit"></i> 評分</a>
+                                                      </div>
+                                                </div>');    
+                              }
+                  }            
+                  mysqli_free_result($result); // 釋放佔用的記憶體
+                  mysqli_close($link); // 關閉資料庫連結
+                  echo json_encode($a);
+                  exit;
+            }*/
       }
 
       if ($oper == "insert") {
@@ -373,7 +393,50 @@
                         echo json_encode($a);
                         exit;
                   }    
-            }         
+            } 
+            else if($type == "collectionTable") {
+                  if($_POST['deal_rating'] == '')
+                        $sql = "update deal_record set deal_score = null where game_ID='" . $_POST['game_ID'] . "' and member_account='" . $_POST['member_account'] . "'"; 
+                  else
+                         $sql = "update deal_record set deal_score='" . $_POST['deal_rating'] . "' where game_ID='" . $_POST['game_ID'] . "' and member_account='" . $_POST['member_account'] . "'"; 
+
+                  if (strlen($sql) > 10) {
+                        if ($result = mysqli_query($link, $sql)) {
+                              $a["message"] = "新增" . $arr_type[$type] . "成功!";
+                              $a["code"] = 0;
+                              
+                        } else {
+                              $a["code"] = mysqli_errno($link);
+                              $a["message"] = "新增" . $arr_type[$type] . "失敗! <br> 錯誤訊息: " . mysqli_error($link);
+                        }
+                  } 
+
+                  if($_POST['member_comment'] != '')
+                        $sql2 = "insert into member_comment(game_ID,member_account,comment_time,comment) values ('" . $_POST['game_ID'] . "','" . $_POST['member_account'] . "', NOW() ,'" . $_POST['member_comment'] . "')";
+                  else{
+                        $sql2 = '';
+                        $a["message"] = "新增" . $arr_type[$type] . "成功!";
+                        $a["code"] = 0;
+                        mysqli_close($link); // 關閉資料庫連結
+                        echo json_encode($a);
+                        exit;
+                  }
+
+                 if (strlen($sql2) > 10) {
+                        if ($result2 = mysqli_query($link, $sql2)) {
+                              $a["message"] = "新增" . $arr_type[$type] . "成功!";
+                              $a["code"] = 0;
+                              
+                        } else {
+                              $a["code"] = mysqli_errno($link);
+                              $a["message"] = "新增" . $arr_type[$type] . "失敗! <br> 錯誤訊息: " . mysqli_error($link);
+                        }
+                        mysqli_close($link); // 關閉資料庫連結
+                        echo json_encode($a);
+                        exit;
+                  } 
+                        
+            }        
       }
 
       if ($oper == "delete") {

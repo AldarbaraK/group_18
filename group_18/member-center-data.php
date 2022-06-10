@@ -402,9 +402,13 @@
 											if ($dealResult = mysqli_query($link, "SELECT member_account,count(*) comment_count FROM member_comment GROUP BY member_account")){
 												while($dealrow = mysqli_fetch_assoc($dealResult)){
 													if($account == $dealrow['member_account']){
-														echo $dealrow['comment_count'];
-													}
+														$comment_cnt = $dealrow['comment_count'];
+													}			
 												}
+												if(isset($comment_cnt))
+													echo $comment_cnt;				
+												else
+													echo 0;
 											}
 										?>
 									</p>

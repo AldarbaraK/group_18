@@ -31,7 +31,6 @@
     
     
 </head>
-
 <body>
     <!-- Page Preloder -->
     <div id="preloder">
@@ -275,7 +274,7 @@
     <!-- Self model Begin -->
     <div class="edit-model self-cart-model">
         <div class="edit-model-show"> 
-            <form action="function.php?op=addSelfProduct" class="edit-model-form" id="self-pay-form" method="post">
+            <form action="function.php?op=addSelfProduct" class="self-pay-form" id="self-pay-form" method="post">
                 <input type="hidden" value="<?php echo $_SESSION['member_account']; ?>" name="account">
                 <div class="edit-switch-pos">
                     <div class="edit-close-switch" id="cart-cancel"><i class="icon_close"></i></div> 
@@ -303,9 +302,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-2">
                             <div class="section-title">
-                                <div class="personal-btn">
-                                    <button class="site-btn">完成</button>
-                                </div>
+                                <button class="site-btn" type="submit">完成</button>
                             </div>
                         </div>
                     </div> 
@@ -318,7 +315,7 @@
     <!-- Gift model Begin -->
     <div class="edit-model gift-cart-model">
         <div class="edit-model-show"> 
-            <form action="function.php?op=addGiftProduct" class="edit-model-form" id="gift-pay-form" method="post">
+            <form action="function.php?op=addGiftProduct" class="gift-pay-form" id="gift-pay-form" method="post">
                 <input type="hidden" value="<?php echo $_SESSION['member_account']; ?>" name="account">
                 <div class="edit-switch-pos">
                     <div class="edit-close-switch" id="cart-cancel"><i class="icon_close"></i></div> 
@@ -341,7 +338,7 @@
                         <div class="col-lg-2">
                             <div class="section-title"><h4>贈禮對象</h4></div>
                         </div>
-                        <div class="col-lg-3"><input class="form-control" type="text" name="gift-target" id="gift-target" placeholder="請輸入贈禮對象帳號"><label for="gift-target" class="error" style="display: inline;"></label><p class="error" id="account_check"></p></div>
+                        <div class="col-lg-3"><input class="form-control" type="text" name="gift-target" id="gift-target" placeholder="請輸入贈禮對象帳號"><label for="gift-target" class="error" style="display: inline;"></label><p class="error" style="display: inline;" id="check_account"></p></p></div>
                     </div>
                     <div class="row justify-content-center edit-comment">
                         <div class="col-lg-2">
@@ -358,9 +355,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-2">
                             <div class="section-title">
-                                <div class="personal-btn">
-                                    <button class="site-btn">完成</button>
-                                </div>
+                                <button type="submit" class="site-btn">完成</button>
                             </div>
                         </div>
                     </div>
@@ -369,6 +364,7 @@
         </div>
     </div>
     <!-- Gift model end -->
+
 
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -379,6 +375,96 @@
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
+
+     <!--表單驗證-->
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+    <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh_TW.js "></script>
+
+    <script>
+        $(document).ready(function($) {
+            $("#self-pay-form").validate({
+                submitHandler: function() {
+                    alert("購買完成!");
+                },
+                rules: {
+                    "self-credit-card": {
+                        required: true,
+                        creditcard: true
+                    }
+                },
+                messages: {
+                    "self-credit-card":{
+                        required: "請輸入信用卡卡號",
+                        mcreditcard: "請輸入合法的信用卡卡號"
+                    }
+                }
+            });
+        });
+
+        $(document).ready(function($) {
+            $("#gift-pay-form").validate({
+                submitHandler: function(form) {
+                    $.ajax({
+                        async: false,
+                        url: "function.php?op=checkGiftAccount",
+                        data: $('#gift-pay-form').serialize(),
+                        type: "POST",
+                        dataType: 'text',
+                        success: function(msg) {
+                            $("#check_account").html(msg);//顯示訊息
+                            if(msg != "贈送對象帳號不存在!")
+                            {
+                                form.submit();
+                            }
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
+                },
+                rules: {
+                    "gift-target": {
+                        required: true,
+                        minlength: 4,
+                        maxlength: 24
+                    },
+                    "gift-credit-card": {
+                        required: true,
+                        creditcard: true
+                    }
+                },
+                messages: {
+                    "gift-target": {
+                        required: "請輸入帳號"
+                    },
+                    "gift-credit-card":{
+                        required: "請輸入信用卡卡號",
+                        mcreditcard: "請輸入合法的信用卡卡號"
+                    }
+                }
+            });
+        });
+
+        $(function() { //網頁完成後才會載入
+            $('#gift-target').keyup(function() {
+                $.ajax({
+                    url: "function.php?op=checkGiftAccount",
+                    data: $('#gift-pay-form').serialize(),
+                    method: "POST",
+                    dataType: 'text',
+                    success: function(msg) {
+                        $("#check_account").html(msg);//顯示訊息
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 
