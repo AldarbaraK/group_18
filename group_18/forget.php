@@ -116,42 +116,6 @@
             });
         });
 
-        /*$(function() { //網頁完成後才會載入
-            $('#fix_btn').on("click", function(){
-                $.ajax({
-                    url: "function.php?op=accountCheckAjax",
-                    data: $('#forget_form').serialize(),
-                    type: "POST",
-                    dataType: 'text',
-                    success: function(msg) {
-                        $("#show_msg").html(msg);//顯示訊息
-                        //document.getElementById('show_msg').innerHTML= msg ;
-                    },
-                    error: function(xhr, ajaxOptions, thrownError) {
-                        alert(xhr.status);
-                        alert(thrownError);
-                    }
-                });
-            });
-
-            $('#account').keyup(function() {
-                $.ajax({
-                    url: "function.php?op=loginAccountAjax",
-                    data: $('#forget_form').serialize(),
-                    type: "POST",
-                    dataType: 'text',
-                    success: function(msg) {
-                        $("#show_msg").html(msg);//顯示訊息
-                        //document.getElementById('show_msg').innerHTML= msg ;
-                    },
-                    error: function(xhr, ajaxOptions, thrownError) {
-                        alert(xhr.status);
-                        alert(thrownError);
-                    }
-                });
-            });
-        });*/
-
     </script>
 
 </head>
@@ -282,7 +246,14 @@
                         <ul>
                             <li class="active"><a href="index.php">首頁</a></li>
                             <li><a href="categories.php">類別</a></li>
-                            <li><a href="member-center-data.php">會員中心</a></li>
+                            <?php
+                                if(isset($_SESSION['member_account'])){
+                                    echo '<li><a href="member-center-data.php">會員中心</a></li>';
+                                }
+                                else{
+                                    echo '<li><a href="login.php">會員中心</a></li>';
+                                }
+                            ?>
                             <li><a href="customer.php">客服中心</a></li>
                             <li><a href="admin.php">管理員中心</a></li>
                         </ul>

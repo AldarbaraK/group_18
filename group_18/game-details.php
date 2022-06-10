@@ -58,46 +58,6 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 
-    <script>
-       /* $(function() {
-            $("#div__follow__btn").on("click" ,"button.follow-btn",function(){
-                $(this).closest("div").remove();
-            })
-
-        });*/
-
-        /*$(document).ready(function(){
-            $('#follow__btn1').click(function(){
-                $('#follow__btn1').toggleClass('fa').toggleClass('fa-heart');
-
-                if($('#follow__btn1').hasClass("fa-heart") == true)
-                    $('#follow__btn1').html("取消追隨");
-                else    
-                    $('#follow__btn1').html("追隨");
-                    
-            });
-        });*/
-
-        /*$(function() { //網頁完成後才會載入
-            $('#addCart_btn').on("click", function() {
-                $.ajax({
-                    url: "function.php?op=addCart&game_ID=<?php //echo $_GET["game_ID"]?>",
-                    data: $('#addcart_form').serialize(),
-                    type: "POST",
-                    dataType: 'text',
-                    success: function(msg) {
-                        $("#show_msg").text(msg);//顯示訊息
-                        //document.getElementById('show_msg').innerHTML= msg ;
-                    },
-                    error: function(xhr, ajaxOptions, thrownError) {
-                        alert(xhr.status);
-                        alert(thrownError);
-                    }
-                });
-            });
-        });*/
-        
-    </script>
 </head>
 
 <body>
@@ -307,7 +267,6 @@
                                                     echo '<button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>追隨</span></button>';
                                                 }
                                             ?>
-                                            <!--<button class="follow-btn" id="follow__btn1" name="follow__btn1"><span>追隨</span></button>-->
                                         </form>
                                         <form action="function.php?op=addCart&game_ID=<?php echo $_GET["game_ID"]?>" method="post" id="addcart_form">
                                             <?php
@@ -340,7 +299,6 @@
                                                     echo '<button class="watch-btn" id="addCart_btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>';
                                                 }
                                             ?>
-                                            <!--<button class="watch-btn" id="addCart_btn"><span>加入購物車</span> <i class="fa fa-angle-right"></i></button>-->
                                         </form>
                                     </div>
                                 </div>
@@ -457,7 +415,14 @@
                         <ul>
                             <li class="active"><a href="index.php">首頁</a></li>
                             <li><a href="categories.php">類別</a></li>
-                            <li><a href="member-center-data.php">會員中心</a></li>
+                            <?php
+                                if(isset($_SESSION['member_account'])){
+                                    echo '<li><a href="member-center-data.php">會員中心</a></li>';
+                                }
+                                else{
+                                    echo '<li><a href="login.php">會員中心</a></li>';
+                                }
+                            ?>
                             <li><a href="customer.php">客服中心</a></li>
                             <li><a href="admin.php">管理員中心</a></li>
                         </ul>
