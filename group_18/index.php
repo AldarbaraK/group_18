@@ -310,8 +310,8 @@
                                 <h5>暢銷商品</h5>
                             </div>
                             <ul class="filter__controls">
-                                <li class="active" data-filter="*">日</li>
-                                <li data-filter=".week">週</li>
+                                <li class="active" data-filter="*">所有時間</li>
+                                <li data-filter=".day">日</li>
                                 <li data-filter=".month">月</li>
                                 <li data-filter=".years">年</li>
                             </ul>
@@ -324,7 +324,35 @@
                                             if($count>=5)
                                                 break;
                                             echo '<a href="game-details.php?game_ID='. $row["game_ID"].'">
-                                                    <div class="product__top__view__item set-bg mix day years" data-setbg="img/product/'. $row["game_picture"].'.jpg">
+                                                    <div class="product__top__view__item set-bg mix ';
+                                                    if ($dayResult = mysqli_query($link, "SELECT game_ID,count(*) day_count FROM deal_record WHERE DAY(deal_datetime) = DAY(NOW()) GROUP BY game_ID ORDER BY day_count DESC")){
+                                                        while ($dayRes = mysqli_fetch_assoc($dayResult)) {
+                                                            if($row["game_ID"] == $dayRes["game_ID"]) 
+                                                            { 
+                                                                echo "day ";
+                                                            }
+                                                        }  
+                                                        mysqli_free_result($dayResult); // 釋放佔用的記憶體
+                                                    }
+                                                    if ($monthResult = mysqli_query($link, "SELECT game_ID,count(*) month_count FROM deal_record WHERE MONTH(deal_datetime) = MONTH(NOW()) GROUP BY game_ID ORDER BY month_count DESC")){
+                                                        while ($monthRes = mysqli_fetch_assoc($monthResult)) {
+                                                            if($row["game_ID"] == $monthRes["game_ID"]) 
+                                                            { 
+                                                                echo "month ";
+                                                            }
+                                                        }  
+                                                        mysqli_free_result($monthResult); // 釋放佔用的記憶體
+                                                    }
+                                                    if ($yearResult = mysqli_query($link, "SELECT game_ID,count(*) year_count FROM deal_record WHERE YEAR(deal_datetime) = YEAR(NOW()) GROUP BY game_ID ORDER BY year_count DESC")){
+                                                        while ($yearRes = mysqli_fetch_assoc($yearResult)) {
+                                                            if($row["game_ID"] == $yearRes["game_ID"]) 
+                                                            { 
+                                                                echo "years ";
+                                                            }
+                                                        }  
+                                                        mysqli_free_result($yearResult); // 釋放佔用的記憶體
+                                                    }
+                                            echo    '" data-setbg="img/product/'. $row["game_picture"].'.jpg">
                                                         <div class="download"><i class="fa fa-download"></i> ';
                                                             if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
                                                                 while ($people = mysqli_fetch_assoc($boughtResult)) {
