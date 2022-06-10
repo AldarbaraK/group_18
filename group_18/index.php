@@ -349,56 +349,55 @@
                                     }
                                 ?>
                             </div>
+                        </div> 
+                    </div>
+                    <div class="product__recommand__comment">
+                        <div class="section-title">
+                            <h5>推薦給您</h5>
                         </div>
-
-                        <div class="product__recommand__comment">
-                            <div class="section-title">
-                                <h5>推薦給您</h5>
-                            </div>
-                            <?php 
-                                if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_pic b WHERE a.game_ID = b.game_ID")) {
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        $boughtflag=0;
-                                        if( $row["game_ID"] == 26 || $row["game_ID"] == 27 || $row["game_ID"] == 28 || $row["game_ID"] == 29 ){
-                                            echo '<div class="product__recommand__comment__item">
-                                                    <div class="product__recommand__comment__item__pic" >
-                                                        <a href="game-details.php?game_ID='. $row["game_ID"].'"><img src="img/product/'. $row["game_picture"].'.jpg" alt=""></a>
-                                                    </div>
-                                                    <div class="product__recommand__comment__item__text">
-                                                        <ul>';
-                                                            if ($cateResult = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
-                                                                while ($categories = mysqli_fetch_assoc($cateResult)) {
-                                                                    if($row["game_ID"] == $categories["game_ID"]) echo '<a href="categories.php"><li>'. $categories["game_type"] .'</li> </a>';
+                        <?php 
+                            if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_pic b WHERE a.game_ID = b.game_ID")) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $boughtflag=0;
+                                    if( $row["game_ID"] == 26 || $row["game_ID"] == 27 || $row["game_ID"] == 28 || $row["game_ID"] == 29 ){
+                                        echo '<div class="product__recommand__comment__item">
+                                                <div class="product__recommand__comment__item__pic" >
+                                                    <a href="game-details.php?game_ID='. $row["game_ID"].'"><img src="img/product/'. $row["game_picture"].'.jpg" alt=""></a>
+                                                </div>
+                                                <div class="product__recommand__comment__item__text">
+                                                    <ul>';
+                                                        if ($cateResult = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
+                                                            while ($categories = mysqli_fetch_assoc($cateResult)) {
+                                                                if($row["game_ID"] == $categories["game_ID"]) echo '<a href="categories.php"><li>'. $categories["game_type"] .'</li> </a>';
+                                                            }  
+                                                            mysqli_free_result($cateResult); // 釋放佔用的記憶體
+                                                        }
+                                                    echo '</ul>
+                                                    <h5><a href="game-details.php?game_ID='. $row["game_ID"].'">'. $row["game_name"].'</a></h5>
+                                                    <div class="recommandProduct__item__pic set-bg">
+                                                        <div class="view"><i class="fa fa-download"></i> ';
+                                                            if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
+                                                                while ($people = mysqli_fetch_assoc($boughtResult)) {
+                                                                    if($row["game_ID"] == $people["game_ID"]) 
+                                                                    {    
+                                                                        echo " ". $people["count"];
+                                                                        $boughtflag = 1;
+                                                                    }
                                                                 }  
-                                                                mysqli_free_result($cateResult); // 釋放佔用的記憶體
+                                                                mysqli_free_result($boughtResult); // 釋放佔用的記憶體
                                                             }
-                                                        echo '</ul>
-                                                        <h5><a href="game-details.php?game_ID='. $row["game_ID"].'">'. $row["game_name"].'</h5>
-                                                        <div class="recommandProduct__item__pic set-bg">
-                                                            <div class="view"><i class="fa fa-download"></i> ';
-                                                                if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
-                                                                    while ($people = mysqli_fetch_assoc($boughtResult)) {
-                                                                        if($row["game_ID"] == $people["game_ID"]) 
-                                                                        {    
-                                                                            echo " ". $people["count"];
-                                                                            $boughtflag = 1;
-                                                                        }
-                                                                    }  
-                                                                    mysqli_free_result($boughtResult); // 釋放佔用的記憶體
-                                                                }
-                                                                if($boughtflag == 0)
-                                                                    echo " 0";
-                                                            echo '</div>
-                                                        </div>
+                                                            if($boughtflag == 0)
+                                                                echo " 0";
+                                                        echo '</div>
                                                     </div>
-                                                </div>';
-                                        }
+                                                </div>
+                                            </div>';
                                     }
-                                    $num = mysqli_num_rows($result); //查詢結果筆數
-                                    mysqli_free_result($result); // 釋放佔用的記憶體
                                 }
-                            ?> 
-                        </div>
+                                $num = mysqli_num_rows($result); //查詢結果筆數
+                                mysqli_free_result($result); // 釋放佔用的記憶體
+                            }
+                        ?> 
                     </div>
                 </div>
             </div>
@@ -407,7 +406,7 @@
                     <div class="row">
                         <div class="col-lg-10 col-md-10 col-sm-10">
                             <div class="section-title">
-                                <h4>所有遊戲　　</h4>
+                                <h4>所有遊戲　</h4>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
