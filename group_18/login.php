@@ -36,7 +36,6 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 
-    <!--<link rel="stylesheet" href="js/pwd.js" type="text/js">-->
     <script>
 
         $(document).ready(function($) {
@@ -54,7 +53,6 @@
                             {
                                 form.submit();
                             }
-                            //document.getElementById('show_msg').innerHTML= msg ;
                         },
                         error: function(xhr, ajaxOptions, thrownError) {
                             alert(xhr.status);
@@ -66,14 +64,12 @@
                     account: {
                         required: true,
                         minlength: 4,
-                        maxlength: 24,
-                       // checkUsername:true
+                        maxlength: 24
                     },
                     pwd: {
                         required: true,
                         minlength: 8,
-                        maxlength: 20,
-                        //checkUsername:true
+                        maxlength: 20
                     }
                 },
                 messages: {
@@ -100,7 +96,6 @@
                     contentType: false,
                     success: function(msg) {
                         $("#show_msg").html(msg);//顯示訊息
-                        //document.getElementById('show_msg').innerHTML= msg ;
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         alert(xhr.status);
@@ -116,7 +111,6 @@
                     dataType: 'text',
                     success: function(msg) {
                         $("#show_msg").html(msg);//顯示訊息
-                        //document.getElementById('show_msg').innerHTML= msg ;
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         alert(xhr.status);
@@ -264,7 +258,14 @@
                         <ul>
                             <li class="active"><a href="index.php">首頁</a></li>
                             <li><a href="categories.php">類別</a></li>
-                            <li><a href="member-center-data.php">會員中心</a></li>
+                            <?php
+                                if(isset($_SESSION['member_account'])){
+                                    echo '<li><a href="member-center-data.php">會員中心</a></li>';
+                                }
+                                else{
+                                    echo '<li><a href="login.php">會員中心</a></li>';
+                                }
+                            ?>
                             <li><a href="customer.php">客服中心</a></li>
                             <li><a href="admin.php">管理員中心</a></li>
                         </ul>

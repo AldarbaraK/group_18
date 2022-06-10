@@ -90,6 +90,14 @@
     {
         search($_POST['search-input']);
     }
+    if($op=='addSelfProduct')
+    {
+        addSelfProduct($_POST['account']);
+    }
+    if($op=='addGiftProduct')
+    {
+        addGiftProduct($_POST['account'],$_POST['gift-target']);
+    }
 
     function isStaff()
     {
@@ -574,5 +582,73 @@
         header("Location:categories.php?search=".$input);
     }
 
+    function addSelfProduct($account)
+    {
+        global $link; 
+
+        if($account!="")
+        {
+            if ($result = mysqli_query($link, "SELECT * FROM member_cart a,game_info b WHERE a.game_ID = b.game_ID")) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    if($row['member_account'] == $account)
+                    {
+                        if($row['game_discount']!=0){
+                            $money = round($row['game_price']*$row['game_discount']/100);
+                        }
+                        else{ 
+                            $money = $row['game_price'];
+                        } 
+                        $sql = "insert into deal_record values ('" . $account . "','" . $row['game_ID'] ."','". NULL ."','". $money ."', NOW() )";
+                        mysqli_query($link, $sql);
+                        $sql = "update deal_record set deal_score=NULL where member_account='$account' and game_ID='".$row['game_ID']."'";
+                        mysqli_query($link, $sql);
+                        $sql = "insert into member_collection values ('" . $account . "','" . $row['game_ID'] ."')";
+                        mysqli_query($link, $sql);
+                        $sql = "delete from member_cart where game_ID = '". $row['game_ID'] ."' and member_account = '" . $account . "'";
+                        mysqli_query($link, $sql);
+                    }
+                }
+                mysqli_free_result($result); // 釋放佔用的記憶體
+            }
+            header("Location:categories.php");
+        }
+        else{
+            header("Location:login.php");
+        }
+
+    }
+
+    function addGiftProduct($account,$target)
+    {
+        global $link;
+        
+        if($target!="")
+        {
+            if ($result = mysqli_query($link, "SELECT * FROM member_cart a,game_info b WHERE a.game_ID = b.game_ID")) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    if($row['member_account'] == $account)
+                    {
+                        if($row['game_discount']!=0){
+                            $money = round($row['game_price']*$row['game_discount']/100);
+                        }
+                        else{ 
+                            $money = $row['game_price'];
+                        } 
+                        $sql = "insert into deal_record values ('" . $target . "','" . $row['game_ID'] ."','". NULL ."','". $money ."', NOW() )";
+                        mysqli_query($link, $sql);
+                        $sql = "update deal_record set deal_score=NULL where member_account='$target' and game_ID='".$row['game_ID']."'";
+                        mysqli_query($link, $sql);
+                        $sql = "insert into member_collection values ('" . $target . "','" . $row['game_ID'] ."')";
+                        mysqli_query($link, $sql);
+                        $sql = "delete from member_cart where game_ID = '". $row['game_ID'] ."' and member_account = '" . $account . "'";
+                        mysqli_query($link, $sql);
+                    }
+                }
+                mysqli_free_result($result); // 釋放佔用的記憶體
+            }
+            header("Location:categories.php");
+        }
+
+    }
 
 ?>

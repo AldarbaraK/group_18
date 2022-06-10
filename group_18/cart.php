@@ -237,7 +237,14 @@
                         <ul>
                             <li class="active"><a href="index.php">首頁</a></li>
                             <li><a href="categories.php">類別</a></li>
-                            <li><a href="member-center-data.php">會員中心</a></li>
+                            <?php
+                                if(isset($_SESSION['member_account'])){
+                                    echo '<li><a href="member-center-data.php">會員中心</a></li>';
+                                }
+                                else{
+                                    echo '<li><a href="login.php">會員中心</a></li>';
+                                }
+                            ?>
                             <li><a href="customer.php">客服中心</a></li>
                             <li><a href="admin.php">管理員中心</a></li>
                         </ul>
@@ -268,7 +275,8 @@
     <!-- Self model Begin -->
     <div class="edit-model self-cart-model">
         <div class="edit-model-show"> 
-            <form class="edit-model-form" id="self-pay-form" method="post">
+            <form action="function.php?op=addSelfProduct" class="edit-model-form" id="self-pay-form" method="post">
+                <input type="hidden" value="<?php echo $_SESSION['member_account']; ?>" name="account">
                 <div class="edit-switch-pos">
                     <div class="edit-close-switch" id="cart-cancel"><i class="icon_close"></i></div> 
                 </div>
@@ -310,7 +318,8 @@
     <!-- Gift model Begin -->
     <div class="edit-model gift-cart-model">
         <div class="edit-model-show"> 
-            <form class="edit-model-form" id="gift-pay-form" method="post">
+            <form action="function.php?op=addGiftProduct" class="edit-model-form" id="gift-pay-form" method="post">
+                <input type="hidden" value="<?php echo $_SESSION['member_account']; ?>" name="account">
                 <div class="edit-switch-pos">
                     <div class="edit-close-switch" id="cart-cancel"><i class="icon_close"></i></div> 
                 </div>

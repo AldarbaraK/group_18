@@ -52,8 +52,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li class="active"><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別</a>
-                                </li>
+                                <li><a href="categories.php">類別</a></li>
                                 <?php
                                     if(isset($_SESSION['member_account'])){
                                         echo '<li><a href="member-center-data.php">會員中心</a></li>';
@@ -135,31 +134,6 @@
                         $num = mysqli_num_rows($result); //查詢結果筆數
                         mysqli_free_result($result); // 釋放佔用的記憶體
                     }
-                    /*if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_pic b WHERE a.game_ID = b.game_ID ")) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            if($row["game_ID"] == 1 || $row["game_ID"] == 2 || $row["game_ID"] == 3){
-                                echo '<div class="hero__items set-bg" data-setbg="img/product/'. $row["game_picture"].'.jpg">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="hero__text">';
-                                                    if ($cateResult = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
-                                                        while ($categories = mysqli_fetch_assoc($cateResult)) {
-                                                            if($row["game_ID"] == $categories["game_ID"]) echo '<a href="categories.php"><div class="label">'. $categories["game_type"].'</div></a> ';
-                                                        }  
-                                                        mysqli_free_result($cateResult); // 釋放佔用的記憶體
-                                                    }
-                                                    echo '<a href="game-details.php?game_ID='. $row["game_ID"].'"><h2>'. $row["game_name"].'</h2></a>
-                                                    <p></p>
-                                                    <a href="game-details.php?game_ID='. $row["game_ID"].'"><span>立即查看</span> <i class="fa fa-angle-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>';
-                            }
-                        }
-                        $num = mysqli_num_rows($result); //查詢結果筆數
-                        mysqli_free_result($result); // 釋放佔用的記憶體
-                    }*/
                 ?> 
             </div>
         </div>
@@ -343,7 +317,6 @@
                             </ul>
                             <div class="filter__gallery">
                                 <?php 
-                                    //if ($result = mysqli_query($link, "SELECT * FROM game_info a,game_pic b,deal_record c WHERE a.game_ID = b.game_ID ")) {
                                     if($result = mysqli_query($link, "SELECT * FROM game_info a LEFT JOIN (SELECT game_ID,COUNT(*) game_count FROM deal_record GROUP BY game_ID) c ON a.game_ID = c.game_ID,game_pic b WHERE a.game_ID = b.game_ID ORDER BY game_count DESC")){
                                         $count=0;
                                         while ($row = mysqli_fetch_assoc($result)) {
@@ -370,111 +343,6 @@
                                                     </div>
                                                 </a>';
                                             $count++;
-                                            /*if( $row["game_ID"] == 1){
-                                                echo '<a href="game-details.php?game_ID='. $row["game_ID"].'">
-                                                        <div class="product__top__view__item set-bg mix day years" data-setbg="img/product/'. $row["game_picture"].'.jpg">
-                                                            <div class="download"><i class="fa fa-download"></i> ';
-                                                                if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
-                                                                    while ($people = mysqli_fetch_assoc($boughtResult)) {
-                                                                        if($row["game_ID"] == $people["game_ID"]) 
-                                                                        {    
-                                                                            echo " ". $people["count"];
-                                                                            $boughtflag = 1;
-                                                                        }
-                                                                    }  
-                                                                    mysqli_free_result($boughtResult); // 釋放佔用的記憶體
-                                                                }
-                                                                if($boughtflag == 0)
-                                                                    echo " 0";
-                                                            echo '</div>
-                                                            <h5>'. $row["game_name"].'</h5>
-                                                        </div>
-                                                    </a>';
-                                            }
-                                            else if( $row["game_ID"] == 2){
-                                                echo '<a href="game-details.php?game_ID='. $row["game_ID"].'">
-                                                        <div class="product__top__view__item set-bg mix month week" data-setbg="img/product/'. $row["game_picture"].'.jpg">
-                                                            <div class="download"><i class="fa fa-download"></i> ';
-                                                                if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
-                                                                    while ($people = mysqli_fetch_assoc($boughtResult)) {
-                                                                        if($row["game_ID"] == $people["game_ID"]) 
-                                                                        {    
-                                                                            echo " ". $people["count"];
-                                                                            $boughtflag = 1;
-                                                                        }
-                                                                    }  
-                                                                    mysqli_free_result($boughtResult); // 釋放佔用的記憶體
-                                                                }
-                                                                if($boughtflag == 0)
-                                                                    echo " 0";
-                                                            echo '</div>
-                                                            <h5>'. $row["game_name"].'</h5>
-                                                        </div>
-                                                    </a>';
-                                            }
-                                            else if( $row["game_ID"] == 9){
-                                                echo '<a href="game-details.php?game_ID='. $row["game_ID"].'">
-                                                        <div class="product__top__view__item set-bg mix week years" data-setbg="img/product/'. $row["game_picture"].'.jpg">
-                                                            <div class="download"><i class="fa fa-download"></i> ';
-                                                                if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
-                                                                    while ($people = mysqli_fetch_assoc($boughtResult)) {
-                                                                        if($row["game_ID"] == $people["game_ID"]) 
-                                                                        {    
-                                                                            echo " ". $people["count"];
-                                                                            $boughtflag = 1;
-                                                                        }
-                                                                    }  
-                                                                    mysqli_free_result($boughtResult); // 釋放佔用的記憶體
-                                                                }
-                                                                if($boughtflag == 0)
-                                                                    echo " 0";
-                                                            echo '</div>
-                                                            <h5>'. $row["game_name"].'</h5>
-                                                        </div>
-                                                    </a>';
-                                            }
-                                            else if( $row["game_ID"] == 10){
-                                                echo '<a href="game-details.php?game_ID='. $row["game_ID"].'">
-                                                        <div class="product__top__view__item set-bg mix month years" data-setbg="img/product/'. $row["game_picture"].'.jpg">
-                                                            <div class="download"><i class="fa fa-download"></i> ';
-                                                                if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
-                                                                    while ($people = mysqli_fetch_assoc($boughtResult)) {
-                                                                        if($row["game_ID"] == $people["game_ID"]) 
-                                                                        {    
-                                                                            echo " ". $people["count"];
-                                                                            $boughtflag = 1;
-                                                                        }
-                                                                    }  
-                                                                    mysqli_free_result($boughtResult); // 釋放佔用的記憶體
-                                                                }
-                                                                if($boughtflag == 0)
-                                                                    echo " 0";
-                                                            echo '</div>
-                                                            <h5>'. $row["game_name"].'</h5>
-                                                        </div>
-                                                    </a>';
-                                            }
-                                            else if( $row["game_ID"] == 25){
-                                                echo '<a href="game-details.php?game_ID='. $row["game_ID"].'">
-                                                        <div class="product__top__view__item set-bg mix day " data-setbg="img/product/'. $row["game_picture"].'.jpg">
-                                                            <div class="download"><i class="fa fa-download"></i> ';
-                                                                if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
-                                                                    while ($people = mysqli_fetch_assoc($boughtResult)) {
-                                                                        if($row["game_ID"] == $people["game_ID"]) 
-                                                                        {    
-                                                                            echo " ". $people["count"];
-                                                                            $boughtflag = 1;
-                                                                        }
-                                                                    }  
-                                                                    mysqli_free_result($boughtResult); // 釋放佔用的記憶體
-                                                                }
-                                                                if($boughtflag == 0)
-                                                                    echo " 0";
-                                                            echo '</div>
-                                                            <h5>'. $row["game_name"].'</h5>
-                                                        </div>
-                                                    </a>';
-                                            }*/
                                         }
                                         $num = mysqli_num_rows($result); //查詢結果筆數
                                         mysqli_free_result($result); // 釋放佔用的記憶體
@@ -605,55 +473,6 @@
                                         </div>
                                     </div>';
                                     $count++;
-                                    /*if( $row["game_ID"] == 17 || $row["game_ID"] == 18 || $row["game_ID"] == 19 || $row["game_ID"] == 20 || $row["game_ID"] == 21 || $row["game_ID"] == 22 || $row["game_ID"] == 23 || $row["game_ID"] == 24){
-                                        echo '<div class="col-lg-3 col-md-6 col-sm-6">
-                                                <div class="product__item">
-                                                    <a href="game-details.php?game_ID='. $row["game_ID"].'">
-                                                        <div class="product__item__pic set-bg" data-setbg="img/product/'. $row["game_picture"].'.jpg">
-                                                            <div class="comment"><i class="fa fa-comments"></i>';
-                                                                if ($commentResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM member_comment GROUP BY game_ID")){
-                                                                    while ($people = mysqli_fetch_assoc($commentResult)) {
-                                                                        if($row["game_ID"] == $people["game_ID"]) 
-                                                                        {   
-                                                                            echo " ". $people["count"];
-                                                                            $commentflag = 1;
-                                                                        }
-                                                                    }  
-                                                                    mysqli_free_result($commentResult); // 釋放佔用的記憶體
-                                                                }
-                                                                if($commentflag == 0)
-                                                                    echo " 0";
-                                                            echo '</div>
-                                                            <div class="view"><i class="fa fa-download"></i> ';
-                                                                if ($boughtResult = mysqli_query($link, "SELECT game_ID,count(*) count FROM deal_record GROUP BY game_ID")){
-                                                                    while ($people = mysqli_fetch_assoc($boughtResult)) {
-                                                                        if($row["game_ID"] == $people["game_ID"]) 
-                                                                        {    
-                                                                            echo " ". $people["count"];
-                                                                            $boughtflag = 1;
-                                                                        }
-                                                                    }  
-                                                                    mysqli_free_result($boughtResult); // 釋放佔用的記憶體
-                                                                }
-                                                                if($boughtflag == 0)
-                                                                    echo " 0";
-                                                            echo '</div>
-                                                        </div>
-                                                    </a>
-                                                    <div class="product__item__text">
-                                                        <ul>';
-                                                            if ($cateResult = mysqli_query($link, "SELECT * FROM game_info a,game_categories b WHERE a.game_ID = b.game_ID")){
-                                                                while ($categories = mysqli_fetch_assoc($cateResult)) {
-                                                                    if($row["game_ID"] == $categories["game_ID"]) echo '<a href="categories.php"><li>'. $categories["game_type"] .'</li> </a>';
-                                                                }  
-                                                                mysqli_free_result($cateResult); // 釋放佔用的記憶體
-                                                            }
-                                                        echo '</ul>
-                                                        <h5><a href="game-details.php?game_ID='. $row["game_ID"].'">'. $row["game_name"].'</a></h5>
-                                                    </div>
-                                                </div>
-                                            </div>';
-                                    }*/
                                 }
                                 $num = mysqli_num_rows($result); //查詢結果筆數
                                 mysqli_free_result($result); // 釋放佔用的記憶體
@@ -683,7 +502,15 @@
                         <ul>
                             <li class="active"><a href="index.php">首頁</a></li>
                             <li><a href="categories.php">類別</a></li>
-                            <li><a href="member-center-data.php">會員中心</a></li>
+                            </li>
+                                <?php
+                                    if(isset($_SESSION['member_account'])){
+                                        echo '<li><a href="member-center-data.php">會員中心</a></li>';
+                                    }
+                                    else{
+                                        echo '<li><a href="login.php">會員中心</a></li>';
+                                    }
+                                ?>
                             <li><a href="customer.php">客服中心</a></li>
                             <li><a href="admin.php">管理員中心</a></li>
                         </ul>
