@@ -80,6 +80,7 @@ jQuery(document).ready(function($) {
                       else {
                             $("#oper").val("update");
                             toastr.success(JData.message);
+                            location.reload();  
                       }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
@@ -90,5 +91,117 @@ jQuery(document).ready(function($) {
                 }
             });
         }        
+
+        /************************
+         *      會員CRUD        *
+         ************************/      
+        //修改
+        $('tbody').on('click', '#member_update', function() {
+            $("#tableType").val("memberTable");
+            $("#oper").val("update");
+        });
+
+       //取消
+       $(document).on('click', '#member_cancel', function() {
+            $('.edit-model').fadeOut(400);        
+            $("#oper").val("update");
+            $("#edit-member-form").get(0).reset(); 
+        });  
+
+       //送出表單 (儲存)
+       jQuery.validator.methods.matches = function( value, element, params ) {
+            var re = new RegExp(params);
+            return this.optional( element ) || re.test( value );
+        }
+
+        $.validator.addMethod("pwd",function(value,element,params){
+            var pwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+            return (pwd.test(value));
+        },"請填寫長度在8-20之間,需包含一個字母和一個數字!");
+        
+        var member_validator = $("#edit-member-form").validate({
+          submitHandler: function() {
+                $('.edit-model').fadeOut(400);
+                member_CRUD();            
+          },
+          rules: {
+                "edit-member-email": {
+                    required: true,
+                    email: true
+                },
+                "edit-member-pwd": {
+                    equalTo: "#edit-member-password"
+                },
+                "edit-member-name": {
+                    required: true
+                },
+                "edit-member-nickname": {
+                    required: true
+                },
+                "edit-member-sex": {
+                    required: true
+                },
+                "edit-member-birth": {
+                    required: true,
+                    dateISO:true
+                },
+                "edit-member-phone": {
+                    required: true,
+                    matches: new RegExp('^09\\d{8}$')
+                }
+            },
+            messages: {
+                "edit-member-email": {
+                    required: "請輸入電子郵箱",
+                    email: "請輸入正確郵箱格式"
+                },
+                "edit-member-pwd": {
+                    equalTo: "密碼不相符"
+                },
+                "edit-member-name": {
+                    required: "請輸入會員姓名"
+                },
+                "edit-member-nickname": {
+                    required: "請輸入會員暱稱"
+                },
+                "edit-member-sex": {
+                    required: "請輸入會員性別"
+                },
+                "edit-member-birth": {
+                    required: "請輸入會員生日日期",
+                    dateISO: "請輸入正確日期格式"
+                },
+                "edit-member-phone": {
+                    required: "請輸入電話號碼",
+                    matches: "請輸入正確的10位手機格式"
+                }
+            }
+        });
+
+        function member_CRUD() {
+            $.ajax({
+                url: "crud.php",
+                data: $("#edit-member-form").serialize(),
+                type: 'POST',
+                dataType: "json",
+                success: function(JData) {                 
+                    $("#edit-member-form").get(0).reset();
+                      if (JData.code){
+                            toastr.error(JData.message);
+                            console.log(JData.message);
+                      }
+                      else {
+                            $("#oper").val("update");  
+                            toastr.success(JData.message);
+                            location.reload();   
+                      }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    $("#edit-member-form").get(0).reset();
+                    console.log(xhr.responseText);
+                    alert(xhr.responseText);
+                }
+            });
+        }
 
 });

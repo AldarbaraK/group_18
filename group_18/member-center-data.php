@@ -1,6 +1,12 @@
 <?php
     include 'dbConnect.php';
     session_start();
+    if(!isset($_SESSION['member_account'])){
+        if(isset($_SESSION['admin_account']))
+            header("Location:admin.php");
+        else
+            header("Location:login.php");
+    }
 ?>
 
 <?php
@@ -57,6 +63,7 @@
     <link rel="stylesheet" href="css/nice-select.css" type="text/css">
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/toastr.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 
@@ -121,30 +128,24 @@
     <header class="header">
         <div class="container">
             <div class="row">
-                <div class="col-lg-2">
-                    <div class="header__logo">
-                        <a href="index.php">
-                            <img src="img/logo.svg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
+            	<div class="col-lg-1">
+					<div class="header-left">
+						<div class="menu-icon dw dw-menu"></div>
+					</div>
+				</div> 		 
+                <div class="col-lg-9">
                     <div class="header__nav">
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別</a>
-                                </li>
-                                <?php
-                                    if(isset($_SESSION['member_account'])){
+                                <li><a href="categories.php">類別</a></li>
+                                <?php 
+                                    if(isset($_SESSION['admin_account'])) 
+                                        echo '<li><a href="admin.php">管理員中心</a></li>';
+                                    else
                                         echo '<li class="active"><a href="member-center-data.php">會員中心</a></li>';
-                                    }
-                                    else{
-                                        echo '<li><a href="login.php">會員中心</a></li>';
-                                    }
                                 ?>
                                 <li><a href="customer.php">客服中心</a></li>
-                                <li><a href="admin.php">管理員中心</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -164,7 +165,7 @@
                             }
                         ?>
                         <?php
-                            if(isset($_SESSION['member_account'])){
+                            if(isset($_SESSION['member_account'])||isset($_SESSION['admin_account'])){
                                 echo '<a href="function.php?op=logout"><span class="fa fa-sign-out"></span></a>';
                             }
                             else{
@@ -179,14 +180,6 @@
     </header>
     <!-- Header End -->
 		<div class="left-side-bar">
-            <div class="brand-logo">
-                <a href="index.php">
-                    <img src="img/logo.svg" alt="">
-                </a>
-                <div class="close-sidebar" data-toggle="left-sidebar-close">
-					<i class="ion-close-round"></i>
-				</div>
-            </div> 
 			<div class="menu-block customscroll">
 				<div class="sidebar-menu">
 					<ul>
@@ -224,7 +217,16 @@
 					<div class="col-lg-6 mb-2">
 						<div class="section-title"><h3>累計折數</h3></div>
 						<div class="personal-background">
-		                   <p>50%</p>
+		                   <p>
+		                   		<?php 
+		                   			if($level == 1) 
+		                   				echo "0%"; 
+		                   			else if($level == 2) 
+		                   				echo "8%";
+		                   			else if($level == 3) 
+		                   				echo "15%";
+		                   		?>	
+		                   	</p>
 		                </div>
 					</div>
 				</div>
@@ -235,7 +237,7 @@
 					<div class="col-lg-2">
 						<div class="section-title">
 							<div class="personal-btn">
-                                <button class="site-btn edit-switch">修改</button>
+                                <button class="site-btn edit-switch" id="member_update">修改</button>
                             </div>
 						</div>
 					</div>
@@ -433,38 +435,56 @@
 
 	<!-- Edit model Begin -->
     <div class="edit-model">
-        <div class="edit-model-show">
-	    	<form class="edit-model-form" action="function.php?op=memberDataEdit" id="edit_form" method="post" >
+        <div class="edit-model-show"> 
+	    	<form class="edit-model-form" id="edit-member-form" method="post">
+	    		<input type="hidden" name="tableType" id="tableType" value="memberTable">
+        		<input type="hidden" name="oper" id="oper" value="update">
+           		<input type="hidden" name="old-member_account" id="old-member_account" value="<?php echo $account ?>">
+           		<div class="edit-switch-pos">
+	        		<button class="edit-close-switch" type="submit" id="member_save"><i class="icon_check"></i></button>
+		    		<div class="edit-close-switch" id="member_cancel"><i class="icon_close"></i></div>	
+		    	</div>
 		        <div class="container">
-					<div class="edit-switch-pos">
-						<button class="edit-close-switch" type="submit" name="edit_btn" id="edit_btn" value=""><i class="icon_check"></i></button>
-						<div class="edit-close-switch"><i class="icon_close"></i></div>	
-					</div>
 		        	<div class="row pt-5">
 		        		<div class="col-lg-6">
 		        			<div class="form-group">
         						<div class="row">
         							<div class="col-lg-3">
-	        							<div class="section-title"><h4>電子信箱</h4></div>
+	        							<div class="section-title"><h4>帳號</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-email" placeholder="請輸入電子信箱" name="email"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-account" id="edit-member-account" placeholder="請輸入帳號" value="<?php echo $account ?>" readonly="readonly"><label for="edit-member-account" class="error"></label></div>
         						</div>
         					</div>
-							<p id="show_msg"></p>
+		        			<div class="form-group">
+        						<div class="row">
+        							<div class="col-lg-3">
+	        							<div class="section-title"><h4>電子信箱</h4></div>
+	        						</div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-email" id="edit-member-email" placeholder="請輸入電子信箱" value="<?php echo $email ?>"><label for="edit-member-email" class="error"></label></div>
+        						</div>
+        					</div>
         					<div class="form-group">
         						<div class="row">
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>密碼</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password" placeholder="請輸入密碼" name="pwd"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="password" name="edit-member-password" id="edit-member-password" placeholder="請輸入密碼"><label for="edit-member-password" class="error"></label></div>
         						</div>
         					</div>
         					<div class="form-group">
         						<div class="row">
         							<div class="col-lg-3">
-	        							<div class="section-title"><h4>確認</h4></div>
+	        							<div class="section-title"><h4>確認密碼</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-password2" placeholder="請重複輸入密碼" name="pwd2"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="password" name="edit-member-pwd" id="edit-member-pwd" placeholder="請確認輸入密碼"><label for="edit-member-pwd" class="error"></label></div>
+        						</div>
+        					</div>
+        					<div class="form-group">
+        						<div class="row">
+        							<div class="col-lg-3">
+	        							<div class="section-title"><h4>會員層級</h4></div>
+	        						</div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-level" id="edit-member-level" placeholder="請輸入會員層級" value="<?php echo $level ?>" readonly="readonly"><label for="edit-member-level" class="error"></label></div>
         						</div>
         					</div>
 		        		</div>
@@ -474,7 +494,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>姓名</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-name" placeholder="請輸入姓名" name="name"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-name" id="edit-member-name" placeholder="請輸入姓名" value="<?php echo $name ?>"><label for="edit-member-name" class="error"></label></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -482,7 +502,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>暱稱</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" id="edit-member-nickname" placeholder="請輸入暱稱" name="nickname"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-nickname" id="edit-member-nickname" placeholder="請輸入暱稱" value="<?php echo $nickname ?>"><label for="edit-member-nickname" class="error"></label></div>
         						</div>
         					</div>
         					<div class="form-group">
@@ -492,16 +512,17 @@
 	        						</div>
 									<div class="col-lg-2">
 										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex1" name="ratedRadio" class="custom-control-input edit-form-Zindex" value="1">
-											<label class="custom-control-label" for="sexRadio1">男性</label>
+											<input type="radio" id="edit-member-sex" name="edit-member-sex" value="M" class="custom-control-input edit-form-Zindex"<?php if($sex=="男性") echo 'checked'; ?>>
+											<label class="custom-control-label" for="edit-member-sex">男性</label>
 										</div>
 									</div>	
 									<div class="col-lg-2">
 										<div class="custom-control custom-radio">
-											<input type="radio" id="edit-member-sex2" name="ratedRadio" class="custom-control-input edit-form-Zindex" value="2">
-											<label class="custom-control-label" for="sexRadio2">女性</label>
+											<input type="radio" id="edit-member-sex" name="edit-member-sex" value="F" class="custom-control-input edit-form-Zindex" <?php if($sex=="女性") echo 'checked'; ?>>
+											<label class="custom-control-label" for="edit-member-sex">女性</label>
 										</div>
-									</div>	
+									</div>
+									<label for="edit-member-sex" class="error"></label>	
 								</div>
         					</div>
         					<div class="form-group">
@@ -509,7 +530,7 @@
 	        						<div class="col-lg-3">
 	        							<div class="section-title"><h4>生日</h4></div>
 	        						</div>
-									<div class="col-lg-9"><input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="birth" id="edit-member-birth" placeholder="選擇生日日期" type="text"></div>
+									<div class="col-lg-9"><input class="form-control date-picker" name="edit-member-birth" id="edit-member-birth" data-date-format="yyyy-mm-dd" placeholder="選擇生日日期" type="text" value="<?php echo $birthday ?>"><label for="edit-member-birth" class="error"></label></div>
 								</div>
         					</div>
         					<div class="form-group">
@@ -517,7 +538,7 @@
         							<div class="col-lg-3">
 	        							<div class="section-title"><h4>電話</h4></div>
 	        						</div>
-	        						<div class="col-lg-9"><input class="form-control" type="text" name="phone" id="edit-member-phone" placeholder="請輸入電話"></div>
+	        						<div class="col-lg-9"><input class="form-control" type="text" name="edit-member-phone" id="edit-member-phone" placeholder="請輸入電話" value="<?php echo $phone ?>"><label for="edit-member-phone" class="error"></label></div>
         						</div>
         					</div>
 		        		</div>
@@ -537,8 +558,11 @@
 	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
 	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
 	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
-	<!-- Datatable Setting js -->
-	<script src="vendors/scripts/datatable-setting.js"></script>
+
+	 <!--表單驗證-->
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+	<script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh_TW.js "></script>
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/player.js"></script>
@@ -546,6 +570,8 @@
     <script src="js/mixitup.min.js"></script>
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/member_center.js"></script>
 	</body>
 </html>

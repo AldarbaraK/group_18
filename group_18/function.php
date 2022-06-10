@@ -128,6 +128,30 @@
                 session_start();
                 $_SESSION['member_account'] = $account;
                 mysqli_query($link, "UPDATE member_details SET login_count=login_count+1 WHERE member_account='$account'");
+
+                $bought_total=0;
+                if ($dealResult = mysqli_query($link, "SELECT member_account,deal_price FROM deal_record")){
+                    while($dealrow = mysqli_fetch_assoc($dealResult)){
+                        if($account == $dealrow['member_account']){
+                            $bought_total += $dealrow['deal_price'];
+                        }
+                    }
+                }
+
+                if ($Result = mysqli_query($link, "SELECT * FROM member_details WHERE member_account='$account'")){
+                    while($row = mysqli_fetch_assoc($Result)){
+                        if($bought_total > 12000 && $row['member_level'] == 2 || $row['member_level'] == 1){
+                            mysqli_query($link, "UPDATE member_details SET member_level= 3 WHERE member_account='$account'");
+                        }
+                        else if($bought_total > 5000 && $row['member_level'] == 1){
+                            mysqli_query($link, "UPDATE member_details SET member_level= 2 WHERE member_account='$account'");
+                        }
+                        else if($bought_total <= 5000 && $row['member_level'] == 1){
+                            mysqli_query($link, "UPDATE member_details SET member_level= 1 WHERE member_account='$account'");
+                        }
+                    }
+                }
+                
                 header("Location:index.php");
             }
             else
@@ -146,9 +170,9 @@
             if($account == $admin['admin_account'] && password_verify($password,$admin['admin_password']) )
             {       
                 session_start();
-                $_SESSION['member_account'] = $account;
+                $_SESSION['admin_account'] = $account;
 
-                header("Location:index.php");
+                header("Location:admin.php");
             }
             else
             {

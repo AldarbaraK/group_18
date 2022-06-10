@@ -1,6 +1,12 @@
 <?php
     include 'dbConnect.php';
     session_start();
+    if(!isset($_SESSION['member_account'])){
+        if(isset($_SESSION['admin_account']))
+            header("Location:admin.php");
+        else
+            header("Location:login.php");
+    }
 ?>
 
 <!DOCTYPE html>
@@ -47,30 +53,24 @@
     <header class="header">
         <div class="container">
             <div class="row">
-                <div class="col-lg-2">
-                    <div class="header__logo">
-                        <a href="index.php">
-                            <img src="img/logo.svg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
+            	<div class="col-lg-1">
+					<div class="header-left">
+						<div class="menu-icon dw dw-menu"></div>
+					</div>
+				</div> 		 
+                <div class="col-lg-9">
                     <div class="header__nav">
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li><a href="index.php">首頁</a></li>
-                                <li><a href="categories.php">類別</a>
-                                </li>
-                                <?php
-                                    if(isset($_SESSION['member_account'])){
+                                <li><a href="categories.php">類別</a></li>
+                                <?php 
+                                    if(isset($_SESSION['admin_account'])) 
+                                        echo '<li><a href="admin.php">管理員中心</a></li>';
+                                    else
                                         echo '<li class="active"><a href="member-center-data.php">會員中心</a></li>';
-                                    }
-                                    else{
-                                        echo '<li><a href="login.php">會員中心</a></li>';
-                                    }
                                 ?>
                                 <li><a href="customer.php">客服中心</a></li>
-                                <li><a href="admin.php">管理員中心</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -90,7 +90,7 @@
                             }
                         ?>
                         <?php
-                            if(isset($_SESSION['member_account'])){
+                            if(isset($_SESSION['member_account'])||isset($_SESSION['admin_account'])){
                                 echo '<a href="function.php?op=logout"><span class="fa fa-sign-out"></span></a>';
                             }
                             else{

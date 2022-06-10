@@ -144,16 +144,13 @@
                                 <li><a href="index.php">首頁</a></li>
                                 <li><a href="categories.php">類別</a>
                                 </li>
-                                <?php
-                                    if(isset($_SESSION['member_account'])){
+                                <?php 
+                                    if(isset($_SESSION['admin_account'])) 
+                                        echo '<li><a href="admin.php">管理員中心</a></li>';
+                                    else
                                         echo '<li><a href="member-center-data.php">會員中心</a></li>';
-                                    }
-                                    else{
-                                        echo '<li><a href="login.php">會員中心</a></li>';
-                                    }
                                 ?>
                                 <li><a href="customer.php">客服中心</a></li>
-                                <li><a href="admin.php">管理員中心</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -162,7 +159,7 @@
                     <div class="header__right">
                         <a href="#" class="search-switch"><span class="icon_search"></span></a>
                         <?php
-                            if(isset($_SESSION['member_account'])){
+                            if(isset($_SESSION['member_account'])||isset($_SESSION['admin_account'])){
                                 echo '<a href="cart.php"><span class="icon_cart"></span></a>';
                             }
                             else{
