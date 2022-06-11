@@ -66,57 +66,6 @@
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 
-	<script>
-		jQuery.validator.methods.matches = function( value, element, params ) {
-			var re = new RegExp(params);
-			return this.optional( element ) || re.test( value );
-		}
-
-		$.validator.addMethod("pwd",function(value,element,params){
-			var pwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
-			return (pwd.test(value));
-		},"請填寫長度在8-20之間,需包含一個字母和一個數字!");
-
-		$(document).ready(function($) {
-			$("#edit_form").validate({
-				submitHandler: function(form) {
-					$('.edit-model').fadeOut(400);
-					form.submit();
-				},
-				rules: {
-					account: {
-						minlength: 4,
-						maxlength: 24
-					},
-					email: {
-						email: true
-					},
-					pwd: {
-						pwd: true
-					},
-					pwd2: {
-						equalTo: "#edit-member-password"
-					},
-					phone: {
-						matches: new RegExp('^09\\d{8}$')
-					}
-				},
-				messages: {
-					email: {
-						email: "請輸入正確郵箱格式"
-					},
-					pwd2: {
-						equalTo: "密碼不相符"
-					},
-					phone: {
-						matches: "請輸入正確的10位手機格式"
-					}
-				}
-			});
-		});
-
-	</script>
-
 <body>
 
 	<div id="preloder">
