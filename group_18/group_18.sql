@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2022-06-11 05:50:24
+-- 產生時間： 2022-06-11 07:54:31
 -- 伺服器版本： 10.4.22-MariaDB
 -- PHP 版本： 8.1.2
 
@@ -464,9 +464,9 @@ CREATE TABLE `member_details` (
 --
 
 INSERT INTO `member_details` (`member_account`, `member_level`, `login_count`) VALUES
-('allan96452', 3, 2),
-('member', 2, 14),
-('Unshun0120', 3, 6);
+('allan96452', 3, 3),
+('member', 2, 17),
+('Unshun0120', 3, 8);
 
 -- --------------------------------------------------------
 
@@ -512,9 +512,9 @@ CREATE TABLE `member_info` (
 --
 
 INSERT INTO `member_info` (`member_account`, `member_password`, `member_email`, `member_name`, `member_nickname`, `member_birth`, `member_phone`, `member_signupDate`, `member_sex`) VALUES
-('allan96452', '$2y$10$b5jAWRyZl76TBK7nzvVgIO94DIDiuV9./TvSbBUIKg8FzmKK9kIRu', 'allan96452@gmail.com', '莊明憲', 'Xian', '2001-09-05', '963111111', '2022-05-14', '男性'),
+('allan96452', '$2y$10$b5jAWRyZl76TBK7nzvVgIO94DIDiuV9./TvSbBUIKg8FzmKK9kIRu', 'allan96452@gmail.com', '莊明憲', 'Xian', '2001-09-05', '0963111111', '2022-05-14', '男性'),
 ('member', '$2y$10$v1IRsSKGtYEVUEwbSxH/V.BMBQWzJdYUEnHHCqmHYsEOUpcUT/bpC', 'member@gmail.com', '測試帳號', '測試', '2022-05-14', '0912345678', '2022-05-14', '男性'),
-('Unshun0120', '$2y$10$/pKwaCl0NlNZZhI.5rAuUeXwJiWRwSBQDKS8Wxx5oqGYPSeTqbIOm', 'unshun0120@gmail.com', '李永紳', '紳', '2001-01-20', '972069867', '2022-05-14', '男性');
+('Unshun0120', '$2y$10$/pKwaCl0NlNZZhI.5rAuUeXwJiWRwSBQDKS8Wxx5oqGYPSeTqbIOm', 'unshun0120@gmail.com', '李永紳', '紳', '2001-01-20', '0972069867', '2022-05-14', '男性');
 
 --
 -- 已傾印資料表的索引

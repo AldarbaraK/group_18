@@ -239,6 +239,8 @@
 
         $sql = "insert into member_info values ('" . $account . "','" . $password ."','" . $email ."','" . $name ."','" . $nickname ."','" . $birthday ."','" . $phone ."','" . $today ."','" . $sex ."')";
         mysqli_query($link, $sql);
+        $sql = "insert into member_details values ('" . $account . "','" . 1 ."','" . 0 ."')";
+        mysqli_query($link, $sql);
         header("Location:login.php");
     }
 
