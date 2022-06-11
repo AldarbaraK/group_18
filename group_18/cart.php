@@ -9,6 +9,17 @@
     }
 ?>
 
+<?php
+	$account = $_SESSION['member_account'];
+    if ($result = mysqli_query($link, "SELECT * FROM member_details")){
+        while($row = mysqli_fetch_assoc($result)){
+            if($account == $row['member_account']){
+                $level = $row['member_level'];         
+            }
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -180,7 +191,38 @@
                 <div class="col-lg-12">
                     <div class="cartCost__form">
                         <br>
-                        <p>總價:　　NT$ <?php echo $total;?></p>
+                        <p style="color:yellow">會員打折
+                            <?php 
+                                if($level == 1) 
+                                    echo "0%"; 
+                                else if($level == 2) 
+                                    echo "8%";
+                                else if($level == 3) 
+                                    echo "15%";
+                            ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="cartTotal__form">
+                        <p>總價:　　NT$ 
+                            <?php 
+                                if($level == 1) 
+                                    echo $total; 
+                                else if($level == 2) 
+                                {
+                                    $total = $total*0.8;
+                                    echo $total;
+                                }
+                                else if($level == 3) 
+                                {
+                                    $total = $total*0.15;
+                                    echo $total;
+                                }
+                            ?>
+                        </p>
                     </div>
                 </div>
             </div>
