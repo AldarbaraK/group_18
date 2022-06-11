@@ -2128,6 +2128,27 @@ ol {
 	color: white;
 }
 
+.cartTotal__form {	
+	margin: 0 auto;
+}
+
+/*.cartCost__form:after {
+	position: absolute;
+	top: 10px;
+	height: 3px;
+	width: 700px;
+	margin-left: 220px;
+	background: rgba(255, 255, 255, 0.2);
+	content: "";
+}*/
+
+.cartTotal__form p {	
+	padding-right: 220px;
+	text-align: right;
+	font-size: 24px;
+	color: white;
+}
+
 
 .cart__self__btn {
 	margin-bottom: 35px;
