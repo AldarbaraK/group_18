@@ -134,7 +134,7 @@
                     <div class="cart__form">
                     </div>
                 </div>
-            </div>
+            </div>  
             <?php
                 $member_account = $_SESSION['member_account'];
                 $total =0; $num=0;
