@@ -213,12 +213,12 @@
                                     echo $total; 
                                 else if($level == 2) 
                                 {
-                                    $total = $total*0.8;
+                                    $total = round($total*0.8);
                                     echo $total;
                                 }
                                 else if($level == 3) 
                                 {
-                                    $total = $total*0.85;
+                                    $total = round($total*0.85);
                                     echo $total;
                                 }
                             ?>
@@ -246,7 +246,7 @@
                 <div class="col-lg-6">
                     <div class="cartCost__form">
                         <br>
-                    </div>
+                    </div>9
                 </div>
             </div>
             <div class="row">
