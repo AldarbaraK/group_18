@@ -60,7 +60,39 @@
             else if($type == "memberTable"){
                   if ($result = mysqli_query($link, "SELECT * FROM member_info a,member_details b WHERE a.member_account = b.member_account")) {
                               while ($row = mysqli_fetch_assoc($result)) { 
-                                    $a['data'][] = array($row["member_account"],$row["member_email"],$row["member_name"],$row["member_nickname"],$arr_level[$row["member_level"]],$row["member_sex"],$row["member_phone"],$row["member_birth"],$row["member_signupDate"],$row["member_password"],$row["bought_count"],$row["member_cost"],$row["login_count"],$row["score_count"],$row["comment_count"],'<div class="dropdown">
+                                    if ($dealResult = mysqli_query($link, "SELECT member_account,count(*) bought_count FROM deal_record GROUP BY member_account")){
+                                          while($dealrow = mysqli_fetch_assoc($dealResult)){
+                                                      if($row["member_account"] == $dealrow['member_account']){
+                                                            $bought_count = $dealrow['bought_count'];
+                                                      }
+                                                }
+                                          }  
+                                          $bought_total=0;
+                                          if ($dealResult = mysqli_query($link, "SELECT member_account,deal_price FROM deal_record")){
+                                                while($dealrow = mysqli_fetch_assoc($dealResult)){
+                                                      if($row["member_account"] == $dealrow['member_account']){
+                                                            $bought_total += $dealrow['deal_price'];
+                                                      }
+                                                }
+                                          }
+                                          $score_count=0;
+                                          if ($dealResult = mysqli_query($link, "SELECT member_account,deal_score FROM deal_record")){
+                                                while($dealrow = mysqli_fetch_assoc($dealResult)){
+                                                      if($row["member_account"] == $dealrow['member_account'] && $dealrow['deal_score'] != NULL){
+                                                            $score_count++;
+                                                      }
+                                                }
+                                          }
+                                          if ($dealResult = mysqli_query($link, "SELECT member_account,count(*) comment_count FROM member_comment GROUP BY member_account")){
+                                                while($dealrow = mysqli_fetch_assoc($dealResult)){
+                                                      if($row["member_account"] == $dealrow['member_account']){
+                                                            $comment_cnt = $dealrow['comment_count'];
+                                                      }                 
+                                                }
+                                                if(!isset($comment_cnt))
+                                                      $comment_cnt = 0;                   
+                                          }
+                                    $a['data'][] = array($row["member_account"],$row["member_email"],$row["member_name"],$row["member_nickname"],$arr_level[$row["member_level"]],$row["member_sex"],$row["member_phone"],$row["member_birth"],$row["member_signupDate"],$row["member_password"],$bought_count,$bought_total,$row["login_count"],$score_count,$comment_cnt,'<div class="dropdown">
                                                                   <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown" id = "test">
                                                                         <i class="dw dw-more"></i>
                                                                   </a>
