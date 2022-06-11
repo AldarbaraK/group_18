@@ -22,7 +22,6 @@
                 $phone = $row['member_phone'];
                 $sex = $row['member_sex'];
                 $level = $row['member_level'];    
-                $totalCost = $row['member_cost']; 
 				$loginCount = $row['login_count'];      
             }
         }

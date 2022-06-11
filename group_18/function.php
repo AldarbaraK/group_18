@@ -10,7 +10,7 @@
     }
     if($op=='checkGiftAccount')
     {
-        checkGiftAccount($_POST['gift-target']);
+        checkGiftAccount($_POST['account'],$_POST['gift-target']);
     }
 
     if($op=='logout')
@@ -617,7 +617,7 @@
 
         if($account!="")
         {
-            if ($result = mysqli_query($link, "SELECT * FROM member_cart a,game_info b WHERE a.game_ID = b.game_ID")) {
+            if ($result = mysqli_query($link, "SELECT * FROM member_cart a,game_info b,member_details c WHERE a.game_ID = b.game_ID and a.member_account = c.member_account")) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     if($row['member_account'] == $account)
                     {
@@ -627,6 +627,11 @@
                         else{ 
                             $money = $row['game_price'];
                         } 
+                        if($row['member_level'] == 2)
+                            $money = round($money*0.8);
+                        else if($row['member_level'] == 3)
+                            $money = round($money*0.85);
+
                         $sql = "insert into deal_record values ('" . $account . "','" . $row['game_ID'] ."','". NULL ."','". $money ."', NOW() )";
                         mysqli_query($link, $sql);
                         $sql = "update deal_record set deal_score=NULL where member_account='$account' and game_ID='".$row['game_ID']."'";
@@ -653,7 +658,7 @@
         
         if($target!="")
         {
-            if ($result = mysqli_query($link, "SELECT * FROM member_cart a,game_info b WHERE a.game_ID = b.game_ID")) {
+            if ($result = mysqli_query($link, "SELECT * FROM member_cart a,game_info b,member_details c WHERE a.game_ID = b.game_ID and a.member_account = c.member_account")) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     if($row['member_account'] == $account)
                     {
@@ -663,6 +668,11 @@
                         else{ 
                             $money = $row['game_price'];
                         } 
+                        if($row['member_level'] == 2)
+                            $money = round($money*0.8);
+                        else if($row['member_level'] == 3)
+                            $money = round($money*0.85);
+
                         $sql = "insert into deal_record values ('" . $target . "','" . $row['game_ID'] ."','". NULL ."','". $money ."', NOW() )";
                         mysqli_query($link, $sql);
                         $sql = "update deal_record set deal_score=NULL where member_account='$target' and game_ID='".$row['game_ID']."'";
@@ -680,7 +690,7 @@
 
     }
 
-    function checkGiftAccount($target)
+    function checkGiftAccount($account,$target)
     {
         global $link;
         if($target!="")
@@ -692,6 +702,13 @@
                 }
                 if($num <= 0)
                     echo "贈送對象帳號不存在!";
+                else{
+                    if ( $result = mysqli_query($link, "SELECT * FROM member_collection a,member_cart b where a.member_account='$target' and b.member_account='$account' and a.game_ID=b.game_ID") ) {
+                        $num2 = mysqli_num_rows($result); //查詢結果筆數
+                    }
+                    if($num2 > 0)
+                        echo "贈送對象帳號已擁有!";
+                }
                 
                 mysqli_free_result($result); // 釋放佔用的記憶體
                 mysqli_close($link); // 關閉資料庫連結

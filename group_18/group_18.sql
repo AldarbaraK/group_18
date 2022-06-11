@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2022-06-10 03:26:57
+-- 產生時間： 2022-06-11 05:50:24
 -- 伺服器版本： 10.4.22-MariaDB
 -- PHP 版本： 8.1.2
 
@@ -43,7 +43,7 @@ CREATE TABLE `admin_info` (
 --
 
 INSERT INTO `admin_info` (`admin_account`, `admin_password`, `admin_email`, `admin_name`, `admin_phone`, `admin_insertDate`) VALUES
-('admin', 'admin123456', 'admin@gmail.com', 'admin', '0911222333', '2022-05-21');
+('admin', '$2y$10$rqp/fa5griFmhJdNghehZ.mO/giC75MPIpjse4E.l1UAj.SlovXgW', 'admin@gmail.com', 'admin', '0911222333', '2022-05-21');
 
 -- --------------------------------------------------------
 
@@ -67,15 +67,21 @@ INSERT INTO `deal_record` (`member_account`, `game_ID`, `deal_score`, `deal_pric
 ('allan96452', 1, 5, 1290, '2022-06-08 01:40:30'),
 ('allan96452', 2, 4, 850, '2022-06-08 01:40:30'),
 ('allan96452', 5, 4, 1650, '2022-06-08 01:46:23'),
+('allan96452', 8, NULL, 0, '2022-06-10 11:14:44'),
 ('allan96452', 10, 5, 1190, '2022-05-26 12:42:57'),
+('allan96452', 15, NULL, 0, '2022-06-11 11:44:22'),
 ('allan96452', 16, 4, 903, '2022-05-26 12:42:57'),
+('member', 1, NULL, 1290, '2022-06-10 10:56:37'),
 ('member', 4, NULL, 325, '2022-05-11 14:57:26'),
 ('member', 5, 4, 1530, '2022-06-08 01:46:23'),
+('member', 7, NULL, 1054, '2022-06-11 11:30:38'),
 ('member', 10, 4, 1190, '2022-06-08 01:40:30'),
 ('member', 19, 4, 1440, '2022-06-08 01:40:30'),
 ('member', 21, NULL, 108, '2022-05-03 05:57:26'),
 ('member', 22, NULL, 100, '2022-06-09 14:05:18'),
+('Unshun0120', 4, NULL, 325, '2022-06-10 10:57:22'),
 ('Unshun0120', 5, 5, 1250, '2022-06-08 01:46:23'),
+('Unshun0120', 6, NULL, 1480, '2022-06-10 10:57:22'),
 ('Unshun0120', 10, 4, 1100, '2022-06-08 01:40:30'),
 ('Unshun0120', 15, 3, 0, '2022-05-26 12:42:57'),
 ('Unshun0120', 21, 4, 100, '2022-06-08 01:40:30'),
@@ -375,11 +381,7 @@ CREATE TABLE `member_cart` (
 --
 
 INSERT INTO `member_cart` (`member_account`, `game_ID`) VALUES
-('allan96452', 8),
-('allan96452', 9),
-('member', 1),
-('Unshun0120', 4),
-('Unshun0120', 6);
+('allan96452', 9);
 
 -- --------------------------------------------------------
 
@@ -397,11 +399,27 @@ CREATE TABLE `member_collection` (
 --
 
 INSERT INTO `member_collection` (`member_account`, `game_ID`) VALUES
+('allan96452', 1),
+('allan96452', 2),
+('allan96452', 5),
+('allan96452', 8),
 ('allan96452', 10),
+('allan96452', 15),
 ('allan96452', 16),
+('member', 1),
 ('member', 4),
+('member', 5),
+('member', 7),
+('member', 10),
+('member', 19),
 ('member', 21),
+('member', 22),
+('Unshun0120', 4),
+('Unshun0120', 5),
+('Unshun0120', 6),
+('Unshun0120', 10),
 ('Unshun0120', 15),
+('Unshun0120', 21),
 ('Unshun0120', 22);
 
 -- --------------------------------------------------------
@@ -446,9 +464,9 @@ CREATE TABLE `member_details` (
 --
 
 INSERT INTO `member_details` (`member_account`, `member_level`, `login_count`) VALUES
-('allan96452', 3, 0),
-('member', 2, 2),
-('Unshun0120', 1, 1);
+('allan96452', 3, 2),
+('member', 2, 14),
+('Unshun0120', 3, 6);
 
 -- --------------------------------------------------------
 
@@ -467,6 +485,7 @@ CREATE TABLE `member_follow` (
 
 INSERT INTO `member_follow` (`member_account`, `game_ID`) VALUES
 ('allan96452', 22),
+('member', 8),
 ('member', 15),
 ('Unshun0120', 11);
 
