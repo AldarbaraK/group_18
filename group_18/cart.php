@@ -196,9 +196,9 @@
                                 if($level == 1) 
                                     echo "0%"; 
                                 else if($level == 2) 
-                                    echo "8%";
+                                    echo "80%";
                                 else if($level == 3) 
-                                    echo "15%";
+                                    echo "85%";
                             ?>
                         </p>
                     </div>
@@ -218,7 +218,7 @@
                                 }
                                 else if($level == 3) 
                                 {
-                                    $total = $total*0.15;
+                                    $total = $total*0.85;
                                     echo $total;
                                 }
                             ?>
@@ -427,7 +427,7 @@
         $(document).ready(function($) {
             $("#self-pay-form").validate({
                 submitHandler: function() {
-                    alert("購買完成!");
+                    form.submit();
                 },
                 rules: {
                     "self-credit-card": {
@@ -455,7 +455,7 @@
                         dataType: 'text',
                         success: function(msg) {
                             $("#check_account").html(msg);//顯示訊息
-                            if(msg != "贈送對象帳號不存在!")
+                            if(msg != "贈送對象帳號不存在!"&& msg != "贈送對象帳號已擁有!")
                             {
                                 form.submit();
                             }
